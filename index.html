@@ -51,6 +51,17 @@
       transition: background 0.3s ease, color 0.3s ease;
     }
 
+    /* Remove text underlines globally */
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
     /* Smooth scroll */
     html {
       scroll-behavior: smooth;
@@ -124,7 +135,6 @@
       transition: all 0.3s ease;
       position: relative;
       color: var(--text-color);
-      text-decoration: none;
     }
 
     .navbar a:hover {
@@ -482,7 +492,6 @@
     @media (min-width: 901px) {
       #menu-icon { display: none; }
     }
-
   </style>
 </head>
 <body>
@@ -553,7 +562,7 @@
       <img src="images/walmart.png" alt="Walmart Sales Data EDA">
       <h3>Walmart Sales Data Project</h3>
       <p>Performed exploratory data analysis on Walmart sales data</p>
-      <a href="https://github.com/HunterHalvorson/walmart_sales_EDA.git" target="_blank" class="project-btn">
+      <a href="https://github.com/HunterHalvorson/walmart_sales.git" target="_blank" class="project-btn">
         View Project <i class="bx bx-right-arrow-alt"></i>
       </a>
     </div>
