@@ -472,7 +472,7 @@
     max-width: var(--max);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
   }
   .stack-cat {
@@ -750,6 +750,135 @@
   }
 
   /* ─────────────────────────────────────────────
+     RESUME
+  ───────────────────────────────────────────── */
+  .resume { max-width: var(--max); margin: 0 auto; }
+  .resume-actions {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .resume-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .resume-card {
+    padding: 2rem 2rem 1.5rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    display: flex; flex-direction: column;
+    transition: border-color .3s ease;
+  }
+  .resume-card:hover { border-color: var(--border-mid); }
+  .resume-card .head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.25rem;
+  }
+  .resume-card .head h3 {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .resume-card .head .idx {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  .resume-item {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .resume-item:first-child { padding-top: 0; }
+  .resume-item:last-child { border-bottom: none; padding-bottom: 0.25rem; }
+  .resume-item .row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 1rem;
+  }
+  .resume-item .title {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+  .resume-item .when {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .resume-item .org {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.4;
+  }
+  .resume-item .note {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.5;
+    margin-top: 6px;
+  }
+  .courses {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 14px;
+    margin-top: 0.25rem;
+  }
+  .courses .code {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+  .courses .name {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .award-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .award-list li {
+    display: grid;
+    grid-template-columns: 14px 1fr auto;
+    gap: 10px;
+    align-items: baseline;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.4;
+  }
+  .award-list li::before {
+    content: "";
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 6px;
+  }
+  .award-list li .years {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  @media (max-width: 768px) {
+    .resume-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─────────────────────────────────────────────
      CONTACT
   ───────────────────────────────────────────── */
   .contact {
@@ -883,6 +1012,7 @@
       <a href="#about">About</a>
       <a href="#stack">Stack</a>
       <a href="#work">Work</a>
+      <a href="#resume">Resume</a>
       <a href="#certifications">Certifications</a>
       <a href="#contact">Contact</a>
     </div>
@@ -966,7 +1096,7 @@
         I'm <span class="em">Hunter Halvorson</span>, a Computer Science &amp; Finance student at the <span class="em">University of Calgary</span>. I'm passionate about building innovative solutions through <span class="em">data science</span> and <span class="em">software development</span>.
       </p>
       <p>
-        <span class="muted">My focus is on creating</span> clean, efficient, and maintainable software that solves real-world problems — from machine learning to data science.
+        <span class="muted">My focus is on creating</span> clean, efficient, and maintainable software that solves real-world problems — from machine learning pipelines to polished web applications.
       </p>
       <p>
         <span class="muted">I'm constantly</span> learning and exploring new technologies to expand my skill set and deliver exceptional results.
@@ -1007,41 +1137,36 @@
       <div class="head"><h3>Languages</h3><span class="idx">A</span></div>
       <ul>
         <li>Python</li>
+        <li>Java</li>
+        <li>C</li>
+        <li>C++</li>
+        <li>Assembly</li>
         <li>JavaScript</li>
-        <li>SQL</li>
-        <li>HTML</li>
-        <li>CSS</li>
-      </ul>
-    </div>
-
-    <div class="stack-cat">
-      <div class="head"><h3>Frontend</h3><span class="idx">B</span></div>
-      <ul>
-        <li>React</li>
-        <li>Advanced React</li>
         <li>HTML / CSS</li>
-        <li>Responsive Design</li>
+        <li>SQL</li>
+        <li>Haskell</li>
+        <li>Prolog</li>
       </ul>
     </div>
 
     <div class="stack-cat">
-      <div class="head"><h3>AI &amp; ML</h3><span class="idx">C</span></div>
+      <div class="head"><h3>Data Science &amp; ML</h3><span class="idx">B</span></div>
       <ul>
-        <li>AI Engineering</li>
-        <li>Deep Learning</li>
+        <li>pandas</li>
+        <li>NumPy</li>
+        <li>Matplotlib</li>
         <li>scikit-learn</li>
-        <li>Pandas &amp; NumPy</li>
-        <li>Data Analysis</li>
+        <li>PyTorch</li>
       </ul>
     </div>
 
     <div class="stack-cat">
-      <div class="head"><h3>Tools</h3><span class="idx">D</span></div>
+      <div class="head"><h3>Tools &amp; Frameworks</h3><span class="idx">C</span></div>
       <ul>
-        <li>Git &amp; GitHub</li>
-        <li>PostgreSQL</li>
-        <li>Jupyter</li>
-        <li>VS Code</li>
+        <li>Git</li>
+        <li>GitHub</li>
+        <li>React</li>
+        <li>Socket Programming</li>
       </ul>
     </div>
   </div>
@@ -1112,12 +1237,155 @@
 </section>
 
 <!-- ─────────────────────────────────────────────
+     RESUME
+─────────────────────────────────────────────── -->
+<section id="resume" class="bordered">
+  <div class="section-head">
+    <div>
+      <span class="eyebrow">04 — Resume</span>
+      <h2>Education &amp; <span class="light">experience.</span></h2>
+    </div>
+    <p class="lead">The full picture — coursework, employment, activities, and a few accolades along the way.</p>
+  </div>
+
+  <div class="resume">
+    <div class="resume-actions">
+      <a href="resume.pdf" download class="btn btn-primary">
+        Download Resume <span class="arrow">↓</span>
+      </a>
+      <a href="https://www.linkedin.com/in/hunter-halvorson-11116724b/" target="_blank" rel="noopener" class="btn btn-ghost">
+        View on LinkedIn <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="resume-grid">
+
+      <!-- Education -->
+      <div class="resume-card">
+        <div class="head">
+          <h3>Education</h3>
+          <span class="idx">A</span>
+        </div>
+
+        <div class="resume-item">
+          <div class="row">
+            <span class="title">B.Sc. Computer Science</span>
+            <span class="when">2023 — Present</span>
+          </div>
+          <span class="org">University of Calgary, Alberta</span>
+        </div>
+
+        <div class="resume-item">
+          <div class="row">
+            <span class="title">B.Comm. Finance</span>
+            <span class="when">2021 — Present</span>
+          </div>
+          <span class="org">University of Calgary, Alberta</span>
+        </div>
+
+        <div class="resume-item">
+          <div class="row">
+            <span class="title">Highlighted Coursework</span>
+          </div>
+          <div class="courses">
+            <span class="code">CPSC 331</span><span class="name">Data Structures &amp; Algorithms</span>
+            <span class="code">CPSC 413</span><span class="name">Design &amp; Analysis of Algorithms</span>
+            <span class="code">CPSC 457</span><span class="name">Operating Systems</span>
+            <span class="code">CPSC 441</span><span class="name">Computer Networks</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employment Experience -->
+      <div class="resume-card">
+        <div class="head">
+          <h3>Employment Experience</h3>
+          <span class="idx">B</span>
+        </div>
+
+        <div class="resume-item">
+          <div class="row">
+            <span class="title">Accounting Assistant</span>
+            <span class="when">06/2025 — 08/2025</span>
+          </div>
+          <span class="org">Canadian Sports Institute · Calgary, AB</span>
+        </div>
+
+        <div class="resume-item">
+          <div class="row">
+            <span class="title">Financial Management Assistant</span>
+            <span class="when">05/2023 — 08/2023</span>
+          </div>
+          <span class="org">GWL Realty Advisors · Calgary, AB</span>
+        </div>
+      </div>
+
+      <!-- Activities & Involvement -->
+      <div class="resume-card">
+        <div class="head">
+          <h3>Activities &amp; Involvement</h3>
+          <span class="idx">C</span>
+        </div>
+
+        <div class="resume-item">
+          <div class="row">
+            <span class="title">Competitive Programming Club — Member</span>
+            <span class="when">Fall 2025</span>
+          </div>
+          <span class="note">Attended weekly workshops featuring competitions on various programming topics.</span>
+        </div>
+
+        <div class="resume-item">
+          <div class="row">
+            <span class="title">GWLRA Development Summer Case Study</span>
+            <span class="when">05/2023 — 08/2023</span>
+          </div>
+          <span class="note">Worked with a cross-Canada team of 5 interns to develop recommendations for amenities, in-suite features, and marketing strategies for a residential development. Presented insights to a panel of judges, including executive leadership.</span>
+        </div>
+      </div>
+
+      <!-- Awards & Honours -->
+      <div class="resume-card">
+        <div class="head">
+          <h3>Awards &amp; Honours</h3>
+          <span class="idx">D</span>
+        </div>
+
+        <ul class="award-list">
+          <li>
+            <span>Jason Lang Scholarship</span>
+            <span class="years">2022 / 2023 / 2024</span>
+          </li>
+          <li>
+            <span>Marion Janet and Ian Stormont Forbes Bursary</span>
+            <span class="years">2022 / 2025</span>
+          </li>
+          <li>
+            <span>Michael and Illa Maher Bursary</span>
+            <span class="years">2023</span>
+          </li>
+          <li>
+            <span>Dean's List, Faculty of Science</span>
+            <span class="years">2023–24, 2024–25</span>
+          </li>
+          <li>
+            <span>Dean's List, Haskayne School of Business</span>
+            <span class="years">Fall 2023, 2024</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────
      CERTIFICATIONS
 ─────────────────────────────────────────────── -->
 <section id="certifications" class="bordered">
   <div class="section-head">
     <div>
-      <span class="eyebrow">04 — Certifications</span>
+      <span class="eyebrow">05 — Certifications</span>
       <h2>Things I've <span class="light">completed.</span></h2>
     </div>
     <p class="lead">A directory of recent coursework and credentials. Verification links available on each.</p>
@@ -1224,7 +1492,7 @@
 <section id="contact" class="contact">
   <div class="contact-glow"></div>
   <div class="contact-inner">
-    <span class="eyebrow" style="color: var(--accent); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;">05 — Contact</span>
+    <span class="eyebrow" style="color: var(--accent); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;">06 — Contact</span>
     <h2 class="big">
       Let's make<br>
       <span class="grad">something</span><br>
@@ -1275,7 +1543,7 @@
   });
 
   // Section reveal via IntersectionObserver
-  const sectionEls = document.querySelectorAll('section, .section-head, .project, .cert, .stack-cat, .stat');
+  const sectionEls = document.querySelectorAll('section, .section-head, .project, .cert, .stack-cat, .stat, .resume-card');
   sectionEls.forEach(el => {
     if (!el.classList.contains('reveal')) el.classList.add('reveal');
   });
