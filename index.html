@@ -601,6 +601,13 @@
       radial-gradient(circle at 75% 30%, rgba(255,136,102,0.10), transparent 55%),
       var(--bg-elev);
   }
+  .art-matcher {
+    background:
+      radial-gradient(circle at 18% 50%, rgba(255,94,58,0.15), transparent 50%),
+      radial-gradient(circle at 82% 50%, rgba(255,94,58,0.15), transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255,136,102,0.10), transparent 45%),
+      var(--bg-elev);
+  }
 
   .project-info { display: flex; flex-direction: column; gap: 1rem; }
   .project-info .num {
@@ -1347,6 +1354,125 @@
             Try Live Demo <span class="arr">→</span>
           </a>
           <a href="https://github.com/HunterHalvorson/exercise-classifier" target="_blank" rel="noopener" class="project-link secondary">
+            View Code <span class="arr">→</span>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Project 003 — Resume ↔ JD Matcher -->
+    <article class="project">
+      <div class="project-media art-matcher">
+        <span class="badge"><span class="accent-dot"></span>Open Source</span>
+        <span class="year">2026</span>
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+          <!-- Background grid -->
+          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.05">
+            <line x1="0" y1="75"  x2="400" y2="75"/>
+            <line x1="0" y1="150" x2="400" y2="150"/>
+            <line x1="0" y1="225" x2="400" y2="225"/>
+          </g>
+
+          <!-- Left document (Resume) -->
+          <g>
+            <rect x="40" y="55" width="110" height="190" rx="3"
+                  fill="none" stroke="#f9f7f1" stroke-width="0.5" opacity="0.22"/>
+            <rect x="40" y="55" width="110" height="14" rx="3"
+                  fill="#f9f7f1" opacity="0.04"/>
+          </g>
+
+          <!-- Right document (JD) -->
+          <g>
+            <rect x="250" y="55" width="110" height="190" rx="3"
+                  fill="none" stroke="#f9f7f1" stroke-width="0.5" opacity="0.22"/>
+            <rect x="250" y="55" width="110" height="14" rx="3"
+                  fill="#f9f7f1" opacity="0.04"/>
+          </g>
+
+          <!-- Resume content lines -->
+          <g stroke="#807c70" stroke-width="0.6" opacity="0.4" stroke-linecap="round">
+            <line x1="50" y1="85"  x2="105" y2="85"/>
+            <line x1="50" y1="95"  x2="130" y2="95"/>
+            <line x1="50" y1="125" x2="120" y2="125"/>
+            <line x1="50" y1="135" x2="138" y2="135"/>
+            <line x1="50" y1="155" x2="115" y2="155"/>
+            <line x1="50" y1="195" x2="130" y2="195"/>
+            <line x1="50" y1="205" x2="118" y2="205"/>
+            <line x1="50" y1="225" x2="135" y2="225"/>
+          </g>
+
+          <!-- JD content lines -->
+          <g stroke="#807c70" stroke-width="0.6" opacity="0.4" stroke-linecap="round">
+            <line x1="260" y1="85"  x2="320" y2="85"/>
+            <line x1="260" y1="95"  x2="345" y2="95"/>
+            <line x1="260" y1="125" x2="335" y2="125"/>
+            <line x1="260" y1="135" x2="348" y2="135"/>
+            <line x1="260" y1="155" x2="325" y2="155"/>
+            <line x1="260" y1="195" x2="345" y2="195"/>
+            <line x1="260" y1="205" x2="328" y2="205"/>
+            <line x1="260" y1="225" x2="340" y2="225"/>
+          </g>
+
+          <!-- Matched skill highlights -->
+          <g fill="#ff5e3a">
+            <rect x="50"  y="113" width="60" height="4" rx="1" opacity="0.9"/>
+            <rect x="260" y="113" width="60" height="4" rx="1" opacity="0.9"/>
+            <rect x="50"  y="173" width="48" height="4" rx="1" opacity="0.55"/>
+            <rect x="260" y="173" width="56" height="4" rx="1" opacity="0.55"/>
+          </g>
+
+          <!-- Connection lines between matched skills -->
+          <g stroke="#ff5e3a" stroke-width="0.7" fill="none" opacity="0.5" stroke-dasharray="2,2.5">
+            <path d="M 150 115 Q 200 95  250 115"/>
+            <path d="M 150 175 Q 200 195 250 175"/>
+          </g>
+
+          <!-- Center match score circle -->
+          <g>
+            <!-- Backplate -->
+            <circle cx="200" cy="150" r="32" fill="#131312" stroke="#f9f7f1" stroke-width="0.4" opacity="0.9"/>
+            <!-- Background track -->
+            <circle cx="200" cy="150" r="32" fill="none"
+                    stroke="#f9f7f1" stroke-width="2" opacity="0.08"/>
+            <!-- Progress arc (~87%) -->
+            <circle cx="200" cy="150" r="32" fill="none"
+                    stroke="#ff5e3a" stroke-width="2"
+                    stroke-dasharray="175 200"
+                    transform="rotate(-90 200 150)"
+                    stroke-linecap="round"/>
+            <!-- Score text -->
+            <text x="200" y="152" text-anchor="middle"
+                  font-family="Geist, sans-serif"
+                  font-size="15" font-weight="600"
+                  fill="#f9f7f1">87<tspan font-size="10" fill="#ff5e3a">%</tspan></text>
+            <text x="200" y="165" text-anchor="middle"
+                  font-family="JetBrains Mono, monospace"
+                  font-size="6" fill="#807c70"
+                  letter-spacing="1">MATCH</text>
+          </g>
+
+          <!-- Doc labels -->
+          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#b8b3a7" text-anchor="middle" letter-spacing="0.8" font-weight="500">
+            <text x="95"  y="65">RESUME.PDF</text>
+            <text x="305" y="65">JOB_DESC.TXT</text>
+          </g>
+
+          <!-- Bottom formula -->
+          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
+            <text x="40"  y="275">SEMANTIC · 0.7 × cos_sim</text>
+            <text x="360" y="275" text-anchor="end">SKILLS · 0.3 × overlap</text>
+          </g>
+        </svg>
+      </div>
+      <div class="project-info">
+        <span class="num">Featured · 003</span>
+        <h3>Resume ↔ JD <span class="grad">Matcher</span></h3>
+        <p class="desc">An NLP application that scores how well a resume matches a job description. Combines rule-based entity extraction (regex + spaCy over a curated 800+ skill vocabulary) with semantic similarity from sentence-transformer embeddings, then produces an interpretable weighted match score and structured JSON for both documents.</p>
+        <div class="project-tags">
+          <span>Python</span><span>NLP</span><span>spaCy</span><span>Sentence Transformers</span><span>Streamlit</span><span>pdfplumber</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/HunterHalvorson/Resume_Parser-Job-Matcher" target="_blank" rel="noopener" class="project-link">
             View Code <span class="arr">→</span>
           </a>
         </div>
