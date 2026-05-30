@@ -433,6 +433,13 @@
       radial-gradient(circle at 80% 70%, rgba(255,94,58,0.08), transparent 45%),
       var(--bg-elev);
   }
+  .art-walmart {
+    background:
+      radial-gradient(circle at 30% 40%, rgba(255,94,58,0.16), transparent 55%),
+      radial-gradient(circle at 70% 65%, rgba(255,136,102,0.12), transparent 50%),
+      radial-gradient(circle at 55% 20%, rgba(255,94,58,0.08), transparent 40%),
+      var(--bg-elev);
+  }
 
   .project-info { display: flex; flex-direction: column; gap: 1rem; }
   .project-info .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; }
@@ -840,38 +847,30 @@
       </div>
     </article>
 
-    <!-- 004 Netflix SQL Analysis — NEW -->
+    <!-- 004 Netflix SQL Analysis -->
     <article class="project reverse">
       <div class="project-media art-netflix">
         <span class="badge"><span class="accent-dot"></span>Data Analysis</span>
         <span class="year">2026</span>
         <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-          <!-- Grid -->
           <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.05">
             <line x1="0" y1="60" x2="400" y2="60"/>
             <line x1="0" y1="120" x2="400" y2="120"/>
             <line x1="0" y1="180" x2="400" y2="180"/>
             <line x1="0" y1="240" x2="400" y2="240"/>
           </g>
-          <!-- Bar chart: content by type -->
           <g>
-            <!-- Movies bar -->
             <rect x="60" y="80" width="160" height="28" rx="3" fill="#ff5e3a" opacity="0.9"/>
-            <!-- TV Shows bar -->
             <rect x="60" y="120" width="68" height="28" rx="3" fill="#ff8866" opacity="0.6"/>
           </g>
-          <!-- Labels -->
           <g font-family="JetBrains Mono, monospace" font-size="8" fill="#807c70">
             <text x="44" y="99" text-anchor="end">Movies</text>
             <text x="44" y="139" text-anchor="end">TV Shows</text>
           </g>
-          <!-- Values -->
           <g font-family="JetBrains Mono, monospace" font-size="8" fill="#f9f7f1">
             <text x="228" y="99">6,131</text>
             <text x="136" y="139">2,676</text>
           </g>
-
-          <!-- Country ranking table -->
           <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
             <text x="60" y="190">RANK</text>
             <text x="100" y="190">COUNTRY</text>
@@ -885,14 +884,12 @@
             <text x="60" y="244">04</text><text x="100" y="244">Canada</text><text x="280" y="244" text-anchor="end">445</text>
             <text x="60" y="256">05</text><text x="100" y="256">France</text><text x="280" y="256" text-anchor="end">393</text>
           </g>
-
-          <!-- SQL keyword badge -->
           <g>
-            <rect x="295" y="80" width="68" height="22" rx="4" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5" opacity="0.4"/>
+            <rect x="295" y="80" width="68" height="22" rx="4" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5"/>
             <text x="329" y="95" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff5e3a" letter-spacing="0.5">PostgreSQL</text>
           </g>
           <g>
-            <rect x="295" y="110" width="68" height="22" rx="4" fill="#ff8866" opacity="0.08" stroke="#ff8866" stroke-width="0.5" opacity="0.3"/>
+            <rect x="295" y="110" width="68" height="22" rx="4" fill="#ff8866" opacity="0.08" stroke="#ff8866" stroke-width="0.5"/>
             <text x="329" y="125" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff8866" letter-spacing="0.5">15 queries</text>
           </g>
         </svg>
@@ -906,6 +903,80 @@
         </div>
         <div class="project-links">
           <a href="https://github.com/HunterHalvorson/Netflix-Business-Problems" target="_blank" rel="noopener" class="project-link">View Code <span class="arr">→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 005 Walmart ETL + SQL Analysis -->
+    <article class="project">
+      <div class="project-media art-walmart">
+        <span class="badge"><span class="accent-dot"></span>ETL + Analysis</span>
+        <span class="year">2026</span>
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+          <!-- Grid lines -->
+          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.05">
+            <line x1="0" y1="60" x2="400" y2="60"/>
+            <line x1="0" y1="120" x2="400" y2="120"/>
+            <line x1="0" y1="180" x2="400" y2="180"/>
+            <line x1="0" y1="240" x2="400" y2="240"/>
+          </g>
+          <!-- ETL pipeline steps -->
+          <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.8">
+            <rect x="30" y="68" width="75" height="34" rx="4" fill="#ff5e3a" opacity="0.15" stroke="#ff5e3a" stroke-width="0.7"/>
+            <text x="67" y="82" text-anchor="middle" fill="#ff5e3a">EXTRACT</text>
+            <text x="67" y="94" text-anchor="middle" fill="#807c70">Walmart.csv</text>
+
+            <line x1="105" y1="85" x2="128" y2="85" stroke="#ff5e3a" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="116" y="81" text-anchor="middle" fill="#ff5e3a" font-size="9">→</text>
+
+            <rect x="128" y="68" width="80" height="34" rx="4" fill="#ff8866" opacity="0.12" stroke="#ff8866" stroke-width="0.7"/>
+            <text x="168" y="82" text-anchor="middle" fill="#ff8866">TRANSFORM</text>
+            <text x="168" y="94" text-anchor="middle" fill="#807c70">pandas</text>
+
+            <line x1="208" y1="85" x2="231" y2="85" stroke="#ff8866" stroke-width="0.7" stroke-dasharray="2,2"/>
+            <text x="219" y="81" text-anchor="middle" fill="#ff8866" font-size="9">→</text>
+
+            <rect x="231" y="68" width="65" height="34" rx="4" fill="#f9f7f1" opacity="0.04" stroke="#f9f7f1" stroke-width="0.4"/>
+            <text x="263" y="82" text-anchor="middle" fill="#b8b3a7">LOAD</text>
+            <text x="263" y="94" text-anchor="middle" fill="#807c70">PostgreSQL</text>
+          </g>
+          <!-- Query table -->
+          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
+            <text x="30" y="130">QUERY</text>
+            <text x="80" y="130">BUSINESS PROBLEM</text>
+            <text x="340" y="130" text-anchor="end">TYPE</text>
+          </g>
+          <line x1="30" y1="135" x2="355" y2="135" stroke="#f9f7f1" stroke-width="0.3" opacity="0.12"/>
+          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#b8b3a7">
+            <text x="30" y="148" fill="#ff5e3a">Q1</text><text x="80" y="148">Transactions by payment method</text><text x="340" y="148" text-anchor="end" fill="#807c70">GROUP BY</text>
+            <text x="30" y="161" fill="#ff5e3a">Q2</text><text x="80" y="161">Highest-rated category per branch</text><text x="340" y="161" text-anchor="end" fill="#807c70">RANK()</text>
+            <text x="30" y="174" fill="#ff5e3a">Q3</text><text x="80" y="174">Busiest day per branch</text><text x="340" y="174" text-anchor="end" fill="#807c70">RANK()</text>
+            <text x="30" y="187" fill="#ff5e3a">Q5</text><text x="80" y="187">Rating stats by city &amp; category</text><text x="340" y="187" text-anchor="end" fill="#807c70">AGG</text>
+            <text x="30" y="200" fill="#ff5e3a">Q6</text><text x="80" y="200">Total profit per category</text><text x="340" y="200" text-anchor="end" fill="#807c70">DERIVED</text>
+            <text x="30" y="213" fill="#ff5e3a">Q7</text><text x="80" y="213">Most common payment per branch</text><text x="340" y="213" text-anchor="end" fill="#807c70">CTE</text>
+          </g>
+          <!-- Stats badges -->
+          <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.5">
+            <rect x="310" y="66" width="55" height="18" rx="3" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5"/>
+            <text x="337" y="79" text-anchor="middle" fill="#ff5e3a">~10K rows</text>
+            <rect x="310" y="88" width="55" height="18" rx="3" fill="#ff8866" opacity="0.08" stroke="#ff8866" stroke-width="0.5"/>
+            <text x="337" y="101" text-anchor="middle" fill="#ff8866">7 queries</text>
+          </g>
+          <!-- Footer -->
+          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
+            <text x="30" y="268">ETL · Python → PostgreSQL → SQL Analysis</text>
+          </g>
+        </svg>
+      </div>
+      <div class="project-info">
+        <span class="num">Featured · 005</span>
+        <h3>Walmart <span class="grad">SQL Analysis</span></h3>
+        <p class="desc">End-to-end ETL + analysis pipeline on ~10,000 Walmart retail transactions. Raw CSV data is cleaned and transformed in Python (pandas), then loaded into PostgreSQL via SQLAlchemy. Seven business problems are answered with SQL — covering payment method breakdowns, branch-level ratings, profit by category, busiest trading days, and more using window functions and CTEs.</p>
+        <div class="project-tags">
+          <span>Python</span><span>pandas</span><span>PostgreSQL</span><span>SQLAlchemy</span><span>ETL</span><span>SQL</span><span>Window Functions</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/HunterHalvorson/Walmart-Data-Analysis" target="_blank" rel="noopener" class="project-link">View Code <span class="arr">→</span></a>
         </div>
       </div>
     </article>
