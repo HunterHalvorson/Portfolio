@@ -102,28 +102,6 @@
     transition: color .25s ease, background .25s ease;
   }
   .nav-links a:hover { color: var(--ink); background: var(--bg-elev); }
-  .status-pill {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 12px;
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-family: var(--sans);
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--ink-2);
-  }
-  .status-pill .pulse {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 0 0 var(--accent);
-    animation: pulse 2.5s infinite;
-  }
-  @keyframes pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(255, 94, 58, 0.5); }
-    70%  { box-shadow: 0 0 0 8px rgba(255, 94, 58, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 94, 58, 0); }
-  }
   @media (max-width: 900px) { .nav-links { display: none; } }
 
   .hero {
@@ -159,7 +137,7 @@
     margin: 0 auto;
     position: relative; z-index: 2;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
     gap: 4rem;
     align-items: end;
   }
@@ -223,14 +201,6 @@
   .btn-ghost:hover { background: var(--bg-elev-2); border-color: var(--border-mid); }
   .btn .arrow { transition: transform .25s ease; }
   .btn:hover .arrow { transform: translateX(3px); }
-  .hero-side {
-    display: flex; flex-direction: column; gap: 1rem;
-    align-items: flex-end;
-    padding-bottom: .5rem;
-  }
-  .hero-side .meta { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
-  .hero-side .meta .key { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
-  .hero-side .meta .val { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
   .hero-scroll {
     position: absolute;
     bottom: 2rem; left: 50%;
@@ -253,8 +223,6 @@
   @keyframes dripDown { 0% { top: -32px; } 100% { top: 32px; } }
   @media (max-width: 768px) {
     .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-    .hero-side { align-items: flex-start; }
-    .hero-side .meta { align-items: flex-start; }
     .hero-scroll { display: none; }
   }
 
@@ -449,6 +417,13 @@
       radial-gradient(circle at 20% 20%, rgba(255,94,58,0.08), transparent 45%),
       var(--bg-elev);
   }
+  .art-automation {
+    background:
+      radial-gradient(circle at 60% 40%, rgba(255,94,58,0.16), transparent 55%),
+      radial-gradient(circle at 20% 70%, rgba(255,136,102,0.12), transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255,94,58,0.08), transparent 45%),
+      var(--bg-elev);
+  }
 
   .project-info { display: flex; flex-direction: column; gap: 1rem; }
   .project-info .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; }
@@ -592,10 +567,7 @@
       <a href="#certifications">Certifications</a>
       <a href="#contact">Contact</a>
     </div>
-    <span class="status-pill">
-      <span class="pulse"></span>
-      Available — Summer 2026
-    </span>
+
   </div>
 </nav>
 
@@ -620,11 +592,7 @@
         <a href="#contact" class="btn btn-ghost">Get in touch</a>
       </div>
     </div>
-    <div class="hero-side reveal delay-5">
-      <div class="meta"><span class="key">Based in</span><span class="val">Calgary, AB</span></div>
-      <div class="meta"><span class="key">Focus</span><span class="val">Software · Data · AI</span></div>
-      <div class="meta"><span class="key">Portfolio</span><span class="val">v2.0 · 2026</span></div>
-    </div>
+
   </div>
   <div class="hero-scroll"><span>Scroll</span><span class="bar"></span></div>
 </header>
@@ -1066,6 +1034,92 @@
         </div>
         <div class="project-links">
           <a href="https://huggingface.co/spaces/HunterHalvorson/Book_Recommender" target="_blank" rel="noopener" class="project-link">Try Live Demo <span class="arr">→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 007 Python Automation -->
+    <article class="project">
+      <div class="project-media art-automation">
+        <span class="badge"><span class="accent-dot"></span>Open Source</span>
+        <span class="year">2026</span>
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+          <!-- Grid -->
+          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.05">
+            <line x1="0" y1="60" x2="400" y2="60"/>
+            <line x1="0" y1="120" x2="400" y2="120"/>
+            <line x1="0" y1="180" x2="400" y2="180"/>
+            <line x1="0" y1="240" x2="400" y2="240"/>
+          </g>
+          <!-- Currency converter module -->
+          <g>
+            <rect x="30" y="40" width="160" height="100" rx="6" fill="none" stroke="#ff5e3a" stroke-width="0.7" opacity="0.5"/>
+            <rect x="30" y="40" width="160" height="18" rx="6" fill="#ff5e3a" opacity="0.12"/>
+            <text x="40" y="53" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff5e3a" letter-spacing="0.5">currency.py</text>
+            <!-- live rates table -->
+            <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#807c70">
+              <text x="40" y="74">USD → CAD</text><text x="160" y="74" text-anchor="end" fill="#b8b3a7">1.36</text>
+              <text x="40" y="88">USD → EUR</text><text x="160" y="88" text-anchor="end" fill="#b8b3a7">0.92</text>
+              <text x="40" y="102">USD → AUD</text><text x="160" y="102" text-anchor="end" fill="#b8b3a7">1.53</text>
+              <text x="40" y="116">USD → CNY</text><text x="160" y="116" text-anchor="end" fill="#b8b3a7">7.24</text>
+            </g>
+            <!-- rates table -->
+            <rect x="38" y="123" width="46" height="11" rx="5.5" fill="#ff5e3a" opacity="0.18" stroke="#ff5e3a" stroke-width="0.5"/>
+            <text x="61" y="131" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#ff5e3a" letter-spacing="0.3">API</text>
+          </g>
+          <!-- Backup module -->
+          <g>
+            <rect x="210" y="40" width="160" height="100" rx="6" fill="none" stroke="#ff8866" stroke-width="0.7" opacity="0.5"/>
+            <rect x="210" y="40" width="160" height="18" rx="6" fill="#ff8866" opacity="0.08"/>
+            <text x="220" y="53" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff8866" letter-spacing="0.5">backup.py</text>
+            <!-- folder tree visual -->
+            <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#807c70">
+              <text x="220" y="74">Backups/</text>
+              <text x="228" y="88" fill="#b8b3a7">2026-06-03/</text>
+              <text x="228" y="101" fill="#b8b3a7">2026-06-04/</text>
+              <text x="228" y="114" fill="#ff5e3a">2026-06-05/ ✓</text>
+            </g>
+            <!-- scheduler badge -->
+            <rect x="218" y="123" width="58" height="11" rx="5.5" fill="#ff8866" opacity="0.12" stroke="#ff8866" stroke-width="0.5"/>
+            <text x="247" y="131" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#ff8866" letter-spacing="0.3">SCHEDULED</text>
+          </g>
+          <!-- Connector arrow -->
+          <g opacity="0.4">
+            <line x1="190" y1="90" x2="210" y2="90" stroke="#ff5e3a" stroke-width="0.7" stroke-dasharray="2,2"/>
+          </g>
+          <!-- Bottom section: project structure -->
+          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.4">
+            <text x="30" y="168">python_automation/</text>
+            <text x="38" y="181" fill="#b8b3a7">├── currency.py</text>
+            <text x="38" y="193" fill="#b8b3a7">├── backup.py</text>
+            <text x="38" y="205" fill="#b8b3a7">├── requirements.txt</text>
+            <text x="38" y="217" fill="#4d4a43">└── .env</text>
+          </g>
+          <!-- Right side tech tags -->
+          <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.4">
+            <rect x="240" y="160" width="60" height="13" rx="6.5" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5"/>
+            <text x="270" y="170" text-anchor="middle" fill="#ff5e3a">requests</text>
+            <rect x="308" y="160" width="60" height="13" rx="6.5" fill="#ff8866" opacity="0.08" stroke="#ff8866" stroke-width="0.5"/>
+            <text x="338" y="170" text-anchor="middle" fill="#ff8866">schedule</text>
+            <rect x="240" y="180" width="54" height="13" rx="6.5" fill="#f9f7f1" opacity="0.04" stroke="#f9f7f1" stroke-width="0.4"/>
+            <text x="267" y="190" text-anchor="middle" fill="#b8b3a7">shutil</text>
+            <rect x="302" y="180" width="66" height="13" rx="6.5" fill="#f9f7f1" opacity="0.04" stroke="#f9f7f1" stroke-width="0.4"/>
+            <text x="335" y="190" text-anchor="middle" fill="#b8b3a7">python-dotenv</text>
+          </g>
+          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
+            <text x="30" y="265">2 scripts · daily scheduler · exchange rates</text>
+          </g>
+        </svg>
+      </div>
+      <div class="project-info">
+        <span class="num">Featured · 007</span>
+        <h3>Python <span class="grad">Automation</span></h3>
+        <p class="desc">A collection of practical Python automation scripts. Includes a currency converter that fetches exchange rates from an external API and loops interactively in the terminal, and an automated folder backup utility that runs on a daily schedule — copying a source directory to a date-stamped destination and skipping runs when today's backup already exists.</p>
+        <div class="project-tags">
+          <span>Python</span><span>requests</span><span>schedule</span><span>shutil</span><span>python-dotenv</span><span>Automation</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/HunterHalvorson/python_automation" target="_blank" rel="noopener" class="project-link">View Code <span class="arr">→</span></a>
         </div>
       </div>
     </article>
