@@ -12,1148 +12,1035 @@
 
 <style>
   :root {
-    --bg:           #0a0a0a;
-    --bg-elev:      #131312;
-    --bg-elev-2:    #1c1b1a;
-    --border:       rgba(255, 251, 240, 0.06);
-    --border-mid:   rgba(255, 251, 240, 0.10);
-    --border-strong:rgba(255, 251, 240, 0.16);
-    --ink:          #f9f7f1;
-    --ink-2:        #b8b3a7;
-    --ink-3:        #807c70;
-    --ink-4:        #4d4a43;
-    --accent:       #ff5e3a;
-    --accent-2:     #ff8866;
-    --accent-soft:  rgba(255, 94, 58, 0.10);
-    --accent-glow:  rgba(255, 94, 58, 0.18);
-    --sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --bg:        #060606;
+    --bg-2:      #0c0c0b;
+    --surface:   rgba(255, 255, 255, 0.022);
+    --surface-2: rgba(255, 255, 255, 0.045);
+    --border:    rgba(255, 255, 255, 0.07);
+    --border-2:  rgba(255, 255, 255, 0.13);
+    --ink:       #f5f3ee;
+    --ink-2:     #a8a49b;
+    --ink-3:     #6e6a61;
+    --ink-4:     #3d3b36;
+    --accent:    #ff5e3a;
+    --accent-2:  #ff8a5c;
+    --accent-3:  #ffc2a3;
+    --accent-soft: rgba(255, 94, 58, 0.12);
+    --accent-glow: rgba(255, 94, 58, 0.22);
+    --sans: "Geist", -apple-system, "Segoe UI", system-ui, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, monospace;
-    --pad-x: clamp(1.25rem, 5vw, 5rem);
-    --max:   1280px;
-    --r-sm: 8px;
-    --r:    12px;
-    --r-lg: 20px;
-    --r-xl: 28px;
+    --pad: clamp(1.25rem, 5vw, 6rem);
+    --max: 1320px;
+    --ease: cubic-bezier(.65, .05, .15, 1);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { scroll-behavior: smooth; }
   body {
     background: var(--bg);
     color: var(--ink);
     font-family: var(--sans);
     font-size: 15px;
-    line-height: 1.55;
-    overflow-x: hidden;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
     font-feature-settings: "ss01", "cv11";
-    text-rendering: optimizeLegibility;
   }
   img, svg { display: block; max-width: 100%; }
-  a { color: inherit; text-decoration: none; transition: color .25s ease; }
-  button { font: inherit; background: none; border: none; color: inherit; cursor: pointer; }
-  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+  ::selection { background: var(--accent); color: #060606; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
 
-  .container { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad-x); }
-  .label {
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-3);
+  /* film grain */
+  body::after {
+    content: "";
+    position: fixed; inset: -50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: 0.032;
+    pointer-events: none;
+    z-index: 9999;
+    animation: grain 9s steps(6) infinite;
+  }
+  @keyframes grain {
+    0%,100% { transform: translate(0,0); } 20% { transform: translate(-4%, 3%); }
+    40% { transform: translate(3%, -4%); } 60% { transform: translate(-3%, -2%); } 80% { transform: translate(4%, 4%); }
   }
 
+  /* dot field */
+  .dots {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.10) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, black 0%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, black 0%, transparent 100%);
+  }
+
+  .mono { font-family: var(--mono); }
+
+  /* scroll progress */
+  .progress {
+    position: fixed; top: 0; left: 0; height: 2px; width: 100%;
+    transform-origin: 0 50%; transform: scaleX(0);
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    z-index: 200;
+  }
+
+  /* ───────── NAV ───────── */
   nav.top {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 1rem var(--pad-x);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    background: rgba(10, 10, 10, 0.65);
-    border-bottom: 1px solid var(--border);
-  }
-  nav.top .inner {
-    display: flex; align-items: center; justify-content: space-between;
-    max-width: var(--max); margin: 0 auto;
-  }
-  .logo {
-    font-family: var(--sans);
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-    display: inline-flex; align-items: center; gap: 8px;
-  }
-  .logo .mark {
-    width: 22px; height: 22px;
-    border-radius: 6px;
-    background: linear-gradient(135deg, var(--accent), #ff8866);
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: var(--bg);
-    letter-spacing: -0.02em;
-  }
-  .nav-links { display: flex; gap: 0.25rem; align-items: center; }
-  .nav-links a {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--ink-2);
-    padding: 8px 14px;
-    border-radius: var(--r-sm);
-    transition: color .25s ease, background .25s ease;
-  }
-  .nav-links a:hover { color: var(--ink); background: var(--bg-elev); }
-  @media (max-width: 900px) { .nav-links { display: none; } }
-
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 8rem var(--pad-x) 4rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-glow {
-    position: absolute;
-    top: 50%; left: 30%;
-    transform: translate(-50%, -50%);
-    width: 800px; height: 800px;
-    background: radial-gradient(circle, var(--accent-glow), transparent 65%);
-    filter: blur(80px);
-    pointer-events: none;
-    z-index: 0;
-  }
-  .hero-glow-2 {
-    position: absolute;
-    bottom: 0; right: 10%;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(255, 136, 102, 0.08), transparent 65%);
-    filter: blur(60px);
-    pointer-events: none;
-    z-index: 0;
-  }
-  .hero-inner {
-    max-width: var(--max);
-    width: 100%;
-    margin: 0 auto;
-    position: relative; z-index: 2;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4rem;
-    align-items: end;
-  }
-  .hero-main { display: flex; flex-direction: column; gap: 2.5rem; }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 8px 14px;
-    background: var(--bg-elev);
+    position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+    z-index: 100;
+    display: flex; align-items: center; gap: 4px;
+    padding: 6px;
+    background: rgba(14, 14, 13, 0.62);
     border: 1px solid var(--border);
     border-radius: 999px;
-    font-family: var(--sans);
-    font-size: 12px;
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  }
+  nav.top .brand {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 13px; color: #060606;
+    margin-right: 2px;
+  }
+  nav.top a.link {
+    font-size: 13px; font-weight: 450; color: var(--ink-2);
+    padding: 8px 15px; border-radius: 999px;
+    transition: color .2s ease, background .2s ease;
+    white-space: nowrap;
+  }
+  nav.top a.link:hover { color: var(--ink); background: var(--surface-2); }
+  nav.top a.cta {
+    font-size: 13px; font-weight: 550; color: #060606;
+    background: var(--ink); padding: 8px 16px; border-radius: 999px;
+    margin-left: 2px; white-space: nowrap;
+    transition: background .2s ease, transform .2s ease;
+  }
+  nav.top a.cta:hover { background: var(--accent); transform: scale(1.03); }
+  @media (max-width: 880px) {
+    nav.top a.link { display: none; }
+    nav.top { gap: 8px; padding: 6px 6px 6px 6px; }
+  }
+
+  /* ───────── HERO ───────── */
+  .hero {
+    min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem var(--pad) 5rem;
+    position: relative;
+    overflow: clip;
+  }
+  .hero-aurora {
+    position: absolute; top: -22%; left: 50%; transform: translateX(-50%);
+    width: 1200px; height: 900px; z-index: 0;
+    background:
+      radial-gradient(ellipse 40% 38% at 38% 40%, rgba(255,94,58,0.20), transparent 70%),
+      radial-gradient(ellipse 36% 34% at 64% 36%, rgba(255,138,92,0.13), transparent 70%),
+      radial-gradient(ellipse 50% 42% at 50% 60%, rgba(255,94,58,0.07), transparent 72%);
+    filter: blur(50px);
+    animation: drift 14s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes drift {
+    from { transform: translateX(-54%) rotate(-2deg) scale(1); }
+    to   { transform: translateX(-46%) rotate(2deg) scale(1.06); }
+  }
+  .hero-inner { max-width: var(--max); margin: 0 auto; width: 100%; position: relative; z-index: 2; }
+  .hero-status {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 7px 14px 7px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em;
     color: var(--ink-2);
-    width: fit-content;
+    backdrop-filter: blur(8px);
   }
-  .hero-tag .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 12px var(--accent-glow);
+  .hero-status .ring {
+    width: 14px; height: 14px; border-radius: 50%;
+    display: grid; place-items: center;
   }
+  .hero-status .ring::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: #4ade80; box-shadow: 0 0 0 0 rgba(74,222,128,0.5);
+    animation: ping 2.4s infinite;
+  }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.45); } 70% { box-shadow: 0 0 0 7px rgba(74,222,128,0); } 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); } }
   .hero h1 {
-    font-family: var(--sans);
-    font-weight: 600;
-    font-size: clamp(3.5rem, 11vw, 10rem);
-    line-height: 0.92;
-    letter-spacing: -0.055em;
+    margin-top: 2rem;
+    font-weight: 560;
+    font-size: clamp(3.4rem, 11.5vw, 10.5rem);
+    line-height: 0.94;
+    letter-spacing: -0.052em;
+    text-wrap: balance;
   }
+  .hero h1 .row { display: block; overflow: hidden; }
+  .hero h1 .row > span { display: inline-block; transform: translateY(110%); animation: rise 1s var(--ease) forwards; }
+  .hero h1 .row:nth-child(2) > span { animation-delay: .12s; }
+  @keyframes rise { to { transform: translateY(0); } }
   .hero h1 .grad {
-    background: linear-gradient(135deg, var(--accent) 0%, #ff8866 60%, #ffb088 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    background: linear-gradient(100deg, var(--accent) 0%, var(--accent-2) 45%, var(--accent-3) 90%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
   }
-  .hero h1 .light { font-weight: 200; color: var(--ink-3); letter-spacing: -0.045em; }
+  .hero-sub {
+    margin-top: 2.2rem;
+    display: grid; grid-template-columns: minmax(0, 60ch) auto;
+    gap: 2rem; align-items: end; justify-content: space-between;
+  }
   .hero-desc {
-    font-family: var(--sans);
-    font-weight: 300;
-    font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    font-weight: 330;
     color: var(--ink-2);
-    max-width: 56ch;
-    line-height: 1.5;
-    letter-spacing: -0.015em;
+    line-height: 1.55;
+    letter-spacing: -0.012em;
   }
-  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-desc b { color: var(--ink); font-weight: 480; }
+  .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
   .btn {
     display: inline-flex; align-items: center; gap: 10px;
-    padding: 12px 22px;
-    border-radius: 999px;
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 500;
-    transition: transform .25s ease, background .25s ease, color .25s ease, box-shadow .3s ease;
-    cursor: pointer;
+    padding: 13px 24px; border-radius: 999px;
+    font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
     border: 1px solid transparent;
+    transition: transform .25s var(--ease), background .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
   }
-  .btn-primary { background: var(--ink); color: var(--bg); }
-  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255, 251, 240, 0.12); }
-  .btn-ghost { background: var(--bg-elev); color: var(--ink); border-color: var(--border); }
-  .btn-ghost:hover { background: var(--bg-elev-2); border-color: var(--border-mid); }
-  .btn .arrow { transition: transform .25s ease; }
-  .btn:hover .arrow { transform: translateX(3px); }
-  .hero-scroll {
-    position: absolute;
-    bottom: 2rem; left: 50%;
-    transform: translateX(-50%);
-    display: inline-flex; flex-direction: column; align-items: center; gap: 10px;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    z-index: 2;
-  }
-  .hero-scroll .bar { width: 1px; height: 32px; background: var(--border-mid); position: relative; overflow: hidden; }
-  .hero-scroll .bar::after {
-    content: ""; position: absolute; top: -32px; left: 0;
-    width: 100%; height: 100%;
-    background: var(--accent);
-    animation: dripDown 2.4s infinite cubic-bezier(.7,.1,.2,1);
-  }
-  @keyframes dripDown { 0% { top: -32px; } 100% { top: 32px; } }
-  @media (max-width: 768px) {
-    .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-    .hero-scroll { display: none; }
-  }
+  .btn-fill { background: var(--ink); color: #060606; }
+  .btn-fill:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 30px var(--accent-glow); }
+  .btn-line { border-color: var(--border-2); color: var(--ink); background: var(--surface); backdrop-filter: blur(8px); }
+  .btn-line:hover { border-color: var(--ink-3); transform: translateY(-2px); }
+  .btn .arr { transition: transform .25s var(--ease); }
+  .btn:hover .arr { transform: translateX(4px); }
+  @media (max-width: 880px) { .hero-sub { grid-template-columns: 1fr; } }
 
-  section { padding: 7rem var(--pad-x); position: relative; }
-  section.bordered { border-top: 1px solid var(--border); }
-  .section-head {
-    max-width: var(--max);
-    margin: 0 auto 5rem;
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 4rem;
-    align-items: end;
+  /* ───────── MARQUEE ───────── */
+  .marquee {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: clip; white-space: nowrap;
+    padding: 1rem 0;
+    position: relative; z-index: 2;
+    background: rgba(255,255,255,0.012);
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
   }
-  .section-head .eyebrow {
+  .marquee .track { display: inline-flex; animation: mq 38s linear infinite; }
+  .marquee:hover .track { animation-play-state: paused; }
+  @keyframes mq { to { transform: translateX(-50%); } }
+  .marquee .it {
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-3);
+    padding: 0 1.1rem; display: inline-flex; align-items: center; gap: 2.2rem;
+  }
+  .marquee .it::after { content: "✦"; color: var(--accent); font-size: 10px; }
+
+  /* ───────── SECTIONS ───────── */
+  section { padding: clamp(5.5rem, 11vw, 9rem) var(--pad); position: relative; z-index: 2; }
+  .shell { max-width: var(--max); margin: 0 auto; }
+  .sec-head { margin-bottom: clamp(2.6rem, 5vw, 4.5rem); display: flex; flex-wrap: wrap; gap: 1.5rem 4rem; align-items: end; justify-content: space-between; }
+  .chip {
     display: inline-flex; align-items: center; gap: 8px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2);
+    padding: 6px 13px;
+    border: 1px solid var(--border); border-radius: 999px;
+    background: var(--surface);
   }
-  .section-head .eyebrow::before { content: ""; width: 14px; height: 1px; background: var(--accent); }
-  .section-head h2 {
-    font-family: var(--sans);
-    font-weight: 500;
-    font-size: clamp(2.25rem, 5vw, 4rem);
+  .chip::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+  .sec-head h2 {
+    margin-top: 1.1rem;
+    font-weight: 540;
+    font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+    letter-spacing: -0.045em;
     line-height: 1;
-    letter-spacing: -0.04em;
-    margin-top: 1rem;
   }
-  .section-head h2 .light { font-weight: 200; color: var(--ink-3); }
-  .section-head .lead {
-    font-family: var(--sans);
-    font-weight: 300;
-    font-size: clamp(1.05rem, 1.3vw, 1.25rem);
-    color: var(--ink-2);
-    max-width: 56ch;
-    line-height: 1.55;
-    letter-spacing: -0.01em;
-  }
-  @media (max-width: 768px) {
-    .section-head { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 3.5rem; }
-    section { padding: 5rem var(--pad-x); }
-  }
+  .sec-head h2 .dim { color: var(--ink-3); font-weight: 260; }
+  .sec-head .lead { max-width: 46ch; color: var(--ink-2); font-weight: 330; font-size: 1.02rem; }
 
-  .about-body {
-    max-width: var(--max);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 4rem;
-    align-items: start;
-  }
-  .portrait {
+  /* spotlight card system */
+  .card {
     position: relative;
-    aspect-ratio: 4/5;
-    border-radius: var(--r-lg);
-    overflow: hidden;
-    background: var(--bg-elev);
+    background: var(--surface);
     border: 1px solid var(--border);
+    border-radius: 22px;
+    overflow: hidden;
+    transition: border-color .3s ease, transform .35s var(--ease);
   }
-  .portrait img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.7,.1,.2,1); }
-  .portrait:hover img { transform: scale(1.04); }
-  .portrait::after {
+  .card::before {
     content: "";
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.4) 100%);
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 94, 58, 0.09), transparent 60%);
+    opacity: 0;
+    transition: opacity .35s ease;
     pointer-events: none;
   }
-  .about-text { display: flex; flex-direction: column; gap: 1.5rem; padding-top: 0.5rem; }
-  .about-text p { font-family: var(--sans); font-weight: 300; font-size: clamp(1.1rem, 1.4vw, 1.35rem); line-height: 1.55; color: var(--ink); letter-spacing: -0.015em; }
-  .about-text p .em { color: var(--accent); font-weight: 400; }
-  .about-text p .muted { color: var(--ink-3); }
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 1.5rem; }
-  .stat {
-    padding: 1.25rem 1.25rem;
-    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    transition: border-color .3s ease, background .3s ease;
-  }
-  .stat:hover { border-color: var(--border-mid); background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); }
-  .stat .num { font-family: var(--sans); font-weight: 500; font-size: clamp(1.75rem, 3.5vw, 2.5rem); line-height: 1; letter-spacing: -0.04em; color: var(--ink); }
-  .stat .num .small { font-size: 0.55em; color: var(--accent); margin-left: 2px; vertical-align: super; }
-  .stat .lbl { margin-top: 8px; font-family: var(--sans); font-size: 12px; color: var(--ink-3); letter-spacing: -0.005em; }
-  @media (max-width: 768px) { .about-body { grid-template-columns: 1fr; gap: 2.5rem; } }
+  .card:hover::before { opacity: 1; }
+  .card:hover { border-color: var(--border-2); }
 
-  .stack { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .stack-cat {
-    padding: 1.75rem;
-    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    display: flex; flex-direction: column; gap: 1.25rem;
-    transition: border-color .3s ease, transform .4s cubic-bezier(.7,.1,.2,1);
+  /* ───────── ABOUT BENTO ───────── */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(120px, auto);
+    gap: 14px;
   }
-  .stack-cat:hover { border-color: var(--border-mid); transform: translateY(-3px); }
-  .stack-cat .head { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-  .stack-cat h3 { font-family: var(--sans); font-weight: 500; font-size: 1.05rem; letter-spacing: -0.02em; color: var(--ink); }
-  .stack-cat .idx { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em; }
-  .stack-cat ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .stack-cat li { font-family: var(--sans); font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 10px; transition: color .25s ease, padding-left .25s ease; cursor: default; }
-  .stack-cat li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--ink-4); transition: background .25s ease, transform .25s ease; flex-shrink: 0; }
-  .stack-cat li:hover { color: var(--ink); padding-left: 4px; }
-  .stack-cat li:hover::before { background: var(--accent); transform: scale(1.3); }
-  .stack-cat li.highlight { color: var(--accent-2); }
-  .stack-cat li.highlight::before { background: var(--accent); }
-  @media (max-width: 1100px) { .stack { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 540px) { .stack { grid-template-columns: 1fr; } }
+  .b-photo { grid-column: span 4; grid-row: span 2; min-height: 380px; }
+  .b-photo img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; filter: saturate(0.95) contrast(1.02); transition: transform .8s var(--ease); }
+  .b-photo:hover img { transform: scale(1.04); }
+  .b-photo .tag {
+    position: absolute; bottom: 14px; left: 14px; z-index: 2;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 12px; border-radius: 999px;
+    background: rgba(6,6,6,0.55); border: 1px solid var(--border-2);
+    backdrop-filter: blur(10px); color: var(--ink);
+  }
+  .b-intro { grid-column: span 8; grid-row: span 2; padding: clamp(1.6rem, 3vw, 2.6rem); display: flex; flex-direction: column; justify-content: center; gap: 1.1rem; }
+  .b-intro p { font-size: clamp(1.08rem, 1.5vw, 1.3rem); font-weight: 320; line-height: 1.55; color: var(--ink-2); letter-spacing: -0.012em; }
+  .b-intro p b { color: var(--ink); font-weight: 470; }
+  .b-intro p .em { color: var(--accent-2); font-weight: 430; }
+  .b-stat { grid-column: span 3; padding: 1.5rem 1.6rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; min-height: 150px; }
+  .b-stat .num { font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 540; letter-spacing: -0.05em; line-height: 1; }
+  .b-stat .num sup { color: var(--accent); font-size: 0.5em; font-weight: 500; }
+  .b-stat .lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  .b-wide { grid-column: span 6; padding: 1.5rem 1.6rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; min-height: 150px; }
+  .b-wide .t { font-weight: 500; font-size: 1.05rem; letter-spacing: -0.02em; }
+  .b-wide .d { color: var(--ink-2); font-size: 13.5px; font-weight: 330; }
+  .b-wide .row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .b-wide .row span {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-2);
+    padding: 5px 11px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255,255,255,0.02);
+  }
+  @media (max-width: 980px) {
+    .b-photo { grid-column: span 12; min-height: 320px; grid-row: span 1; }
+    .b-intro { grid-column: span 12; }
+    .b-stat { grid-column: span 6; }
+    .b-wide { grid-column: span 12; }
+  }
 
-  .projects { max-width: var(--max); margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+  /* ───────── STACK ───────── */
+  .stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .stack .card { padding: 1.7rem 1.7rem 1.9rem; }
+  .stack h3 { font-size: 1rem; font-weight: 520; letter-spacing: -0.02em; display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  .stack h3 .k { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.14em; }
+  .stack ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .stack li { font-size: 13.5px; color: var(--ink-2); display: flex; align-items: center; gap: 10px; transition: color .2s ease, transform .2s var(--ease); }
+  .stack li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--ink-4); transition: background .2s ease; flex-shrink: 0; }
+  .stack li:hover { color: var(--ink); transform: translateX(3px); }
+  .stack li:hover::before { background: var(--accent); }
+  .stack li.hl { color: var(--accent-2); }
+  .stack li.hl::before { background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+  @media (max-width: 1060px) { .stack { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .stack { grid-template-columns: 1fr; } }
+
+  /* ───────── WORK ───────── */
+  .projects { display: flex; flex-direction: column; gap: 18px; }
   .project {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 3rem;
-    align-items: center;
-    padding: 2.5rem;
-    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    transition: border-color .3s ease;
+    display: grid; grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(1.6rem, 3.5vw, 3.2rem); align-items: center;
+    padding: clamp(1.4rem, 2.5vw, 2.4rem);
   }
-  .project:hover { border-color: var(--border-mid); }
-  .project.reverse { grid-template-columns: 0.9fr 1.1fr; }
-  .project.reverse .project-media { order: 2; }
-  .project.reverse .project-info { order: 1; }
-  .project-media {
-    aspect-ratio: 4/3;
-    border-radius: var(--r);
-    overflow: hidden;
-    position: relative;
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    transition: transform .6s cubic-bezier(.7,.1,.2,1);
+  .project.flip .p-media { order: 2; }
+  .p-media {
+    aspect-ratio: 4/3; border-radius: 16px; overflow: hidden;
+    position: relative; border: 1px solid var(--border);
+    background: var(--bg-2);
+    transition: transform .5s var(--ease);
   }
-  .project:hover .project-media { transform: translateY(-4px); }
-  .project-media .badge {
-    position: absolute; top: 16px; left: 16px;
-    z-index: 3;
-    padding: 5px 10px;
-    background: rgba(10,10,10,0.6);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-mid);
-    border-radius: 999px;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: var(--ink-2);
-    text-transform: uppercase;
+  .project:hover .p-media { transform: translateY(-4px) scale(1.005); }
+  .p-media svg { width: 100%; height: 100%; }
+  .p-media .badge {
+    position: absolute; top: 14px; left: 14px; z-index: 3;
+    padding: 5px 11px; border-radius: 999px;
+    background: rgba(6,6,6,0.6); backdrop-filter: blur(10px);
+    border: 1px solid var(--border-2);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-2);
+    display: inline-flex; align-items: center; gap: 7px;
   }
-  .project-media .badge .accent-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 6px; vertical-align: middle; }
-  .project-media .year { position: absolute; top: 16px; right: 16px; z-index: 3; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
-  .project-media svg { width: 100%; height: 100%; display: block; }
-
-  .art-medical {
-    background:
-      radial-gradient(circle at 50% 50%, rgba(255,94,58,0.18), transparent 60%),
-      radial-gradient(circle at 80% 20%, rgba(255,136,102,0.08), transparent 50%),
-      var(--bg-elev);
+  .p-media .badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+  .p-media .yr { position: absolute; top: 16px; right: 16px; z-index: 3; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .p-info { display: flex; flex-direction: column; gap: 0.9rem; }
+  .p-info .idx { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+  .p-info h3 { font-weight: 540; font-size: clamp(1.7rem, 3.2vw, 2.6rem); letter-spacing: -0.04em; line-height: 1.02; }
+  .p-info h3 .grad { background: linear-gradient(100deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .p-info .desc { font-size: 14.5px; font-weight: 330; color: var(--ink-2); line-height: 1.6; max-width: 52ch; }
+  .p-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .p-tags span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--ink-2); padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255,255,255,0.02); }
+  .p-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 0.5rem; }
+  .p-link {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 10px 19px; border-radius: 999px;
+    background: var(--ink); color: #060606;
+    font-size: 13px; font-weight: 520;
+    transition: background .2s ease, transform .25s var(--ease), box-shadow .25s ease;
   }
-  .art-exercise {
-    background:
-      radial-gradient(circle at 25% 70%, rgba(255,94,58,0.16), transparent 55%),
-      radial-gradient(circle at 75% 30%, rgba(255,136,102,0.10), transparent 55%),
-      var(--bg-elev);
-  }
-  .art-matcher {
-    background:
-      radial-gradient(circle at 18% 50%, rgba(255,94,58,0.15), transparent 50%),
-      radial-gradient(circle at 82% 50%, rgba(255,94,58,0.15), transparent 50%),
-      radial-gradient(circle at 50% 50%, rgba(255,136,102,0.10), transparent 45%),
-      var(--bg-elev);
-  }
-  .art-netflix {
-    background:
-      radial-gradient(circle at 50% 30%, rgba(255,94,58,0.20), transparent 55%),
-      radial-gradient(circle at 20% 80%, rgba(255,136,102,0.10), transparent 50%),
-      radial-gradient(circle at 80% 70%, rgba(255,94,58,0.08), transparent 45%),
-      var(--bg-elev);
-  }
-  .art-walmart {
-    background:
-      radial-gradient(circle at 30% 40%, rgba(255,94,58,0.16), transparent 55%),
-      radial-gradient(circle at 70% 65%, rgba(255,136,102,0.12), transparent 50%),
-      radial-gradient(circle at 55% 20%, rgba(255,94,58,0.08), transparent 40%),
-      var(--bg-elev);
-  }
-  .art-books {
-    background:
-      radial-gradient(circle at 40% 55%, rgba(255,94,58,0.18), transparent 55%),
-      radial-gradient(circle at 75% 25%, rgba(255,136,102,0.12), transparent 50%),
-      radial-gradient(circle at 20% 20%, rgba(255,94,58,0.08), transparent 45%),
-      var(--bg-elev);
-  }
-  .art-automation {
-    background:
-      radial-gradient(circle at 60% 40%, rgba(255,94,58,0.16), transparent 55%),
-      radial-gradient(circle at 20% 70%, rgba(255,136,102,0.12), transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255,94,58,0.08), transparent 45%),
-      var(--bg-elev);
+  .p-link:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 26px var(--accent-glow); }
+  .p-link.alt { background: transparent; color: var(--ink); border: 1px solid var(--border-2); }
+  .p-link.alt:hover { background: var(--surface-2); border-color: var(--ink-3); box-shadow: none; }
+  .p-link .arr { transition: transform .25s var(--ease); }
+  .p-link:hover .arr { transform: translateX(3px); }
+  @media (max-width: 920px) {
+    .project, .project.flip { grid-template-columns: 1fr; }
+    .project.flip .p-media { order: 0; }
   }
 
-  .project-info { display: flex; flex-direction: column; gap: 1rem; }
-  .project-info .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; }
-  .project-info h3 { font-family: var(--sans); font-weight: 500; font-size: clamp(1.8rem, 3.5vw, 2.75rem); line-height: 1.05; letter-spacing: -0.035em; }
-  .project-info h3 .grad { background: linear-gradient(135deg, var(--accent), #ff8866); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
-  .project-info .desc { font-family: var(--sans); font-weight: 300; font-size: 1.05rem; line-height: 1.55; color: var(--ink-2); max-width: 50ch; letter-spacing: -0.01em; }
-  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-  .project-tags span { font-family: var(--sans); font-size: 11px; color: var(--ink-2); padding: 5px 10px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 999px; }
-  .project-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 1rem; }
-  .project-link {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 11px 20px;
-    background: var(--ink);
-    color: var(--bg);
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 500;
-    border-radius: 999px;
-    width: fit-content;
-    transition: transform .25s ease, box-shadow .3s ease;
-  }
-  .project-link:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255, 251, 240, 0.12); }
-  .project-link.secondary { background: var(--bg-elev); color: var(--ink); border: 1px solid var(--border); }
-  .project-link.secondary:hover { background: var(--bg-elev-2); border-color: var(--border-mid); box-shadow: none; }
-  .project-link .arr { transition: transform .25s ease; }
-  .project-link:hover .arr { transform: translateX(3px); }
-  @media (max-width: 900px) {
-    .project, .project.reverse { grid-template-columns: 1fr; gap: 2rem; padding: 1.75rem; }
-    .project.reverse .project-media { order: 0; }
-    .project.reverse .project-info { order: 0; }
-  }
+  /* ───────── RESUME ───────── */
+  .res-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.6rem; }
+  .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .res-card { padding: 1.8rem 1.9rem; }
+  .res-card h3 { font-size: 1rem; font-weight: 520; letter-spacing: -0.02em; display: flex; justify-content: space-between; padding-bottom: 1.1rem; margin-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  .res-card h3 .k { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.14em; }
+  .entry { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .entry:last-child { border-bottom: none; padding-bottom: 0.2rem; }
+  .entry .row { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+  .entry .t { font-weight: 500; font-size: 0.98rem; letter-spacing: -0.015em; }
+  .entry .w { font-family: var(--mono); font-size: 11px; color: var(--ink-3); white-space: nowrap; letter-spacing: 0.05em; }
+  .entry .o { font-size: 13px; color: var(--ink-2); margin-top: 2px; font-weight: 330; }
+  .entry .n { font-size: 13px; color: var(--ink-3); margin-top: 7px; line-height: 1.55; font-weight: 330; }
+  .courses { display: grid; grid-template-columns: auto 1fr; gap: 5px 14px; margin-top: 0.6rem; }
+  .courses .code { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+  .courses .name { font-size: 13px; color: var(--ink-2); font-weight: 330; }
+  .awards { list-style: none; }
+  .awards li { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; padding: 0.7rem 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+  .awards li:last-child { border-bottom: none; }
+  .awards .y { font-family: var(--mono); font-size: 11px; color: var(--ink-3); white-space: nowrap; }
+  @media (max-width: 860px) { .res-grid { grid-template-columns: 1fr; } }
 
-  .certs {
-    max-width: var(--max);
-    margin: 0 auto;
-    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    overflow: hidden;
-  }
+  /* ───────── CERTS ───────── */
+  .certs.card { border-radius: 22px; }
   .cert {
-    display: grid;
-    grid-template-columns: 56px 1fr auto auto;
-    gap: 2rem;
-    padding: 1.5rem 2rem;
-    align-items: center;
+    display: grid; grid-template-columns: 52px 1fr auto auto;
+    gap: 1.6rem; align-items: center;
+    padding: 1.2rem 1.8rem;
     border-bottom: 1px solid var(--border);
-    transition: background .3s ease;
     position: relative;
-    color: var(--ink);
+    transition: background .25s ease;
   }
   .cert:last-child { border-bottom: none; }
-  .cert::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); transform: scaleY(0); transition: transform .3s cubic-bezier(.7,.1,.2,1); transform-origin: center; }
-  .cert:hover { background: rgba(255,255,255,0.02); }
-  .cert:hover::before { transform: scaleY(1); }
-  .cert:hover .cert-name { color: var(--accent); }
-  .cert:hover .arr { color: var(--accent); transform: translateX(4px); }
-  .cert .idx { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.12em; }
-  .cert .info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  .cert-name { font-family: var(--sans); font-weight: 500; font-size: clamp(1.05rem, 1.5vw, 1.25rem); letter-spacing: -0.02em; line-height: 1.2; transition: color .3s ease; }
-  .cert .issuer { font-family: var(--sans); font-size: 12px; color: var(--ink-3); display: inline-flex; align-items: center; gap: 8px; }
-  .cert .issuer .sep { color: var(--ink-4); }
-  .cert .badge-new { display: inline-flex; padding: 2px 8px; background: var(--accent-soft); border: 1px solid rgba(255,94,58,0.25); border-radius: 999px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; }
-  .cert .year { font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: 0.06em; }
-  .cert .arr { font-family: var(--mono); font-size: 14px; color: var(--ink-3); transition: color .3s ease, transform .3s ease; }
-  @media (max-width: 768px) { .cert { grid-template-columns: 32px 1fr auto; gap: 1rem; padding: 1.25rem 1.25rem; } .cert .year { display: none; } }
-
-  .resume { max-width: var(--max); margin: 0 auto; }
-  .resume-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 2.5rem; }
-  .resume-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .resume-card {
-    padding: 2rem 2rem 1.5rem;
-    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    display: flex; flex-direction: column;
-    transition: border-color .3s ease;
+  .cert::after {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(var(--accent), var(--accent-2));
+    transform: scaleY(0); transform-origin: center;
+    transition: transform .3s var(--ease);
   }
-  .resume-card:hover { border-color: var(--border-mid); }
-  .resume-card .head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; }
-  .resume-card .head h3 { font-family: var(--sans); font-weight: 500; font-size: 1.1rem; letter-spacing: -0.02em; color: var(--ink); }
-  .resume-card .head .idx { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em; }
-  .resume-item { display: flex; flex-direction: column; gap: 4px; padding: 1rem 0; border-bottom: 1px solid var(--border); }
-  .resume-item:first-child { padding-top: 0; }
-  .resume-item:last-child { border-bottom: none; padding-bottom: 0.25rem; }
-  .resume-item .row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
-  .resume-item .title { font-family: var(--sans); font-weight: 500; font-size: 0.95rem; color: var(--ink); letter-spacing: -0.015em; line-height: 1.25; }
-  .resume-item .when { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; white-space: nowrap; }
-  .resume-item .org { font-family: var(--sans); font-size: 13px; color: var(--ink-2); line-height: 1.4; }
-  .resume-item .note { font-family: var(--sans); font-size: 13px; color: var(--ink-3); line-height: 1.5; margin-top: 6px; }
-  .courses { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin-top: 0.25rem; }
-  .courses .code { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.04em; }
-  .courses .name { font-family: var(--sans); font-size: 13px; color: var(--ink-2); }
-  .award-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .award-list li { display: grid; grid-template-columns: 14px 1fr auto; gap: 10px; align-items: baseline; font-family: var(--sans); font-size: 13px; color: var(--ink-2); line-height: 1.4; }
-  .award-list li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); margin-top: 6px; }
-  .award-list li .years { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; white-space: nowrap; }
-  @media (max-width: 768px) { .resume-grid { grid-template-columns: 1fr; } }
+  .cert:hover { background: rgba(255,255,255,0.025); }
+  .cert:hover::after { transform: scaleY(1); }
+  .cert:hover .cn { color: var(--accent-2); }
+  .cert:hover .go { color: var(--accent); transform: translateX(4px); }
+  .cert .ix { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.1em; }
+  .cert .cn { font-weight: 500; font-size: 1.02rem; letter-spacing: -0.015em; line-height: 1.3; transition: color .25s ease; }
+  .cert .is { font-size: 12px; color: var(--ink-3); margin-top: 2px; font-weight: 330; }
+  .cert .new {
+    display: inline-block; margin-left: 9px; vertical-align: 2px;
+    font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); background: var(--accent-soft);
+    border: 1px solid rgba(255,94,58,0.3); border-radius: 999px; padding: 2px 8px;
+  }
+  .cert .yy { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+  .cert .go { font-family: var(--mono); color: var(--ink-3); transition: color .25s ease, transform .25s var(--ease); }
+  @media (max-width: 700px) { .cert { grid-template-columns: 30px 1fr auto; gap: 0.9rem; padding: 1.05rem 1.2rem; } .cert .yy { display: none; } }
 
-  .contact { padding: 7rem var(--pad-x) 4rem; border-top: 1px solid var(--border); position: relative; overflow: hidden; }
-  .contact-glow { position: absolute; top: 50%; right: 0; transform: translateY(-50%); width: 600px; height: 600px; background: radial-gradient(circle, var(--accent-glow), transparent 65%); filter: blur(80px); pointer-events: none; z-index: 0; }
-  .contact-inner { max-width: var(--max); margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem; position: relative; z-index: 2; }
-  .contact .big { font-family: var(--sans); font-weight: 500; font-size: clamp(3rem, 9vw, 8rem); line-height: 0.95; letter-spacing: -0.05em; }
-  .contact .big .grad { background: linear-gradient(135deg, var(--accent), #ff8866); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
-  .contact .big .light { font-weight: 200; color: var(--ink-3); }
-  .email-link { display: inline-flex; align-items: center; gap: 14px; padding: 16px 24px 16px 28px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 999px; font-family: var(--sans); font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 500; color: var(--ink); width: fit-content; transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
-  .email-link:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 12px 32px var(--accent-soft); }
-  .email-link .arr { color: var(--accent); transition: transform .3s ease; }
-  .email-link:hover .arr { transform: translateX(4px); }
-  .socials { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 2rem; border-top: 1px solid var(--border); margin-top: 1rem; }
-  .socials a { padding: 10px 18px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 999px; font-family: var(--sans); font-size: 13px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 8px; transition: color .25s ease, border-color .25s ease, background .25s ease; }
-  .socials a:hover { color: var(--ink); background: var(--bg-elev-2); border-color: var(--border-mid); }
+  /* ───────── CONTACT ───────── */
+  .contact { padding-bottom: 3rem; overflow: clip; }
+  .contact .shell { position: relative; }
+  .contact-glow {
+    position: absolute; right: -10%; top: -20%;
+    width: 640px; height: 640px;
+    background: radial-gradient(circle, var(--accent-glow), transparent 65%);
+    filter: blur(70px); pointer-events: none;
+  }
+  .contact h2 {
+    font-weight: 540;
+    font-size: clamp(3rem, 10vw, 8.5rem);
+    line-height: 0.96; letter-spacing: -0.05em;
+    margin-top: 1.3rem;
+    position: relative;
+  }
+  .contact h2 .grad { background: linear-gradient(100deg, var(--accent), var(--accent-2), var(--accent-3)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .contact h2 .dim { color: var(--ink-3); font-weight: 260; }
+  .email-pill {
+    margin-top: 2.6rem;
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 16px 26px;
+    background: var(--surface); border: 1px solid var(--border-2);
+    border-radius: 999px; backdrop-filter: blur(10px);
+    font-family: var(--mono); font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+    transition: border-color .25s ease, transform .3s var(--ease), box-shadow .3s ease;
+    position: relative;
+  }
+  .email-pill:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 16px 40px var(--accent-soft); }
+  .email-pill .arr { color: var(--accent); transition: transform .25s var(--ease); }
+  .email-pill:hover .arr { transform: translateX(5px); }
+  .socials { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2.4rem; position: relative; }
+  .socials a {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 10px 18px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+    font-size: 13px; color: var(--ink-2);
+    transition: color .2s ease, border-color .2s ease, transform .25s var(--ease);
+  }
+  .socials a:hover { color: var(--ink); border-color: var(--border-2); transform: translateY(-2px); }
   .socials a svg { width: 14px; height: 14px; }
-  .colophon { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--ink-4); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; }
+  .colophon {
+    margin-top: 4.5rem; padding-top: 1.8rem;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-4); letter-spacing: 0.05em;
+    position: relative;
+  }
   .colophon .right { text-align: right; }
-  @media (max-width: 768px) { .colophon { flex-direction: column; gap: 1rem; align-items: flex-start; } .colophon .right { text-align: left; } }
+  @media (max-width: 700px) { .colophon { flex-direction: column; align-items: flex-start; gap: 0.9rem; } .colophon .right { text-align: left; } }
 
-  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .8s cubic-bezier(.5,.1,.2,1), transform .8s cubic-bezier(.5,.1,.2,1); }
-  .reveal.in { opacity: 1; transform: translateY(0); }
-  .delay-1 { transition-delay: .1s; }
-  .delay-2 { transition-delay: .2s; }
-  .delay-3 { transition-delay: .35s; }
-  .delay-4 { transition-delay: .5s; }
-  .delay-5 { transition-delay: .65s; }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  /* reveal */
+  .rv { opacity: 0; transform: translateY(22px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+  .rv.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .rv { opacity: 1; transform: none; }
+    .hero h1 .row > span { transform: none; }
+    body::after { display: none; }
+  }
 </style>
 </head>
 <body>
 
-<nav class="top">
-  <div class="inner">
-    <a href="#" class="logo">
-      <span class="mark">H</span>
-      Hunter Halvorson
-    </a>
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#stack">Stack</a>
-      <a href="#work">Work</a>
-      <a href="#resume">Resume</a>
-      <a href="#certifications">Certifications</a>
-      <a href="#contact">Contact</a>
-    </div>
+<div class="dots" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
 
-  </div>
+<nav class="top" aria-label="Main">
+  <span class="brand">H</span>
+  <a class="link" href="#about">About</a>
+  <a class="link" href="#stack">Stack</a>
+  <a class="link" href="#work">Work</a>
+  <a class="link" href="#resume">Resume</a>
+  <a class="link" href="#certifications">Certs</a>
+  <a class="cta" href="#contact">Get in touch</a>
 </nav>
 
+<!-- ── HERO ── -->
 <header class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow-2"></div>
+  <div class="hero-aurora" aria-hidden="true"></div>
   <div class="hero-inner">
-    <div class="hero-main">
-      <span class="hero-tag reveal">
-        <span class="dot"></span>
-        CS &amp; Finance · University of Calgary
-      </span>
-      <h1>
-        <span class="reveal delay-1">Hunter</span><br>
-        <span class="grad reveal delay-2">Halvorson.</span>
-      </h1>
-      <p class="hero-desc reveal delay-3">
-        Computer Science &amp; Finance student building software at the intersection of <span style="color: var(--ink);">data, design, and decision-making</span>.
-      </p>
-      <div class="hero-actions reveal delay-4">
-        <a href="#work" class="btn btn-primary">View Work <span class="arrow">→</span></a>
-        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+    <span class="hero-status"><span class="ring"></span>Open to opportunities · CS &amp; Finance @ UCalgary</span>
+    <h1>
+      <span class="row"><span>Hunter</span></span>
+      <span class="row"><span class="grad">Halvorson</span></span>
+    </h1>
+    <div class="hero-sub">
+      <p class="hero-desc">Building software at the intersection of <b>data, design, and decision-making</b> — from deep learning pipelines and RAG systems to polished web applications.</p>
+      <div class="hero-actions">
+        <a href="#work" class="btn btn-fill">View work <span class="arr">→</span></a>
+        <a href="#contact" class="btn btn-line">Get in touch</a>
       </div>
     </div>
-
   </div>
-  <div class="hero-scroll"><span>Scroll</span><span class="bar"></span></div>
 </header>
 
-<!-- ── ABOUT ── -->
-<section id="about" class="bordered">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">01 — About</span>
-      <h2>A short <span class="light">introduction.</span></h2>
-    </div>
-    <p class="lead">A computer scientist with a finance lens — drawn to problems that sit at the seam between engineering, data, and decision-making.</p>
+<!-- ── MARQUEE ── -->
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span class="it">Python</span><span class="it">PyTorch</span><span class="it">LangChain</span><span class="it">RAG Pipelines</span><span class="it">PostgreSQL</span><span class="it">React</span><span class="it">spaCy</span><span class="it">Hugging Face</span><span class="it">Transfer Learning</span><span class="it">Vector Databases</span>
+    <span class="it">Python</span><span class="it">PyTorch</span><span class="it">LangChain</span><span class="it">RAG Pipelines</span><span class="it">PostgreSQL</span><span class="it">React</span><span class="it">spaCy</span><span class="it">Hugging Face</span><span class="it">Transfer Learning</span><span class="it">Vector Databases</span>
   </div>
-  <div class="about-body">
-    <div class="portrait">
-      <img src="images/image.png" alt="Hunter Halvorson">
+</div>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="shell">
+    <div class="sec-head rv">
+      <div>
+        <span class="chip">About</span>
+        <h2>A short <span class="dim">introduction.</span></h2>
+      </div>
+      <p class="lead">A computer scientist with a finance lens — drawn to problems that sit at the seam between engineering, data, and decision-making.</p>
     </div>
-    <div class="about-text">
-      <p>I'm <span class="em">Hunter Halvorson</span>, a Computer Science &amp; Finance student at the <span class="em">University of Calgary</span>. I'm passionate about building innovative solutions through <span class="em">data science</span> and <span class="em">software development</span>.</p>
-      <p><span class="muted">My focus is on creating</span> clean, efficient, and maintainable software that solves real-world problems — from machine learning pipelines to polished web applications.</p>
-      <p><span class="muted">I also build</span> LLM-powered pipelines using <span class="em">LangChain</span> — structuring model inputs, chaining outputs through parsers with LCEL, and designing <span class="em">RAG workflows</span> backed by vector databases.</p>
-      <p><span class="muted">I'm constantly</span> learning and exploring new technologies to expand my skill set and deliver exceptional results.</p>
-      <div class="stats">
-        <div class="stat"><div class="num">2<span class="small">×</span></div><div class="lbl">Majors</div></div>
-        <div class="stat"><div class="num">9<span class="small">+</span></div><div class="lbl">Certifications</div></div>
-        <div class="stat"><div class="num">26<span class="small">+</span></div><div class="lbl">Languages &amp; tools</div></div>
+    <div class="bento">
+      <div class="card b-photo rv">
+        <img src="images/image.png" alt="Hunter Halvorson">
+        <span class="tag">Calgary, AB</span>
+      </div>
+      <div class="card b-intro rv">
+        <p>I'm <b>Hunter Halvorson</b>, a Computer Science &amp; Finance student at the <b>University of Calgary</b>, passionate about building innovative solutions through <span class="em">data science</span> and <span class="em">software development</span>.</p>
+        <p>My focus is clean, efficient, maintainable software that solves real problems — from <span class="em">machine learning pipelines</span> to polished web applications. I build LLM-powered systems with <span class="em">LangChain</span>: structured model I/O, LCEL chaining, and RAG workflows backed by vector databases.</p>
+      </div>
+      <div class="card b-stat rv"><span class="num">2<sup>×</sup></span><span class="lbl">Majors</span></div>
+      <div class="card b-stat rv"><span class="num">9<sup>+</sup></span><span class="lbl">Certifications</span></div>
+      <div class="card b-wide rv">
+        <div>
+          <div class="t">Currently exploring</div>
+          <div class="d">Always adding to the toolkit — right now it's deeper LLM engineering.</div>
+        </div>
+        <div class="row"><span>RAG</span><span>LCEL</span><span>Output Parsers</span><span>Chroma</span><span>Embeddings</span></div>
+      </div>
+      <div class="card b-stat rv"><span class="num">26<sup>+</sup></span><span class="lbl">Languages &amp; tools</span></div>
+      <div class="card b-stat rv"><span class="num">7</span><span class="lbl">Featured projects</span></div>
+      <div class="card b-wide rv">
+        <div>
+          <div class="t">Recognition</div>
+          <div class="d">Dean's List in both faculties · Jason Lang Scholarship ×3.</div>
+        </div>
+        <div class="row"><span>Faculty of Science</span><span>Haskayne School of Business</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ── STACK ── -->
-<section id="stack" class="bordered">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">02 — Stack</span>
-      <h2>Tools of the <span class="light">trade.</span></h2>
+<section id="stack">
+  <div class="shell">
+    <div class="sec-head rv">
+      <div>
+        <span class="chip">Stack</span>
+        <h2>Tools of the <span class="dim">trade.</span></h2>
+      </div>
+      <p class="lead">A curated, opinionated kit. I reach first for what's sharp and reliable — and learn whatever the problem needs.</p>
     </div>
-    <p class="lead">A curated, opinionated kit. I reach first for what's sharp and reliable — and learn whatever the problem needs.</p>
-  </div>
-  <div class="stack">
-    <div class="stack-cat">
-      <div class="head"><h3>Languages</h3><span class="idx">A</span></div>
-      <ul>
-        <li>Python</li><li>Java</li><li>C</li><li>C++</li><li>Assembly</li>
-        <li>JavaScript</li><li>HTML / CSS</li><li>SQL</li><li>Haskell</li><li>Prolog</li>
-      </ul>
-    </div>
-    <div class="stack-cat">
-      <div class="head"><h3>Data Science &amp; ML</h3><span class="idx">B</span></div>
-      <ul>
-        <li>pandas</li><li>NumPy</li><li>Matplotlib</li><li>scikit-learn</li><li>PyTorch</li>
-      </ul>
-    </div>
-    <div class="stack-cat">
-      <div class="head"><h3>NLP &amp; LLM</h3><span class="idx">C</span></div>
-      <ul>
-        <li>Text Processing</li>
-        <li>POS Tagging &amp; NER</li>
-        <li>Sentiment Analysis</li>
-        <li>Text Vectorization</li>
-        <li>Topic Modelling</li>
-        <li class="highlight">LangChain (LCEL)</li>
-        <li class="highlight">Model I/O &amp; Output Parsers</li>
-        <li class="highlight">RAG Pipelines</li>
-      </ul>
-    </div>
-    <div class="stack-cat">
-      <div class="head"><h3>Tools &amp; Frameworks</h3><span class="idx">D</span></div>
-      <ul>
-        <li>Git</li><li>GitHub</li><li>React</li><li>Gradio</li>
-        <li>Hugging Face</li><li>Socket Programming</li>
-        <li class="highlight">Vector Databases</li>
-      </ul>
+    <div class="stack">
+      <div class="card rv">
+        <h3>Languages <span class="k">A</span></h3>
+        <ul>
+          <li>Python</li><li>Java</li><li>C</li><li>C++</li><li>Assembly</li>
+          <li>JavaScript</li><li>HTML / CSS</li><li>SQL</li><li>Haskell</li><li>Prolog</li>
+        </ul>
+      </div>
+      <div class="card rv">
+        <h3>Data Science &amp; ML <span class="k">B</span></h3>
+        <ul>
+          <li>pandas</li><li>NumPy</li><li>Matplotlib</li><li>scikit-learn</li><li>PyTorch</li>
+        </ul>
+      </div>
+      <div class="card rv">
+        <h3>NLP &amp; LLM <span class="k">C</span></h3>
+        <ul>
+          <li>Text Processing</li>
+          <li>POS Tagging &amp; NER</li>
+          <li>Sentiment Analysis</li>
+          <li>Text Vectorization</li>
+          <li>Topic Modelling</li>
+          <li class="hl">LangChain (LCEL)</li>
+          <li class="hl">Model I/O &amp; Output Parsers</li>
+          <li class="hl">RAG Pipelines</li>
+        </ul>
+      </div>
+      <div class="card rv">
+        <h3>Tools &amp; Frameworks <span class="k">D</span></h3>
+        <ul>
+          <li>Git</li><li>GitHub</li><li>React</li><li>Gradio</li>
+          <li>Hugging Face</li><li>Socket Programming</li>
+          <li class="hl">Vector Databases</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ── WORK ── -->
-<section id="work" class="bordered">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">03 — Selected Work</span>
-      <h2>Featured <span class="light">projects.</span></h2>
+<section id="work">
+  <div class="shell">
+    <div class="sec-head rv">
+      <div>
+        <span class="chip">Selected work</span>
+        <h2>Featured <span class="dim">projects.</span></h2>
+      </div>
+      <p class="lead">Recent projects — turning state-of-the-art deep learning and data analysis into something genuinely useful.</p>
     </div>
-    <p class="lead">A look at recent projects — turning state-of-the-art deep learning and data analysis into something genuinely useful.</p>
-  </div>
 
-  <div class="projects">
+    <div class="projects">
 
-    <!-- 001 ScreenVision AI -->
-    <article class="project">
-      <div class="project-media art-medical">
-        <span class="badge"><span class="accent-dot"></span>Featured</span>
-        <span class="year">2025</span>
-        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-          <g stroke="#ff5e3a" stroke-width="0.6" fill="none" opacity="0.6">
-            <circle cx="200" cy="150" r="30"/><circle cx="200" cy="150" r="55"/>
-            <circle cx="200" cy="150" r="80"/><circle cx="200" cy="150" r="105"/><circle cx="200" cy="150" r="130"/>
-          </g>
-          <g stroke="#ff8866" stroke-width="0.3" fill="none" opacity="0.3"><circle cx="200" cy="150" r="155"/></g>
-          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.15">
-            <line x1="40" y1="150" x2="360" y2="150"/><line x1="200" y1="20" x2="200" y2="280"/>
-          </g>
-          <g fill="#ff5e3a">
-            <circle cx="200" cy="150" r="3.5"/><circle cx="232" cy="128" r="2"/><circle cx="172" cy="172" r="2"/>
-          </g>
-          <g stroke="#ff5e3a" stroke-width="0.7" fill="none" stroke-dasharray="3,2.5">
-            <rect x="214" y="114" width="36" height="28" rx="2"/>
-          </g>
-        </svg>
-      </div>
-      <div class="project-info">
-        <span class="num">Featured · 001</span>
-        <h3>ScreenVision <span class="grad">AI</span></h3>
-        <p class="desc">Advanced deep learning system for medical image analysis, leveraging state-of-the-art neural networks for accurate diagnostic support.</p>
-        <div class="project-tags"><span>Python</span><span>Deep Learning</span><span>Computer Vision</span><span>Medical AI</span></div>
-        <div class="project-links">
-          <a href="https://youtu.be/M1GjIFlY1cM" target="_blank" rel="noopener" class="project-link">Watch Demo <span class="arr">→</span></a>
-        </div>
-      </div>
-    </article>
-
-    <!-- 002 Exercise Classifier -->
-    <article class="project reverse">
-      <div class="project-media art-exercise">
-        <span class="badge"><span class="accent-dot"></span>Live Demo</span>
-        <span class="year">2026</span>
-        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.06">
-            <line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="120" x2="400" y2="120"/>
-            <line x1="0" y1="180" x2="400" y2="180"/><line x1="0" y1="240" x2="400" y2="240"/>
-            <line x1="80" y1="0" x2="80" y2="300"/><line x1="160" y1="0" x2="160" y2="300"/>
-            <line x1="240" y1="0" x2="240" y2="300"/><line x1="320" y1="0" x2="320" y2="300"/>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="8" fill="#807c70">
-            <text x="60" y="80">squat</text><text x="60" y="115">deadlift</text>
-            <text x="60" y="150">pushup</text><text x="60" y="185">pullup</text><text x="60" y="220">burpee</text>
-          </g>
-          <g fill="#f9f7f1" opacity="0.05">
-            <rect x="110" y="70" width="240" height="10" rx="2"/><rect x="110" y="105" width="240" height="10" rx="2"/>
-            <rect x="110" y="140" width="240" height="10" rx="2"/><rect x="110" y="175" width="240" height="10" rx="2"/>
-            <rect x="110" y="210" width="240" height="10" rx="2"/>
-          </g>
-          <g>
-            <rect x="110" y="70" width="232" height="10" rx="2" fill="#ff5e3a"/>
-            <rect x="110" y="105" width="38" height="10" rx="2" fill="#ff8866" opacity="0.6"/>
-            <rect x="110" y="140" width="22" height="10" rx="2" fill="#ff8866" opacity="0.4"/>
-            <rect x="110" y="175" width="14" height="10" rx="2" fill="#ff8866" opacity="0.3"/>
-            <rect x="110" y="210" width="8" height="10" rx="2" fill="#ff8866" opacity="0.25"/>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="8" fill="#b8b3a7" text-anchor="end">
-            <text x="358" y="78">96.7%</text><text x="358" y="113">1.6%</text>
-            <text x="358" y="148">0.9%</text><text x="358" y="183">0.5%</text><text x="358" y="218">0.3%</text>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
-            <text x="60" y="265">MODEL · RESNET50</text><text x="60" y="278">TEST ACC · 99.15%</text>
-          </g>
-          <g stroke="#ff5e3a" stroke-width="0.6" fill="none" opacity="0.7">
-            <circle cx="342" cy="75" r="4"/>
-            <line x1="336" y1="75" x2="348" y2="75"/><line x1="342" y1="69" x2="342" y2="81"/>
-          </g>
-        </svg>
-      </div>
-      <div class="project-info">
-        <span class="num">Featured · 002</span>
-        <h3>Exercise <span class="grad">Classifier</span></h3>
-        <p class="desc">Fine-tuned ResNet50 on a custom exercise dataset using transfer learning. Achieves 99.15% test accuracy classifying photos of exercises like squats, deadlifts, pushups, pullups, and burpees. Deployed as an interactive web demo where anyone can upload an image and see live predictions.</p>
-        <div class="project-tags"><span>PyTorch</span><span>Transfer Learning</span><span>ResNet50</span><span>Gradio</span><span>Hugging Face</span></div>
-        <div class="project-links">
-          <a href="https://huggingface.co/spaces/HunterHalvorson/exercise-classifier" target="_blank" rel="noopener" class="project-link">Try Live Demo <span class="arr">→</span></a>
-          <a href="https://github.com/HunterHalvorson/exercise-classifier" target="_blank" rel="noopener" class="project-link secondary">View Code <span class="arr">→</span></a>
-        </div>
-      </div>
-    </article>
-
-    <!-- 003 Resume JD Matcher -->
-    <article class="project">
-      <div class="project-media art-matcher">
-        <span class="badge"><span class="accent-dot"></span>Open Source</span>
-        <span class="year">2026</span>
-        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.05">
-            <line x1="0" y1="75" x2="400" y2="75"/><line x1="0" y1="150" x2="400" y2="150"/><line x1="0" y1="225" x2="400" y2="225"/>
-          </g>
-          <g>
-            <rect x="40" y="55" width="110" height="190" rx="3" fill="none" stroke="#f9f7f1" stroke-width="0.5" opacity="0.22"/>
-            <rect x="40" y="55" width="110" height="14" rx="3" fill="#f9f7f1" opacity="0.04"/>
-          </g>
-          <g>
-            <rect x="250" y="55" width="110" height="190" rx="3" fill="none" stroke="#f9f7f1" stroke-width="0.5" opacity="0.22"/>
-            <rect x="250" y="55" width="110" height="14" rx="3" fill="#f9f7f1" opacity="0.04"/>
-          </g>
-          <g stroke="#807c70" stroke-width="0.6" opacity="0.4" stroke-linecap="round">
-            <line x1="50" y1="85" x2="105" y2="85"/><line x1="50" y1="95" x2="130" y2="95"/>
-            <line x1="50" y1="125" x2="120" y2="125"/><line x1="50" y1="135" x2="138" y2="135"/>
-            <line x1="50" y1="155" x2="115" y2="155"/><line x1="50" y1="195" x2="130" y2="195"/>
-            <line x1="50" y1="205" x2="118" y2="205"/><line x1="50" y1="225" x2="135" y2="225"/>
-          </g>
-          <g stroke="#807c70" stroke-width="0.6" opacity="0.4" stroke-linecap="round">
-            <line x1="260" y1="85" x2="320" y2="85"/><line x1="260" y1="95" x2="345" y2="95"/>
-            <line x1="260" y1="125" x2="335" y2="125"/><line x1="260" y1="135" x2="348" y2="135"/>
-            <line x1="260" y1="155" x2="325" y2="155"/><line x1="260" y1="195" x2="345" y2="195"/>
-            <line x1="260" y1="205" x2="328" y2="205"/><line x1="260" y1="225" x2="340" y2="225"/>
-          </g>
-          <g fill="#ff5e3a">
-            <rect x="50" y="113" width="60" height="4" rx="1" opacity="0.9"/>
-            <rect x="260" y="113" width="60" height="4" rx="1" opacity="0.9"/>
-            <rect x="50" y="173" width="48" height="4" rx="1" opacity="0.55"/>
-            <rect x="260" y="173" width="56" height="4" rx="1" opacity="0.55"/>
-          </g>
-          <g stroke="#ff5e3a" stroke-width="0.7" fill="none" opacity="0.5" stroke-dasharray="2,2.5">
-            <path d="M 150 115 Q 200 95 250 115"/>
-            <path d="M 150 175 Q 200 195 250 175"/>
-          </g>
-          <g>
-            <circle cx="200" cy="150" r="32" fill="#131312" stroke="#f9f7f1" stroke-width="0.4" opacity="0.9"/>
-            <circle cx="200" cy="150" r="32" fill="none" stroke="#f9f7f1" stroke-width="2" opacity="0.08"/>
-            <circle cx="200" cy="150" r="32" fill="none" stroke="#ff5e3a" stroke-width="2" stroke-dasharray="175 200" transform="rotate(-90 200 150)" stroke-linecap="round"/>
-            <text x="200" y="152" text-anchor="middle" font-family="Geist, sans-serif" font-size="15" font-weight="600" fill="#f9f7f1">87<tspan font-size="10" fill="#ff5e3a">%</tspan></text>
-            <text x="200" y="165" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6" fill="#807c70" letter-spacing="1">MATCH</text>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#b8b3a7" text-anchor="middle" letter-spacing="0.8" font-weight="500">
-            <text x="95" y="65">RESUME.PDF</text><text x="305" y="65">JOB_DESC.TXT</text>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
-            <text x="40" y="275">SEMANTIC · 0.7 × cos_sim</text>
-            <text x="360" y="275" text-anchor="end">SKILLS · 0.3 × overlap</text>
-          </g>
-        </svg>
-      </div>
-      <div class="project-info">
-        <span class="num">Featured · 003</span>
-        <h3>Resume ↔ JD <span class="grad">Matcher</span></h3>
-        <p class="desc">An NLP application that scores how well a resume matches a job description. Combines rule-based entity extraction (regex + spaCy over a curated 800+ skill vocabulary) with semantic similarity from sentence-transformer embeddings, then produces an interpretable weighted match score and structured JSON for both documents.</p>
-        <div class="project-tags"><span>Python</span><span>NLP</span><span>spaCy</span><span>Sentence Transformers</span><span>Streamlit</span><span>pdfplumber</span></div>
-        <div class="project-links">
-          <a href="https://github.com/HunterHalvorson/Resume_Parser-Job-Matcher" target="_blank" rel="noopener" class="project-link">View Code <span class="arr">→</span></a>
-        </div>
-      </div>
-    </article>
-
-    <!-- 004 Netflix SQL Analysis -->
-    <article class="project reverse">
-      <div class="project-media art-netflix">
-        <span class="badge"><span class="accent-dot"></span>Data Analysis</span>
-        <span class="year">2026</span>
-        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.05">
-            <line x1="0" y1="60" x2="400" y2="60"/>
-            <line x1="0" y1="120" x2="400" y2="120"/>
-            <line x1="0" y1="180" x2="400" y2="180"/>
-            <line x1="0" y1="240" x2="400" y2="240"/>
-          </g>
-          <g>
-            <rect x="60" y="80" width="160" height="28" rx="3" fill="#ff5e3a" opacity="0.9"/>
-            <rect x="60" y="120" width="68" height="28" rx="3" fill="#ff8866" opacity="0.6"/>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="8" fill="#807c70">
-            <text x="44" y="99" text-anchor="end">Movies</text>
-            <text x="44" y="139" text-anchor="end">TV Shows</text>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="8" fill="#f9f7f1">
-            <text x="228" y="99">6,131</text>
-            <text x="136" y="139">2,676</text>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
-            <text x="60" y="190">RANK</text>
-            <text x="100" y="190">COUNTRY</text>
-            <text x="280" y="190" text-anchor="end">COUNT</text>
-          </g>
-          <line x1="60" y1="195" x2="310" y2="195" stroke="#f9f7f1" stroke-width="0.3" opacity="0.15"/>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#b8b3a7">
-            <text x="60" y="208" fill="#ff5e3a">01</text><text x="100" y="208">United States</text><text x="280" y="208" text-anchor="end">3,211</text>
-            <text x="60" y="220">02</text><text x="100" y="220">India</text><text x="280" y="220" text-anchor="end">1,046</text>
-            <text x="60" y="232">03</text><text x="100" y="232">United Kingdom</text><text x="280" y="232" text-anchor="end">806</text>
-            <text x="60" y="244">04</text><text x="100" y="244">Canada</text><text x="280" y="244" text-anchor="end">445</text>
-            <text x="60" y="256">05</text><text x="100" y="256">France</text><text x="280" y="256" text-anchor="end">393</text>
-          </g>
-          <g>
-            <rect x="295" y="80" width="68" height="22" rx="4" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5"/>
-            <text x="329" y="95" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff5e3a" letter-spacing="0.5">PostgreSQL</text>
-          </g>
-          <g>
-            <rect x="295" y="110" width="68" height="22" rx="4" fill="#ff8866" opacity="0.08" stroke="#ff8866" stroke-width="0.5"/>
-            <text x="329" y="125" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff8866" letter-spacing="0.5">15 queries</text>
-          </g>
-        </svg>
-      </div>
-      <div class="project-info">
-        <span class="num">Featured · 004</span>
-        <h3>Netflix <span class="grad">SQL Analysis</span></h3>
-        <p class="desc">Exploratory data analysis of Netflix's 8,000+ title catalog using PostgreSQL. Solves 9 real business problems — from content distribution and regional breakdowns to keyword-based content categorization — using window functions, string manipulation, date arithmetic, and subqueries.</p>
-        <div class="project-tags">
-          <span>PostgreSQL</span><span>SQL</span><span>Window Functions</span><span>EDA</span><span>Data Analysis</span>
-        </div>
-        <div class="project-links">
-          <a href="https://github.com/HunterHalvorson/Netflix-Business-Problems" target="_blank" rel="noopener" class="project-link">View Code <span class="arr">→</span></a>
-        </div>
-      </div>
-    </article>
-
-    <!-- 005 Walmart ETL + SQL Analysis -->
-    <article class="project">
-      <div class="project-media art-walmart">
-        <span class="badge"><span class="accent-dot"></span>ETL + Analysis</span>
-        <span class="year">2026</span>
-        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.05">
-            <line x1="0" y1="60" x2="400" y2="60"/>
-            <line x1="0" y1="120" x2="400" y2="120"/>
-            <line x1="0" y1="180" x2="400" y2="180"/>
-            <line x1="0" y1="240" x2="400" y2="240"/>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.8">
-            <rect x="30" y="68" width="75" height="34" rx="4" fill="#ff5e3a" opacity="0.15" stroke="#ff5e3a" stroke-width="0.7"/>
-            <text x="67" y="82" text-anchor="middle" fill="#ff5e3a">EXTRACT</text>
-            <text x="67" y="94" text-anchor="middle" fill="#807c70">Walmart.csv</text>
-            <line x1="105" y1="85" x2="128" y2="85" stroke="#ff5e3a" stroke-width="0.7" stroke-dasharray="2,2"/>
-            <text x="116" y="81" text-anchor="middle" fill="#ff5e3a" font-size="9">→</text>
-            <rect x="128" y="68" width="80" height="34" rx="4" fill="#ff8866" opacity="0.12" stroke="#ff8866" stroke-width="0.7"/>
-            <text x="168" y="82" text-anchor="middle" fill="#ff8866">TRANSFORM</text>
-            <text x="168" y="94" text-anchor="middle" fill="#807c70">pandas</text>
-            <line x1="208" y1="85" x2="231" y2="85" stroke="#ff8866" stroke-width="0.7" stroke-dasharray="2,2"/>
-            <text x="219" y="81" text-anchor="middle" fill="#ff8866" font-size="9">→</text>
-            <rect x="231" y="68" width="65" height="34" rx="4" fill="#f9f7f1" opacity="0.04" stroke="#f9f7f1" stroke-width="0.4"/>
-            <text x="263" y="82" text-anchor="middle" fill="#b8b3a7">LOAD</text>
-            <text x="263" y="94" text-anchor="middle" fill="#807c70">PostgreSQL</text>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
-            <text x="30" y="130">QUERY</text>
-            <text x="80" y="130">BUSINESS PROBLEM</text>
-            <text x="340" y="130" text-anchor="end">TYPE</text>
-          </g>
-          <line x1="30" y1="135" x2="355" y2="135" stroke="#f9f7f1" stroke-width="0.3" opacity="0.12"/>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#b8b3a7">
-            <text x="30" y="148" fill="#ff5e3a">Q1</text><text x="80" y="148">Transactions by payment method</text><text x="340" y="148" text-anchor="end" fill="#807c70">GROUP BY</text>
-            <text x="30" y="161" fill="#ff5e3a">Q2</text><text x="80" y="161">Highest-rated category per branch</text><text x="340" y="161" text-anchor="end" fill="#807c70">RANK()</text>
-            <text x="30" y="174" fill="#ff5e3a">Q3</text><text x="80" y="174">Busiest day per branch</text><text x="340" y="174" text-anchor="end" fill="#807c70">RANK()</text>
-            <text x="30" y="187" fill="#ff5e3a">Q5</text><text x="80" y="187">Rating stats by city &amp; category</text><text x="340" y="187" text-anchor="end" fill="#807c70">AGG</text>
-            <text x="30" y="200" fill="#ff5e3a">Q6</text><text x="80" y="200">Total profit per category</text><text x="340" y="200" text-anchor="end" fill="#807c70">DERIVED</text>
-            <text x="30" y="213" fill="#ff5e3a">Q7</text><text x="80" y="213">Most common payment per branch</text><text x="340" y="213" text-anchor="end" fill="#807c70">CTE</text>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.5">
-            <rect x="310" y="66" width="55" height="18" rx="3" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5"/>
-            <text x="337" y="79" text-anchor="middle" fill="#ff5e3a">~10K rows</text>
-            <rect x="310" y="88" width="55" height="18" rx="3" fill="#ff8866" opacity="0.08" stroke="#ff8866" stroke-width="0.5"/>
-            <text x="337" y="101" text-anchor="middle" fill="#ff8866">7 queries</text>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
-            <text x="30" y="268">ETL · Python → PostgreSQL → SQL Analysis</text>
-          </g>
-        </svg>
-      </div>
-      <div class="project-info">
-        <span class="num">Featured · 005</span>
-        <h3>Walmart <span class="grad">SQL Analysis</span></h3>
-        <p class="desc">End-to-end ETL + analysis pipeline on ~10,000 Walmart retail transactions. Raw CSV data is cleaned and transformed in Python (pandas), then loaded into PostgreSQL via SQLAlchemy. Seven business problems are answered with SQL — covering payment method breakdowns, branch-level ratings, profit by category, busiest trading days, and more using window functions and CTEs.</p>
-        <div class="project-tags">
-          <span>Python</span><span>pandas</span><span>PostgreSQL</span><span>SQLAlchemy</span><span>ETL</span><span>SQL</span><span>Window Functions</span>
-        </div>
-        <div class="project-links">
-          <a href="https://github.com/HunterHalvorson/Walmart-Data-Analysis" target="_blank" rel="noopener" class="project-link">View Code <span class="arr">→</span></a>
-        </div>
-      </div>
-    </article>
-
-    <!-- 006 Semantic Book Recommender -->
-    <article class="project reverse">
-      <div class="project-media art-books">
-        <span class="badge"><span class="accent-dot"></span>Live Demo</span>
-        <span class="year">2026</span>
-        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.05">
-            <line x1="0" y1="60" x2="400" y2="60"/>
-            <line x1="0" y1="120" x2="400" y2="120"/>
-            <line x1="0" y1="180" x2="400" y2="180"/>
-            <line x1="0" y1="240" x2="400" y2="240"/>
-          </g>
-          <rect x="30" y="38" width="290" height="24" rx="12" fill="none" stroke="#ff5e3a" stroke-width="0.7" opacity="0.6"/>
-          <text x="44" y="54" font-family="JetBrains Mono, monospace" font-size="8" fill="#807c70">"a story about forgiveness and redemption..."</text>
-          <circle cx="308" cy="50" r="7" fill="none" stroke="#ff5e3a" stroke-width="0.8" opacity="0.8"/>
-          <line x1="313" y1="55" x2="317" y2="59" stroke="#ff5e3a" stroke-width="0.8" opacity="0.8"/>
-          <g font-family="JetBrains Mono, monospace" font-size="7">
-            <rect x="30" y="72" width="32" height="14" rx="7" fill="#ff5e3a" opacity="0.9"/>
-            <text x="46" y="82" text-anchor="middle" fill="#0a0a0a" font-weight="600">Joy</text>
-            <rect x="68" y="72" width="44" height="14" rx="7" fill="none" stroke="#807c70" stroke-width="0.5"/>
-            <text x="90" y="82" text-anchor="middle" fill="#807c70">Surprise</text>
-            <rect x="118" y="72" width="36" height="14" rx="7" fill="none" stroke="#807c70" stroke-width="0.5"/>
-            <text x="136" y="82" text-anchor="middle" fill="#807c70">Fear</text>
-            <rect x="160" y="72" width="32" height="14" rx="7" fill="none" stroke="#807c70" stroke-width="0.5"/>
-            <text x="176" y="82" text-anchor="middle" fill="#807c70">Sad</text>
-            <rect x="198" y="72" width="40" height="14" rx="7" fill="none" stroke="#807c70" stroke-width="0.5"/>
-            <text x="218" y="82" text-anchor="middle" fill="#807c70">Angry</text>
-          </g>
-          <g>
-            <rect x="30" y="98" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff5e3a" stroke-width="0.6" opacity="0.8"/>
-            <rect x="30" y="98" width="48" height="68" rx="3" fill="url(#bookGrad1)" opacity="0.4"/>
-            <rect x="84" y="98" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="138" y="98" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="192" y="98" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="246" y="98" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="300" y="98" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="30" y="174" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="84" y="174" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="138" y="174" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="192" y="174" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="246" y="174" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-            <rect x="300" y="174" width="48" height="68" rx="3" fill="#1c1b1a" stroke="#ff8866" stroke-width="0.4" opacity="0.5"/>
-          </g>
-          <g stroke="#4d4a43" stroke-width="0.4" opacity="0.6">
-            <line x1="37" y1="100" x2="37" y2="164"/><line x1="91" y1="100" x2="91" y2="164"/>
-            <line x1="145" y1="100" x2="145" y2="164"/><line x1="199" y1="100" x2="199" y2="164"/>
-            <line x1="253" y1="100" x2="253" y2="164"/><line x1="307" y1="100" x2="307" y2="164"/>
-            <line x1="37" y1="176" x2="37" y2="240"/><line x1="91" y1="176" x2="91" y2="240"/>
-            <line x1="145" y1="176" x2="145" y2="240"/><line x1="199" y1="176" x2="199" y2="240"/>
-            <line x1="253" y1="176" x2="253" y2="240"/><line x1="307" y1="176" x2="307" y2="240"/>
-          </g>
-          <rect x="26" y="94" width="56" height="14" rx="7" fill="#ff5e3a" opacity="0.95"/>
-          <text x="54" y="104" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#0a0a0a" font-weight="600">97% match</text>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
-            <text x="30" y="260">VECTOR DB · Chroma + OpenAI Embeddings · LangChain RAG</text>
-            <text x="370" y="260" text-anchor="end">7,000+ books</text>
-          </g>
-          <defs>
-            <linearGradient id="bookGrad1" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ff5e3a" stop-opacity="0.5"/>
-              <stop offset="100%" stop-color="#ff8866" stop-opacity="0.2"/>
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-      <div class="project-info">
-        <span class="num">Featured · 006</span>
-        <h3>Book <span class="grad">Recommender</span></h3>
-        <p class="desc">Semantic book recommendation engine built on a 7,000+ title dataset. Describe the kind of story you're looking for in plain English, then filter by genre and emotional tone — powered by a LangChain RAG pipeline using OpenAI embeddings stored in a Chroma vector database, with LCEL chaining and output parsing throughout. Deployed as an interactive Gradio app on Hugging Face Spaces.</p>
-        <div class="project-tags">
-          <span>Python</span><span>LangChain</span><span>RAG</span><span>LCEL</span><span>OpenAI Embeddings</span><span>Chroma</span><span>Gradio</span><span>Hugging Face</span><span>NLP</span>
-        </div>
-        <div class="project-links">
-          <a href="https://huggingface.co/spaces/HunterHalvorson/Book_Recommender" target="_blank" rel="noopener" class="project-link">Try Live Demo <span class="arr">→</span></a>
-        </div>
-      </div>
-    </article>
-
-    <!-- 007 Python Automation -->
-    <article class="project">
-      <div class="project-media art-automation">
-        <span class="badge"><span class="accent-dot"></span>Open Source</span>
-        <span class="year">2026</span>
-        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-          <!-- Grid -->
-          <g stroke="#f9f7f1" stroke-width="0.3" opacity="0.05">
-            <line x1="0" y1="60" x2="400" y2="60"/>
-            <line x1="0" y1="120" x2="400" y2="120"/>
-            <line x1="0" y1="180" x2="400" y2="180"/>
-            <line x1="0" y1="240" x2="400" y2="240"/>
-          </g>
-          <!-- Currency converter module -->
-          <g>
-            <rect x="30" y="40" width="160" height="100" rx="6" fill="none" stroke="#ff5e3a" stroke-width="0.7" opacity="0.5"/>
-            <rect x="30" y="40" width="160" height="18" rx="6" fill="#ff5e3a" opacity="0.12"/>
-            <text x="40" y="53" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff5e3a" letter-spacing="0.5">currency.py</text>
-            <!-- live rates table -->
-            <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#807c70">
-              <text x="40" y="74">USD → CAD</text><text x="160" y="74" text-anchor="end" fill="#b8b3a7">1.36</text>
-              <text x="40" y="88">USD → EUR</text><text x="160" y="88" text-anchor="end" fill="#b8b3a7">0.92</text>
-              <text x="40" y="102">USD → AUD</text><text x="160" y="102" text-anchor="end" fill="#b8b3a7">1.53</text>
-              <text x="40" y="116">USD → CNY</text><text x="160" y="116" text-anchor="end" fill="#b8b3a7">7.24</text>
+      <!-- 001 -->
+      <article class="card project rv">
+        <div class="p-media" style="background: radial-gradient(circle at 50% 50%, rgba(255,94,58,0.16), transparent 60%), var(--bg-2);">
+          <span class="badge">Featured</span><span class="yr">2025</span>
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <g stroke="#ff5e3a" stroke-width="0.6" fill="none" opacity="0.6">
+              <circle cx="200" cy="150" r="30"/><circle cx="200" cy="150" r="55"/>
+              <circle cx="200" cy="150" r="80"/><circle cx="200" cy="150" r="105"/><circle cx="200" cy="150" r="130"/>
             </g>
-            <!-- rates table -->
-            <rect x="38" y="123" width="46" height="11" rx="5.5" fill="#ff5e3a" opacity="0.18" stroke="#ff5e3a" stroke-width="0.5"/>
-            <text x="61" y="131" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#ff5e3a" letter-spacing="0.3">API</text>
-          </g>
-          <!-- Backup module -->
-          <g>
-            <rect x="210" y="40" width="160" height="100" rx="6" fill="none" stroke="#ff8866" stroke-width="0.7" opacity="0.5"/>
-            <rect x="210" y="40" width="160" height="18" rx="6" fill="#ff8866" opacity="0.08"/>
-            <text x="220" y="53" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff8866" letter-spacing="0.5">backup.py</text>
-            <!-- folder tree visual -->
-            <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#807c70">
-              <text x="220" y="74">Backups/</text>
-              <text x="228" y="88" fill="#b8b3a7">2026-06-03/</text>
-              <text x="228" y="101" fill="#b8b3a7">2026-06-04/</text>
-              <text x="228" y="114" fill="#ff5e3a">2026-06-05/ ✓</text>
+            <g stroke="#ff8a5c" stroke-width="0.3" fill="none" opacity="0.3"><circle cx="200" cy="150" r="155"/></g>
+            <g stroke="#f5f3ee" stroke-width="0.3" opacity="0.15">
+              <line x1="40" y1="150" x2="360" y2="150"/><line x1="200" y1="20" x2="200" y2="280"/>
             </g>
-            <!-- scheduler badge -->
-            <rect x="218" y="123" width="58" height="11" rx="5.5" fill="#ff8866" opacity="0.12" stroke="#ff8866" stroke-width="0.5"/>
-            <text x="247" y="131" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#ff8866" letter-spacing="0.3">SCHEDULED</text>
-          </g>
-          <!-- Connector arrow -->
-          <g opacity="0.4">
-            <line x1="190" y1="90" x2="210" y2="90" stroke="#ff5e3a" stroke-width="0.7" stroke-dasharray="2,2"/>
-          </g>
-          <!-- Bottom section: project structure -->
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.4">
-            <text x="30" y="168">python_automation/</text>
-            <text x="38" y="181" fill="#b8b3a7">├── currency.py</text>
-            <text x="38" y="193" fill="#b8b3a7">├── backup.py</text>
-            <text x="38" y="205" fill="#b8b3a7">├── requirements.txt</text>
-            <text x="38" y="217" fill="#4d4a43">└── .env</text>
-          </g>
-          <!-- Right side tech tags -->
-          <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.4">
-            <rect x="240" y="160" width="60" height="13" rx="6.5" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5"/>
-            <text x="270" y="170" text-anchor="middle" fill="#ff5e3a">requests</text>
-            <rect x="308" y="160" width="60" height="13" rx="6.5" fill="#ff8866" opacity="0.08" stroke="#ff8866" stroke-width="0.5"/>
-            <text x="338" y="170" text-anchor="middle" fill="#ff8866">schedule</text>
-            <rect x="240" y="180" width="54" height="13" rx="6.5" fill="#f9f7f1" opacity="0.04" stroke="#f9f7f1" stroke-width="0.4"/>
-            <text x="267" y="190" text-anchor="middle" fill="#b8b3a7">shutil</text>
-            <rect x="302" y="180" width="66" height="13" rx="6.5" fill="#f9f7f1" opacity="0.04" stroke="#f9f7f1" stroke-width="0.4"/>
-            <text x="335" y="190" text-anchor="middle" fill="#b8b3a7">python-dotenv</text>
-          </g>
-          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#807c70" letter-spacing="0.5">
-            <text x="30" y="265">2 scripts · daily scheduler · exchange rates</text>
-          </g>
-        </svg>
-      </div>
-      <div class="project-info">
-        <span class="num">Featured · 007</span>
-        <h3>Python <span class="grad">Automation</span></h3>
-        <p class="desc">A collection of practical Python automation scripts. Includes a currency converter that fetches exchange rates from an external API and loops interactively in the terminal, and an automated folder backup utility that runs on a daily schedule — copying a source directory to a date-stamped destination and skipping runs when today's backup already exists.</p>
-        <div class="project-tags">
-          <span>Python</span><span>requests</span><span>schedule</span><span>shutil</span><span>python-dotenv</span><span>Automation</span>
+            <g fill="#ff5e3a">
+              <circle cx="200" cy="150" r="3.5"/><circle cx="232" cy="128" r="2"/><circle cx="172" cy="172" r="2"/>
+            </g>
+            <g stroke="#ff5e3a" stroke-width="0.7" fill="none" stroke-dasharray="3,2.5">
+              <rect x="214" y="114" width="36" height="28" rx="2"/>
+            </g>
+          </svg>
         </div>
-        <div class="project-links">
-          <a href="https://github.com/HunterHalvorson/python_automation" target="_blank" rel="noopener" class="project-link">View Code <span class="arr">→</span></a>
+        <div class="p-info">
+          <span class="idx">001 — Medical AI</span>
+          <h3>ScreenVision <span class="grad">AI</span></h3>
+          <p class="desc">Advanced deep learning system for medical image analysis, leveraging state-of-the-art neural networks for accurate diagnostic support.</p>
+          <div class="p-tags"><span>Python</span><span>Deep Learning</span><span>Computer Vision</span><span>Medical AI</span></div>
+          <div class="p-links">
+            <a href="https://youtu.be/M1GjIFlY1cM" target="_blank" rel="noopener" class="p-link">Watch demo <span class="arr">→</span></a>
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
 
+      <!-- 002 -->
+      <article class="card project flip rv">
+        <div class="p-media" style="background: radial-gradient(circle at 25% 70%, rgba(255,94,58,0.14), transparent 55%), var(--bg-2);">
+          <span class="badge">Live demo</span><span class="yr">2026</span>
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <g stroke="#f5f3ee" stroke-width="0.3" opacity="0.06">
+              <line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="120" x2="400" y2="120"/>
+              <line x1="0" y1="180" x2="400" y2="180"/><line x1="0" y1="240" x2="400" y2="240"/>
+              <line x1="80" y1="0" x2="80" y2="300"/><line x1="160" y1="0" x2="160" y2="300"/>
+              <line x1="240" y1="0" x2="240" y2="300"/><line x1="320" y1="0" x2="320" y2="300"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e6a61">
+              <text x="60" y="80">squat</text><text x="60" y="115">deadlift</text>
+              <text x="60" y="150">pushup</text><text x="60" y="185">pullup</text><text x="60" y="220">burpee</text>
+            </g>
+            <g fill="#f5f3ee" opacity="0.05">
+              <rect x="110" y="70" width="240" height="10" rx="2"/><rect x="110" y="105" width="240" height="10" rx="2"/>
+              <rect x="110" y="140" width="240" height="10" rx="2"/><rect x="110" y="175" width="240" height="10" rx="2"/>
+              <rect x="110" y="210" width="240" height="10" rx="2"/>
+            </g>
+            <g>
+              <rect x="110" y="70" width="232" height="10" rx="2" fill="#ff5e3a"/>
+              <rect x="110" y="105" width="38" height="10" rx="2" fill="#ff8a5c" opacity="0.6"/>
+              <rect x="110" y="140" width="22" height="10" rx="2" fill="#ff8a5c" opacity="0.4"/>
+              <rect x="110" y="175" width="14" height="10" rx="2" fill="#ff8a5c" opacity="0.3"/>
+              <rect x="110" y="210" width="8" height="10" rx="2" fill="#ff8a5c" opacity="0.25"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#a8a49b" text-anchor="end">
+              <text x="358" y="78">96.7%</text><text x="358" y="113">1.6%</text>
+              <text x="358" y="148">0.9%</text><text x="358" y="183">0.5%</text><text x="358" y="218">0.3%</text>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
+              <text x="60" y="265">MODEL · RESNET50</text><text x="60" y="278">TEST ACC · 99.15%</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-info">
+          <span class="idx">002 — Computer vision</span>
+          <h3>Exercise <span class="grad">Classifier</span></h3>
+          <p class="desc">Fine-tuned ResNet50 on a custom exercise dataset using transfer learning. Achieves 99.15% test accuracy classifying photos of exercises like squats, deadlifts, pushups, pullups, and burpees. Deployed as an interactive web demo with live predictions.</p>
+          <div class="p-tags"><span>PyTorch</span><span>Transfer Learning</span><span>ResNet50</span><span>Gradio</span><span>Hugging Face</span></div>
+          <div class="p-links">
+            <a href="https://huggingface.co/spaces/HunterHalvorson/exercise-classifier" target="_blank" rel="noopener" class="p-link">Try live demo <span class="arr">→</span></a>
+            <a href="https://github.com/HunterHalvorson/exercise-classifier" target="_blank" rel="noopener" class="p-link alt">View code <span class="arr">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 003 -->
+      <article class="card project rv">
+        <div class="p-media" style="background: radial-gradient(circle at 18% 50%, rgba(255,94,58,0.13), transparent 50%), radial-gradient(circle at 82% 50%, rgba(255,94,58,0.13), transparent 50%), var(--bg-2);">
+          <span class="badge">Open source</span><span class="yr">2026</span>
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <g>
+              <rect x="40" y="55" width="110" height="190" rx="3" fill="none" stroke="#f5f3ee" stroke-width="0.5" opacity="0.22"/>
+              <rect x="40" y="55" width="110" height="14" rx="3" fill="#f5f3ee" opacity="0.04"/>
+            </g>
+            <g>
+              <rect x="250" y="55" width="110" height="190" rx="3" fill="none" stroke="#f5f3ee" stroke-width="0.5" opacity="0.22"/>
+              <rect x="250" y="55" width="110" height="14" rx="3" fill="#f5f3ee" opacity="0.04"/>
+            </g>
+            <g stroke="#6e6a61" stroke-width="0.6" opacity="0.4" stroke-linecap="round">
+              <line x1="50" y1="85" x2="105" y2="85"/><line x1="50" y1="95" x2="130" y2="95"/>
+              <line x1="50" y1="125" x2="120" y2="125"/><line x1="50" y1="135" x2="138" y2="135"/>
+              <line x1="50" y1="155" x2="115" y2="155"/><line x1="50" y1="195" x2="130" y2="195"/>
+              <line x1="50" y1="205" x2="118" y2="205"/><line x1="50" y1="225" x2="135" y2="225"/>
+            </g>
+            <g stroke="#6e6a61" stroke-width="0.6" opacity="0.4" stroke-linecap="round">
+              <line x1="260" y1="85" x2="320" y2="85"/><line x1="260" y1="95" x2="345" y2="95"/>
+              <line x1="260" y1="125" x2="335" y2="125"/><line x1="260" y1="135" x2="348" y2="135"/>
+              <line x1="260" y1="155" x2="325" y2="155"/><line x1="260" y1="195" x2="345" y2="195"/>
+              <line x1="260" y1="205" x2="328" y2="205"/><line x1="260" y1="225" x2="340" y2="225"/>
+            </g>
+            <g fill="#ff5e3a">
+              <rect x="50" y="113" width="60" height="4" rx="1" opacity="0.9"/>
+              <rect x="260" y="113" width="60" height="4" rx="1" opacity="0.9"/>
+              <rect x="50" y="173" width="48" height="4" rx="1" opacity="0.55"/>
+              <rect x="260" y="173" width="56" height="4" rx="1" opacity="0.55"/>
+            </g>
+            <g stroke="#ff5e3a" stroke-width="0.7" fill="none" opacity="0.5" stroke-dasharray="2,2.5">
+              <path d="M 150 115 Q 200 95 250 115"/>
+              <path d="M 150 175 Q 200 195 250 175"/>
+            </g>
+            <g>
+              <circle cx="200" cy="150" r="32" fill="#0c0c0b" stroke="#f5f3ee" stroke-width="0.4" opacity="0.9"/>
+              <circle cx="200" cy="150" r="32" fill="none" stroke="#f5f3ee" stroke-width="2" opacity="0.08"/>
+              <circle cx="200" cy="150" r="32" fill="none" stroke="#ff5e3a" stroke-width="2" stroke-dasharray="175 200" transform="rotate(-90 200 150)" stroke-linecap="round"/>
+              <text x="200" y="152" text-anchor="middle" font-family="Geist, sans-serif" font-size="15" font-weight="600" fill="#f5f3ee">87<tspan font-size="10" fill="#ff5e3a">%</tspan></text>
+              <text x="200" y="165" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6" fill="#6e6a61" letter-spacing="1">MATCH</text>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#a8a49b" text-anchor="middle" letter-spacing="0.8" font-weight="500">
+              <text x="95" y="65">RESUME.PDF</text><text x="305" y="65">JOB_DESC.TXT</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-info">
+          <span class="idx">003 — NLP</span>
+          <h3>Resume ↔ JD <span class="grad">Matcher</span></h3>
+          <p class="desc">An NLP application that scores how well a resume matches a job description. Combines rule-based entity extraction (regex + spaCy over a curated 800+ skill vocabulary) with semantic similarity from sentence-transformer embeddings — producing an interpretable weighted match score and structured JSON for both documents.</p>
+          <div class="p-tags"><span>Python</span><span>NLP</span><span>spaCy</span><span>Sentence Transformers</span><span>Streamlit</span><span>pdfplumber</span></div>
+          <div class="p-links">
+            <a href="https://github.com/HunterHalvorson/Resume_Parser-Job-Matcher" target="_blank" rel="noopener" class="p-link">View code <span class="arr">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 004 -->
+      <article class="card project flip rv">
+        <div class="p-media" style="background: radial-gradient(circle at 50% 30%, rgba(255,94,58,0.17), transparent 55%), var(--bg-2);">
+          <span class="badge">Data analysis</span><span class="yr">2026</span>
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <g>
+              <rect x="60" y="80" width="160" height="28" rx="3" fill="#ff5e3a" opacity="0.9"/>
+              <rect x="60" y="120" width="68" height="28" rx="3" fill="#ff8a5c" opacity="0.6"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e6a61">
+              <text x="44" y="99" text-anchor="end">Movies</text>
+              <text x="44" y="139" text-anchor="end">TV Shows</text>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#f5f3ee">
+              <text x="228" y="99">6,131</text>
+              <text x="136" y="139">2,676</text>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
+              <text x="60" y="190">RANK</text>
+              <text x="100" y="190">COUNTRY</text>
+              <text x="280" y="190" text-anchor="end">COUNT</text>
+            </g>
+            <line x1="60" y1="195" x2="310" y2="195" stroke="#f5f3ee" stroke-width="0.3" opacity="0.15"/>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#a8a49b">
+              <text x="60" y="208" fill="#ff5e3a">01</text><text x="100" y="208">United States</text><text x="280" y="208" text-anchor="end">3,211</text>
+              <text x="60" y="220">02</text><text x="100" y="220">India</text><text x="280" y="220" text-anchor="end">1,046</text>
+              <text x="60" y="232">03</text><text x="100" y="232">United Kingdom</text><text x="280" y="232" text-anchor="end">806</text>
+              <text x="60" y="244">04</text><text x="100" y="244">Canada</text><text x="280" y="244" text-anchor="end">445</text>
+              <text x="60" y="256">05</text><text x="100" y="256">France</text><text x="280" y="256" text-anchor="end">393</text>
+            </g>
+            <g>
+              <rect x="295" y="80" width="68" height="22" rx="4" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5"/>
+              <text x="329" y="95" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff5e3a" letter-spacing="0.5">PostgreSQL</text>
+            </g>
+            <g>
+              <rect x="295" y="110" width="68" height="22" rx="4" fill="#ff8a5c" opacity="0.08" stroke="#ff8a5c" stroke-width="0.5"/>
+              <text x="329" y="125" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff8a5c" letter-spacing="0.5">15 queries</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-info">
+          <span class="idx">004 — SQL</span>
+          <h3>Netflix <span class="grad">SQL Analysis</span></h3>
+          <p class="desc">Exploratory data analysis of Netflix's 8,000+ title catalog using PostgreSQL. Solves 9 real business problems — from content distribution and regional breakdowns to keyword-based categorization — using window functions, string manipulation, date arithmetic, and subqueries.</p>
+          <div class="p-tags"><span>PostgreSQL</span><span>SQL</span><span>Window Functions</span><span>EDA</span><span>Data Analysis</span></div>
+          <div class="p-links">
+            <a href="https://github.com/HunterHalvorson/Netflix-Business-Problems" target="_blank" rel="noopener" class="p-link">View code <span class="arr">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 005 -->
+      <article class="card project rv">
+        <div class="p-media" style="background: radial-gradient(circle at 30% 40%, rgba(255,94,58,0.14), transparent 55%), var(--bg-2);">
+          <span class="badge">ETL + analysis</span><span class="yr">2026</span>
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.8">
+              <rect x="30" y="68" width="75" height="34" rx="4" fill="#ff5e3a" opacity="0.15" stroke="#ff5e3a" stroke-width="0.7"/>
+              <text x="67" y="82" text-anchor="middle" fill="#ff5e3a">EXTRACT</text>
+              <text x="67" y="94" text-anchor="middle" fill="#6e6a61">Walmart.csv</text>
+              <line x1="105" y1="85" x2="128" y2="85" stroke="#ff5e3a" stroke-width="0.7" stroke-dasharray="2,2"/>
+              <rect x="128" y="68" width="80" height="34" rx="4" fill="#ff8a5c" opacity="0.12" stroke="#ff8a5c" stroke-width="0.7"/>
+              <text x="168" y="82" text-anchor="middle" fill="#ff8a5c">TRANSFORM</text>
+              <text x="168" y="94" text-anchor="middle" fill="#6e6a61">pandas</text>
+              <line x1="208" y1="85" x2="231" y2="85" stroke="#ff8a5c" stroke-width="0.7" stroke-dasharray="2,2"/>
+              <rect x="231" y="68" width="65" height="34" rx="4" fill="#f5f3ee" opacity="0.04" stroke="#f5f3ee" stroke-width="0.4"/>
+              <text x="263" y="82" text-anchor="middle" fill="#a8a49b">LOAD</text>
+              <text x="263" y="94" text-anchor="middle" fill="#6e6a61">PostgreSQL</text>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
+              <text x="30" y="130">QUERY</text>
+              <text x="80" y="130">BUSINESS PROBLEM</text>
+              <text x="340" y="130" text-anchor="end">TYPE</text>
+            </g>
+            <line x1="30" y1="135" x2="355" y2="135" stroke="#f5f3ee" stroke-width="0.3" opacity="0.12"/>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#a8a49b">
+              <text x="30" y="148" fill="#ff5e3a">Q1</text><text x="80" y="148">Transactions by payment method</text><text x="340" y="148" text-anchor="end" fill="#6e6a61">GROUP BY</text>
+              <text x="30" y="161" fill="#ff5e3a">Q2</text><text x="80" y="161">Highest-rated category per branch</text><text x="340" y="161" text-anchor="end" fill="#6e6a61">RANK()</text>
+              <text x="30" y="174" fill="#ff5e3a">Q3</text><text x="80" y="174">Busiest day per branch</text><text x="340" y="174" text-anchor="end" fill="#6e6a61">RANK()</text>
+              <text x="30" y="187" fill="#ff5e3a">Q5</text><text x="80" y="187">Rating stats by city &amp; category</text><text x="340" y="187" text-anchor="end" fill="#6e6a61">AGG</text>
+              <text x="30" y="200" fill="#ff5e3a">Q6</text><text x="80" y="200">Total profit per category</text><text x="340" y="200" text-anchor="end" fill="#6e6a61">DERIVED</text>
+              <text x="30" y="213" fill="#ff5e3a">Q7</text><text x="80" y="213">Most common payment per branch</text><text x="340" y="213" text-anchor="end" fill="#6e6a61">CTE</text>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.5">
+              <rect x="310" y="66" width="55" height="18" rx="3" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5"/>
+              <text x="337" y="79" text-anchor="middle" fill="#ff5e3a">~10K rows</text>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
+              <text x="30" y="268">ETL · Python → PostgreSQL → SQL Analysis</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-info">
+          <span class="idx">005 — ETL</span>
+          <h3>Walmart <span class="grad">SQL Analysis</span></h3>
+          <p class="desc">End-to-end ETL + analysis pipeline on ~10,000 Walmart retail transactions. Raw CSV cleaned and transformed in Python (pandas), loaded into PostgreSQL via SQLAlchemy. Seven business problems answered with SQL — payment breakdowns, branch-level ratings, profit by category, busiest trading days — using window functions and CTEs.</p>
+          <div class="p-tags"><span>Python</span><span>pandas</span><span>PostgreSQL</span><span>SQLAlchemy</span><span>ETL</span><span>Window Functions</span></div>
+          <div class="p-links">
+            <a href="https://github.com/HunterHalvorson/Walmart-Data-Analysis" target="_blank" rel="noopener" class="p-link">View code <span class="arr">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 006 -->
+      <article class="card project flip rv">
+        <div class="p-media" style="background: radial-gradient(circle at 40% 55%, rgba(255,94,58,0.16), transparent 55%), var(--bg-2);">
+          <span class="badge">Live demo</span><span class="yr">2026</span>
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <rect x="30" y="38" width="290" height="24" rx="12" fill="none" stroke="#ff5e3a" stroke-width="0.7" opacity="0.6"/>
+            <text x="44" y="54" font-family="JetBrains Mono, monospace" font-size="8" fill="#6e6a61">"a story about forgiveness and redemption..."</text>
+            <circle cx="308" cy="50" r="7" fill="none" stroke="#ff5e3a" stroke-width="0.8" opacity="0.8"/>
+            <line x1="313" y1="55" x2="317" y2="59" stroke="#ff5e3a" stroke-width="0.8" opacity="0.8"/>
+            <g font-family="JetBrains Mono, monospace" font-size="7">
+              <rect x="30" y="72" width="32" height="14" rx="7" fill="#ff5e3a" opacity="0.9"/>
+              <text x="46" y="82" text-anchor="middle" fill="#060606" font-weight="600">Joy</text>
+              <rect x="68" y="72" width="44" height="14" rx="7" fill="none" stroke="#6e6a61" stroke-width="0.5"/>
+              <text x="90" y="82" text-anchor="middle" fill="#6e6a61">Surprise</text>
+              <rect x="118" y="72" width="36" height="14" rx="7" fill="none" stroke="#6e6a61" stroke-width="0.5"/>
+              <text x="136" y="82" text-anchor="middle" fill="#6e6a61">Fear</text>
+              <rect x="160" y="72" width="32" height="14" rx="7" fill="none" stroke="#6e6a61" stroke-width="0.5"/>
+              <text x="176" y="82" text-anchor="middle" fill="#6e6a61">Sad</text>
+              <rect x="198" y="72" width="40" height="14" rx="7" fill="none" stroke="#6e6a61" stroke-width="0.5"/>
+              <text x="218" y="82" text-anchor="middle" fill="#6e6a61">Angry</text>
+            </g>
+            <g>
+              <rect x="30" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff5e3a" stroke-width="0.6" opacity="0.8"/>
+              <rect x="84" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="138" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="192" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="246" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="300" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="30" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="84" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="138" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="192" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="246" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+              <rect x="300" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a5c" stroke-width="0.4" opacity="0.5"/>
+            </g>
+            <rect x="26" y="94" width="56" height="14" rx="7" fill="#ff5e3a" opacity="0.95"/>
+            <text x="54" y="104" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#060606" font-weight="600">97% match</text>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
+              <text x="30" y="260">VECTOR DB · Chroma + OpenAI Embeddings · LangChain RAG</text>
+              <text x="370" y="260" text-anchor="end">7,000+ books</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-info">
+          <span class="idx">006 — LLM / RAG</span>
+          <h3>Book <span class="grad">Recommender</span></h3>
+          <p class="desc">Semantic book recommendation engine built on a 7,000+ title dataset. Describe the story you want in plain English, then filter by genre and emotional tone — powered by a LangChain RAG pipeline using OpenAI embeddings in a Chroma vector database, with LCEL chaining and output parsing throughout. Deployed as a Gradio app on Hugging Face Spaces.</p>
+          <div class="p-tags"><span>Python</span><span>LangChain</span><span>RAG</span><span>LCEL</span><span>OpenAI Embeddings</span><span>Chroma</span><span>Gradio</span></div>
+          <div class="p-links">
+            <a href="https://huggingface.co/spaces/HunterHalvorson/Book_Recommender" target="_blank" rel="noopener" class="p-link">Try live demo <span class="arr">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 007 -->
+      <article class="card project rv">
+        <div class="p-media" style="background: radial-gradient(circle at 60% 40%, rgba(255,94,58,0.14), transparent 55%), var(--bg-2);">
+          <span class="badge">Open source</span><span class="yr">2026</span>
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <g>
+              <rect x="30" y="40" width="160" height="100" rx="6" fill="none" stroke="#ff5e3a" stroke-width="0.7" opacity="0.5"/>
+              <rect x="30" y="40" width="160" height="18" rx="6" fill="#ff5e3a" opacity="0.12"/>
+              <text x="40" y="53" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff5e3a" letter-spacing="0.5">currency.py</text>
+              <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#6e6a61">
+                <text x="40" y="74">USD → CAD</text><text x="160" y="74" text-anchor="end" fill="#a8a49b">1.36</text>
+                <text x="40" y="88">USD → EUR</text><text x="160" y="88" text-anchor="end" fill="#a8a49b">0.92</text>
+                <text x="40" y="102">USD → AUD</text><text x="160" y="102" text-anchor="end" fill="#a8a49b">1.53</text>
+                <text x="40" y="116">USD → CNY</text><text x="160" y="116" text-anchor="end" fill="#a8a49b">7.24</text>
+              </g>
+              <rect x="38" y="123" width="46" height="11" rx="5.5" fill="#ff5e3a" opacity="0.18" stroke="#ff5e3a" stroke-width="0.5"/>
+              <text x="61" y="131" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#ff5e3a" letter-spacing="0.3">API</text>
+            </g>
+            <g>
+              <rect x="210" y="40" width="160" height="100" rx="6" fill="none" stroke="#ff8a5c" stroke-width="0.7" opacity="0.5"/>
+              <rect x="210" y="40" width="160" height="18" rx="6" fill="#ff8a5c" opacity="0.08"/>
+              <text x="220" y="53" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff8a5c" letter-spacing="0.5">backup.py</text>
+              <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#6e6a61">
+                <text x="220" y="74">Backups/</text>
+                <text x="228" y="88" fill="#a8a49b">2026-06-03/</text>
+                <text x="228" y="101" fill="#a8a49b">2026-06-04/</text>
+                <text x="228" y="114" fill="#ff5e3a">2026-06-05/ ✓</text>
+              </g>
+              <rect x="218" y="123" width="58" height="11" rx="5.5" fill="#ff8a5c" opacity="0.12" stroke="#ff8a5c" stroke-width="0.5"/>
+              <text x="247" y="131" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#ff8a5c" letter-spacing="0.3">SCHEDULED</text>
+            </g>
+            <line x1="190" y1="90" x2="210" y2="90" stroke="#ff5e3a" stroke-width="0.7" stroke-dasharray="2,2" opacity="0.4"/>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.4">
+              <text x="30" y="168">python_automation/</text>
+              <text x="38" y="181" fill="#a8a49b">├── currency.py</text>
+              <text x="38" y="193" fill="#a8a49b">├── backup.py</text>
+              <text x="38" y="205" fill="#a8a49b">├── requirements.txt</text>
+              <text x="38" y="217" fill="#3d3b36">└── .env</text>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.4">
+              <rect x="240" y="160" width="60" height="13" rx="6.5" fill="#ff5e3a" opacity="0.12" stroke="#ff5e3a" stroke-width="0.5"/>
+              <text x="270" y="170" text-anchor="middle" fill="#ff5e3a">requests</text>
+              <rect x="308" y="160" width="60" height="13" rx="6.5" fill="#ff8a5c" opacity="0.08" stroke="#ff8a5c" stroke-width="0.5"/>
+              <text x="338" y="170" text-anchor="middle" fill="#ff8a5c">schedule</text>
+              <rect x="240" y="180" width="54" height="13" rx="6.5" fill="#f5f3ee" opacity="0.04" stroke="#f5f3ee" stroke-width="0.4"/>
+              <text x="267" y="190" text-anchor="middle" fill="#a8a49b">shutil</text>
+              <rect x="302" y="180" width="66" height="13" rx="6.5" fill="#f5f3ee" opacity="0.04" stroke="#f5f3ee" stroke-width="0.4"/>
+              <text x="335" y="190" text-anchor="middle" fill="#a8a49b">python-dotenv</text>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
+              <text x="30" y="265">2 scripts · daily scheduler · exchange rates</text>
+            </g>
+          </svg>
+        </div>
+        <div class="p-info">
+          <span class="idx">007 — Automation</span>
+          <h3>Python <span class="grad">Automation</span></h3>
+          <p class="desc">A collection of practical Python automation scripts. Includes a currency converter that fetches exchange rates from an external API and loops interactively in the terminal, and an automated folder backup utility on a daily schedule — copying to a date-stamped destination and skipping runs when today's backup already exists.</p>
+          <div class="p-tags"><span>Python</span><span>requests</span><span>schedule</span><span>shutil</span><span>python-dotenv</span><span>Automation</span></div>
+          <div class="p-links">
+            <a href="https://github.com/HunterHalvorson/python_automation" target="_blank" rel="noopener" class="p-link">View code <span class="arr">→</span></a>
+          </div>
+        </div>
+      </article>
+
+    </div>
   </div>
 </section>
 
 <!-- ── RESUME ── -->
-<section id="resume" class="bordered">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">04 — Resume</span>
-      <h2>Education &amp; <span class="light">experience.</span></h2>
+<section id="resume">
+  <div class="shell">
+    <div class="sec-head rv">
+      <div>
+        <span class="chip">Resume</span>
+        <h2>Education &amp; <span class="dim">experience.</span></h2>
+      </div>
+      <p class="lead">The full picture — coursework, employment, activities, and a few accolades along the way.</p>
     </div>
-    <p class="lead">The full picture — coursework, employment, activities, and a few accolades along the way.</p>
-  </div>
-  <div class="resume">
-    <div class="resume-actions">
-      <a href="resume.pdf" download class="btn btn-primary">Download Resume <span class="arrow">↓</span></a>
-      <a href="https://www.linkedin.com/in/hunter-halvorson-11116724b/" target="_blank" rel="noopener" class="btn btn-ghost">View on LinkedIn <span class="arrow">→</span></a>
+    <div class="res-actions rv">
+      <a href="resume.pdf" download class="btn btn-fill">Download resume <span class="arr">↓</span></a>
+      <a href="https://www.linkedin.com/in/hunter-halvorson-11116724b/" target="_blank" rel="noopener" class="btn btn-line">View on LinkedIn <span class="arr">→</span></a>
     </div>
-    <div class="resume-grid">
-      <div class="resume-card">
-        <div class="head"><h3>Education</h3><span class="idx">A</span></div>
-        <div class="resume-item">
-          <div class="row"><span class="title">B.Sc. Computer Science</span><span class="when">2023 — Present</span></div>
-          <span class="org">University of Calgary</span>
+    <div class="res-grid">
+      <div class="card res-card rv">
+        <h3>Education <span class="k">A</span></h3>
+        <div class="entry">
+          <div class="row"><span class="t">B.Sc. Computer Science</span><span class="w">2023 — Present</span></div>
+          <div class="o">University of Calgary</div>
         </div>
-        <div class="resume-item">
-          <div class="row"><span class="title">B.Comm. Finance</span><span class="when">2021 — Present</span></div>
-          <span class="org">University of Calgary</span>
+        <div class="entry">
+          <div class="row"><span class="t">B.Comm. Finance</span><span class="w">2021 — Present</span></div>
+          <div class="o">University of Calgary</div>
         </div>
-        <div class="resume-item">
-          <div class="row"><span class="title">Highlighted Coursework</span></div>
+        <div class="entry">
+          <div class="row"><span class="t">Highlighted coursework</span></div>
           <div class="courses">
             <span class="code">CPSC 331</span><span class="name">Data Structures &amp; Algorithms</span>
             <span class="code">CPSC 413</span><span class="name">Design &amp; Analysis of Algorithms</span>
@@ -1162,36 +1049,36 @@
           </div>
         </div>
       </div>
-      <div class="resume-card">
-        <div class="head"><h3>Employment Experience</h3><span class="idx">B</span></div>
-        <div class="resume-item">
-          <div class="row"><span class="title">Accounting Assistant</span><span class="when">06/2025 — 08/2025</span></div>
-          <span class="org">Canadian Sports Institute · Calgary, AB</span>
+      <div class="card res-card rv">
+        <h3>Employment experience <span class="k">B</span></h3>
+        <div class="entry">
+          <div class="row"><span class="t">Accounting Assistant</span><span class="w">06/2025 — 08/2025</span></div>
+          <div class="o">Canadian Sports Institute · Calgary, AB</div>
         </div>
-        <div class="resume-item">
-          <div class="row"><span class="title">Financial Management Assistant</span><span class="when">05/2023 — 08/2023</span></div>
-          <span class="org">GWL Realty Advisors · Calgary, AB</span>
-        </div>
-      </div>
-      <div class="resume-card">
-        <div class="head"><h3>Activities &amp; Involvement</h3><span class="idx">C</span></div>
-        <div class="resume-item">
-          <div class="row"><span class="title">Competitive Programming Club — Member</span><span class="when">Fall 2025</span></div>
-          <span class="note">Attended weekly workshops featuring competitions on various programming topics.</span>
-        </div>
-        <div class="resume-item">
-          <div class="row"><span class="title">GWLRA Development Summer Case Study</span><span class="when">05/2023 — 08/2023</span></div>
-          <span class="note">Worked with a cross-Canada team of 5 interns to develop recommendations for amenities, in-suite features, and marketing strategies for a residential development. Presented insights to a panel of judges, including executive leadership.</span>
+        <div class="entry">
+          <div class="row"><span class="t">Financial Management Assistant</span><span class="w">05/2023 — 08/2023</span></div>
+          <div class="o">GWL Realty Advisors · Calgary, AB</div>
         </div>
       </div>
-      <div class="resume-card">
-        <div class="head"><h3>Awards &amp; Honours</h3><span class="idx">D</span></div>
-        <ul class="award-list">
-          <li><span>Jason Lang Scholarship</span><span class="years">2022 / 2023 / 2024</span></li>
-          <li><span>Marion Janet and Ian Stormont Forbes Bursary</span><span class="years">2022 / 2025</span></li>
-          <li><span>Michael and Illa Maher Bursary</span><span class="years">2023</span></li>
-          <li><span>Dean's List, Faculty of Science</span><span class="years">2023–24, 2024–25</span></li>
-          <li><span>Dean's List, Haskayne School of Business</span><span class="years">Fall 2023, 2024</span></li>
+      <div class="card res-card rv">
+        <h3>Activities &amp; involvement <span class="k">C</span></h3>
+        <div class="entry">
+          <div class="row"><span class="t">Competitive Programming Club — Member</span><span class="w">Fall 2025</span></div>
+          <div class="n">Attended weekly workshops featuring competitions on various programming topics.</div>
+        </div>
+        <div class="entry">
+          <div class="row"><span class="t">GWLRA Development Summer Case Study</span><span class="w">05/2023 — 08/2023</span></div>
+          <div class="n">Worked with a cross-Canada team of 5 interns to develop recommendations for amenities, in-suite features, and marketing strategies for a residential development. Presented insights to a panel of judges, including executive leadership.</div>
+        </div>
+      </div>
+      <div class="card res-card rv">
+        <h3>Awards &amp; honours <span class="k">D</span></h3>
+        <ul class="awards">
+          <li><span>Jason Lang Scholarship</span><span class="y">2022 / 2023 / 2024</span></li>
+          <li><span>Marion Janet and Ian Stormont Forbes Bursary</span><span class="y">2022 / 2025</span></li>
+          <li><span>Michael and Illa Maher Bursary</span><span class="y">2023</span></li>
+          <li><span>Dean's List, Faculty of Science</span><span class="y">2023–24, 2024–25</span></li>
+          <li><span>Dean's List, Haskayne School of Business</span><span class="y">Fall 2023, 2024</span></li>
         </ul>
       </div>
     </div>
@@ -1199,78 +1086,73 @@
 </section>
 
 <!-- ── CERTIFICATIONS ── -->
-<section id="certifications" class="bordered">
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">05 — Certifications</span>
-      <h2>Things I've <span class="light">completed.</span></h2>
+<section id="certifications">
+  <div class="shell">
+    <div class="sec-head rv">
+      <div>
+        <span class="chip">Certifications</span>
+        <h2>Things I've <span class="dim">completed.</span></h2>
+      </div>
+      <p class="lead">A directory of recent coursework and credentials — verification links on each.</p>
     </div>
-    <p class="lead">A directory of recent coursework and credentials. Verification links available on each.</p>
-  </div>
-  <div class="certs">
-    <a href="https://ude.my/UC-1cf19807-7653-44e3-b6a9-354a38212946" target="_blank" rel="noopener" class="cert">
-      <span class="idx">01</span>
-      <div class="info"><div class="cert-name">The AI Engineer Course 2026: Complete AI Engineer Bootcamp</div><span class="issuer">365 Careers <span class="sep">·</span> Udemy <span class="sep">·</span> <span class="badge-new">New</span></span></div>
-      <span class="year">2026</span><span class="arr">→</span>
-    </a>
-    <a href="https://udemy-certificate.s3.amazonaws.com/pdf/UC-406a7a6f-a3fe-4b24-a5d3-0a9e699a9235.pdf" target="_blank" rel="noopener" class="cert">
-      <span class="idx">02</span>
-      <div class="info"><div class="cert-name">AI &amp; Machine Learning Bootcamp</div><span class="issuer">Udemy</span></div>
-      <span class="year">2025</span><span class="arr">→</span>
-    </a>
-    <a href="https://www.coursera.org/account/accomplishments/verify/3VNB2VBHYQUL" target="_blank" rel="noopener" class="cert">
-      <span class="idx">03</span>
-      <div class="info"><div class="cert-name">Meta Front-End Developer</div><span class="issuer">Meta <span class="sep">·</span> Coursera</span></div>
-      <span class="year">2024</span><span class="arr">→</span>
-    </a>
-    <a href="https://www.coursera.org/account/accomplishments/verify/5KJY7TM36ANW" target="_blank" rel="noopener" class="cert">
-      <span class="idx">04</span>
-      <div class="info"><div class="cert-name">Advanced React</div><span class="issuer">Meta <span class="sep">·</span> Coursera</span></div>
-      <span class="year">2024</span><span class="arr">→</span>
-    </a>
-    <a href="https://www.coursera.org/account/accomplishments/verify/YSP5PCVZZRKM" target="_blank" rel="noopener" class="cert">
-      <span class="idx">05</span>
-      <div class="info"><div class="cert-name">React Basics</div><span class="issuer">Meta <span class="sep">·</span> Coursera</span></div>
-      <span class="year">2024</span><span class="arr">→</span>
-    </a>
-    <a href="https://www.coursera.org/account/accomplishments/verify/9Z8LGYRWH9XQ" target="_blank" rel="noopener" class="cert">
-      <span class="idx">06</span>
-      <div class="info"><div class="cert-name">HTML &amp; CSS in Depth</div><span class="issuer">Meta <span class="sep">·</span> Coursera</span></div>
-      <span class="year">2024</span><span class="arr">→</span>
-    </a>
-    <a href="https://www.coursera.org/account/accomplishments/verify/T97LYDFHDJT8" target="_blank" rel="noopener" class="cert">
-      <span class="idx">07</span>
-      <div class="info"><div class="cert-name">Programming with JavaScript</div><span class="issuer">Meta <span class="sep">·</span> Coursera</span></div>
-      <span class="year">2024</span><span class="arr">→</span>
-    </a>
-    <a href="https://www.coursera.org/account/accomplishments/verify/DYB84WWUR7YB" target="_blank" rel="noopener" class="cert">
-      <span class="idx">08</span>
-      <div class="info"><div class="cert-name">Version Control</div><span class="issuer">Meta <span class="sep">·</span> Coursera</span></div>
-      <span class="year">2024</span><span class="arr">→</span>
-    </a>
-    <a href="https://udemy-certificate.s3.amazonaws.com/pdf/UC-a908a9c6-de1a-4774-b173-b1f8b143f610.pdf" target="_blank" rel="noopener" class="cert">
-      <span class="idx">09</span>
-      <div class="info"><div class="cert-name">The Complete JavaScript Course</div><span class="issuer">Udemy</span></div>
-      <span class="year">2024</span><span class="arr">→</span>
-    </a>
+    <div class="card certs rv">
+      <a href="https://ude.my/UC-1cf19807-7653-44e3-b6a9-354a38212946" target="_blank" rel="noopener" class="cert">
+        <span class="ix">01</span>
+        <div><div class="cn">The AI Engineer Course 2026: Complete AI Engineer Bootcamp<span class="new">New</span></div><div class="is">365 Careers · Udemy</div></div>
+        <span class="yy">2026</span><span class="go">→</span>
+      </a>
+      <a href="https://udemy-certificate.s3.amazonaws.com/pdf/UC-406a7a6f-a3fe-4b24-a5d3-0a9e699a9235.pdf" target="_blank" rel="noopener" class="cert">
+        <span class="ix">02</span>
+        <div><div class="cn">AI &amp; Machine Learning Bootcamp</div><div class="is">Udemy</div></div>
+        <span class="yy">2025</span><span class="go">→</span>
+      </a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/3VNB2VBHYQUL" target="_blank" rel="noopener" class="cert">
+        <span class="ix">03</span>
+        <div><div class="cn">Meta Front-End Developer</div><div class="is">Meta · Coursera</div></div>
+        <span class="yy">2024</span><span class="go">→</span>
+      </a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/5KJY7TM36ANW" target="_blank" rel="noopener" class="cert">
+        <span class="ix">04</span>
+        <div><div class="cn">Advanced React</div><div class="is">Meta · Coursera</div></div>
+        <span class="yy">2024</span><span class="go">→</span>
+      </a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/YSP5PCVZZRKM" target="_blank" rel="noopener" class="cert">
+        <span class="ix">05</span>
+        <div><div class="cn">React Basics</div><div class="is">Meta · Coursera</div></div>
+        <span class="yy">2024</span><span class="go">→</span>
+      </a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/9Z8LGYRWH9XQ" target="_blank" rel="noopener" class="cert">
+        <span class="ix">06</span>
+        <div><div class="cn">HTML &amp; CSS in Depth</div><div class="is">Meta · Coursera</div></div>
+        <span class="yy">2024</span><span class="go">→</span>
+      </a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/T97LYDFHDJT8" target="_blank" rel="noopener" class="cert">
+        <span class="ix">07</span>
+        <div><div class="cn">Programming with JavaScript</div><div class="is">Meta · Coursera</div></div>
+        <span class="yy">2024</span><span class="go">→</span>
+      </a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/DYB84WWUR7YB" target="_blank" rel="noopener" class="cert">
+        <span class="ix">08</span>
+        <div><div class="cn">Version Control</div><div class="is">Meta · Coursera</div></div>
+        <span class="yy">2024</span><span class="go">→</span>
+      </a>
+      <a href="https://udemy-certificate.s3.amazonaws.com/pdf/UC-a908a9c6-de1a-4774-b173-b1f8b143f610.pdf" target="_blank" rel="noopener" class="cert">
+        <span class="ix">09</span>
+        <div><div class="cn">The Complete JavaScript Course</div><div class="is">Udemy</div></div>
+        <span class="yy">2024</span><span class="go">→</span>
+      </a>
+    </div>
   </div>
 </section>
 
 <!-- ── CONTACT ── -->
 <section id="contact" class="contact">
-  <div class="contact-glow"></div>
-  <div class="contact-inner">
-    <span class="eyebrow" style="color: var(--accent); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;">06 — Contact</span>
-    <h2 class="big">
-      Let's make<br>
-      <span class="grad">something</span><br>
-      <span class="light">together.</span>
-    </h2>
-    <a href="mailto:hhhalvorson@gmail.com" class="email-link">
-      hhhalvorson@gmail.com
-      <span class="arr">→</span>
-    </a>
-    <div class="socials">
+  <div class="shell">
+    <div class="contact-glow" aria-hidden="true"></div>
+    <span class="chip rv">Contact</span>
+    <h2 class="rv">Let's make<br><span class="grad">something</span> <span class="dim">together.</span></h2>
+    <a href="mailto:hhhalvorson@gmail.com" class="email-pill rv">hhhalvorson@gmail.com <span class="arr">→</span></a>
+    <div class="socials rv">
       <a href="https://github.com/HunterHalvorson" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.9-.39.98 0 1.98.13 2.9.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
         GitHub
@@ -1296,28 +1178,44 @@
 </section>
 
 <script>
-  const revealEls = document.querySelectorAll('.reveal');
-  window.addEventListener('load', () => { revealEls.forEach(el => el.classList.add('in')); });
-  const sectionEls = document.querySelectorAll('section, .section-head, .project, .cert, .stack-cat, .stat, .resume-card');
-  sectionEls.forEach(el => { if (!el.classList.contains('reveal')) el.classList.add('reveal'); });
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); } });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  sectionEls.forEach(el => io.observe(el));
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const href = this.getAttribute('href');
-      if (href.length <= 1) return;
-      const target = document.querySelector(href);
-      if (!target) return;
-      e.preventDefault();
-      const top = target.getBoundingClientRect().top + window.scrollY - 70;
-      window.scrollTo({ top, behavior: 'smooth' });
+  // scroll progress
+  const bar = document.getElementById('progress');
+  addEventListener('scroll', () => {
+    const h = document.documentElement;
+    bar.style.transform = `scaleX(${h.scrollTop / (h.scrollHeight - h.clientHeight)})`;
+  }, { passive: true });
+
+  // spotlight cards
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
     });
   });
+
+  // reveals
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+  // smooth anchors with offset
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      if (href.length <= 1) return;
+      const t = document.querySelector(href);
+      if (!t) return;
+      e.preventDefault();
+      window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 80, behavior: 'smooth' });
+    });
+  });
+
+  // clock
   function tick() {
-    const opts = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'America/Edmonton' };
-    document.getElementById('time').textContent = new Intl.DateTimeFormat('en-CA', opts).format(new Date());
+    const o = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'America/Edmonton' };
+    document.getElementById('time').textContent = new Intl.DateTimeFormat('en-CA', o).format(new Date());
   }
   tick(); setInterval(tick, 1000);
 </script>
