@@ -1,1291 +1,600 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Hunter Halvorson — Computer Science Portfolio</title>
-<meta name="description" content="Hunter Halvorson — Computer Science & Finance student at the University of Calgary. Software engineering and AI portfolio." />
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@300..600&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hunter Halvorson, Software and Data</title>
+<meta name="description" content="Hunter Halvorson is a computer science and finance student at the University of Calgary. He builds AI, data, and web projects and is open to opportunities.">
 <style>
   :root {
-    --bg:        #0a0a0a;
-    --bg-2:      #101010;
-    --surface:   rgba(255, 255, 255, 0.028);
-    --surface-2: rgba(255, 255, 255, 0.055);
-    --border:    rgba(255, 255, 255, 0.08);
-    --border-2:  rgba(255, 255, 255, 0.16);
-    --ink:       #f8f6f1;
-    --ink-2:     #aba79e;
-    --ink-3:     #6e6a61;
-    --ink-4:     #3d3b36;
-    --accent:    #ff6b4a;
-    --accent-2:  #ff8a66;
-    --accent-3:  #ffb399;
-    --accent-soft: rgba(255, 107, 74, 0.12);
-    --accent-glow: rgba(255, 107, 74, 0.26);
-    --sans: "Geist", -apple-system, "Segoe UI", system-ui, sans-serif;
-    --mono: "JetBrains Mono", ui-monospace, monospace;
-    --pad: clamp(1.25rem, 5vw, 6rem);
-    --max: 1320px;
-    --ease: cubic-bezier(.165, .84, .44, 1);
+    --bg: #0b0e14;
+    --panel: #0f141c;
+    --card: #121822;
+    --bar: #161b22;
+    --line: #232b38;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --faint: #5b6472;
+    --green: #7ee787;
+    --cyan: #56d4dd;
+    --magenta: #d2a8ff;
+    --yellow: #e3b341;
+    --orange: #ffa657;
+    --pink: #ff9bce;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
   body {
     background: var(--bg);
-    color: var(--ink);
+    color: var(--text);
     font-family: var(--sans);
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    overflow-x: clip;
-    font-feature-settings: "ss01", "cv11";
-  }
-  img, svg { display: block; max-width: 100%; }
-  a { color: inherit; text-decoration: none; }
-  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
-  ::selection { background: var(--accent); color: #0a0a0a; }
-  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
-
-  /* film grain */
-  body::after {
-    content: "";
-    position: fixed; inset: -50%;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-    opacity: 0.032;
-    pointer-events: none;
-    z-index: 9999;
-    animation: grain 9s steps(6) infinite;
-  }
-  @keyframes grain {
-    0%,100% { transform: translate(0,0); } 20% { transform: translate(-4%, 3%); }
-    40% { transform: translate(3%, -4%); } 60% { transform: translate(-3%, -2%); } 80% { transform: translate(4%, 4%); }
   }
 
-  /* dot field */
-  .dots {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background-image: radial-gradient(rgba(255,255,255,0.11) 1px, transparent 1px);
-    background-size: 28px 28px;
-    mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, black 0%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, black 0%, transparent 100%);
-  }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
 
-  .mono { font-family: var(--mono); }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
-  /* scroll progress */
-  .progress {
-    position: fixed; top: 0; left: 0; height: 2px; width: 100%;
-    transform-origin: 0 50%; transform: scaleX(0);
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    z-index: 200;
+  /* top bar */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(11, 14, 20, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
   }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; }
+  .brand { font-family: var(--mono); font-size: 15px; color: var(--green); font-weight: 600; white-space: nowrap; }
+  .brand span { color: var(--muted); font-weight: 400; }
+  .nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a {
+    color: var(--muted); font-size: 14px; padding: 7px 12px; border-radius: 6px; white-space: nowrap;
+  }
+  .nav a:hover { color: var(--text); background: var(--card); text-decoration: none; }
+  .nav a.hire {
+    color: #0b0e14; background: var(--green); font-weight: 600; margin-left: 6px;
+  }
+  .nav a.hire:hover { background: #9af5a4; }
 
-  /* ───────── NAV ───────── */
-  nav.top {
-    position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
-    z-index: 100;
-    display: flex; align-items: center; gap: 4px;
-    padding: 7px 8px;
-    background: rgba(10, 10, 10, 0.68);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  /* hero */
+  .hero { padding: 56px 0 32px; }
+  .window {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
   }
-  nav.top .brand {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    display: grid; place-items: center;
-    font-weight: 700; font-size: 14px; color: #0a0a0a;
-    margin-right: 3px;
+  .window-bar {
+    background: var(--bar);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 12px; color: var(--faint);
   }
-  nav.top a.link {
-    font-size: 13px; font-weight: 450; color: var(--ink-2);
-    padding: 9px 16px; border-radius: 999px;
-    transition: color .2s ease, background .2s ease;
+  .window-bar .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .window-bar .path { margin-left: 10px; }
+  .window-body {
+    display: grid; grid-template-columns: 1fr 260px; gap: 40px;
+    padding: 40px 40px 36px; align-items: center;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 13px; color: var(--green); margin-bottom: 14px;
+  }
+  .eyebrow .m { color: var(--magenta); }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .tagline {
+    font-family: var(--mono);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--cyan);
+    margin-top: 18px;
+    min-height: 1.8em;
+  }
+  .tagline .caret { color: var(--green); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .summary { color: var(--muted); margin-top: 18px; max-width: 58ch; font-size: 16px; }
+  .summary strong { color: var(--text); font-weight: 600; }
+
+  .ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 18px; border-radius: 8px;
+    font-size: 15px; font-weight: 600;
+    border: 1px solid var(--line); color: var(--text); background: var(--card);
+    transition: transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); border-color: var(--faint); }
+  .btn.primary { background: var(--green); color: #0b0e14; border-color: var(--green); }
+  .btn.primary:hover { background: #9af5a4; border-color: #9af5a4; }
+
+  .portrait { position: relative; justify-self: center; }
+  .portrait img {
+    width: 240px; height: 240px; object-fit: cover; display: block;
+    border-radius: 12px; border: 1px solid var(--line);
+  }
+  .status {
+    position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--panel); border: 1px solid var(--green); color: var(--green);
+    font-family: var(--mono); font-size: 12px; padding: 5px 12px; border-radius: 999px;
     white-space: nowrap;
   }
-  nav.top a.link:hover { color: var(--ink); background: var(--surface-2); }
-  nav.top a.cta {
-    font-size: 13px; font-weight: 550; color: #0a0a0a;
-    background: var(--ink); padding: 9px 18px; border-radius: 999px;
-    margin-left: 4px; white-space: nowrap;
-    transition: background .2s ease, transform .2s ease;
-  }
-  nav.top a.cta:hover { background: var(--accent); transform: scale(1.03); }
-  @media (max-width: 880px) {
-    nav.top a.link { display: none; }
-    nav.top { gap: 8px; padding: 7px 7px; }
-  }
+  .status::before { content: "● "; }
 
-  /* ───────── HERO ───────── */
-  .hero {
-    min-height: 100svh;
-    display: flex; flex-direction: column; justify-content: center;
-    padding: 8rem var(--pad) 5rem;
-    position: relative;
-    overflow: clip;
+  /* glance strip */
+  .glance {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-top: 16px;
   }
-  .hero-aurora {
-    position: absolute; top: -22%; left: 50%; transform: translateX(-50%);
-    width: 1200px; height: 900px; z-index: 0;
-    background:
-      radial-gradient(ellipse 40% 38% at 38% 40%, rgba(255,107,74,0.22), transparent 70%),
-      radial-gradient(ellipse 36% 34% at 64% 36%, rgba(255,138,102,0.15), transparent 70%),
-      radial-gradient(ellipse 50% 42% at 50% 60%, rgba(255,107,74,0.08), transparent 72%);
-    filter: blur(55px);
-    animation: drift 15s ease-in-out infinite alternate;
-    pointer-events: none;
+  .glance div {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 18px 20px;
   }
-  @keyframes drift {
-    from { transform: translateX(-54%) rotate(-2deg) scale(1); }
-    to   { transform: translateX(-46%) rotate(2deg) scale(1.06); }
-  }
-  .hero-inner { max-width: var(--max); margin: 0 auto; width: 100%; position: relative; z-index: 2; }
-  .hero-status {
-    display: inline-flex; align-items: center; gap: 9px;
-    padding: 8px 15px 8px 11px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.05em;
-    color: var(--ink-2);
-    backdrop-filter: blur(10px);
-  }
-  .hero-status .ring {
-    width: 14px; height: 14px; border-radius: 50%;
-    display: grid; place-items: center;
-  }
-  .hero-status .ring::before {
-    content: ""; width: 6px; height: 6px; border-radius: 50%;
-    background: #4ade80; box-shadow: 0 0 0 0 rgba(74,222,128,0.5);
-    animation: ping 2.4s infinite;
-  }
-  @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.45); } 70% { box-shadow: 0 0 0 7px rgba(74,222,128,0); } 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); } }
-  .hero h1 {
-    margin-top: 2rem;
-    font-weight: 560;
-    font-size: clamp(3.4rem, 11.5vw, 10.5rem);
-    line-height: 0.94;
-    letter-spacing: -0.052em;
-    text-wrap: balance;
-  }
-  .hero h1 .row { display: block; overflow: hidden; }
-  .hero h1 .row > span { display: inline-block; transform: translateY(110%); animation: rise 1s var(--ease) forwards; }
-  .hero h1 .row:nth-child(2) > span { animation-delay: .12s; }
-  @keyframes rise { to { transform: translateY(0); } }
-  .hero h1 .grad {
-    background: linear-gradient(105deg, var(--accent) 0%, var(--accent-2) 48%, var(--accent-3) 95%);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent; color: transparent;
-  }
-  .hero-sub {
-    margin-top: 2.2rem;
-    display: grid; grid-template-columns: minmax(0, 60ch) auto;
-    gap: 2rem; align-items: end; justify-content: space-between;
-  }
-  .hero-desc {
-    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-    font-weight: 330;
-    color: var(--ink-2);
-    line-height: 1.55;
-    letter-spacing: -0.012em;
-  }
-  .hero-desc b { color: var(--ink); font-weight: 480; }
-  .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 13px 24px; border-radius: 999px;
-    font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
-    border: 1px solid transparent;
-    transition: transform .25s var(--ease), background .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
-  }
-  .btn-fill { background: var(--ink); color: #0a0a0a; }
-  .btn-fill:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 12px 32px var(--accent-glow); }
-  .btn-line { border-color: var(--border-2); color: var(--ink); background: var(--surface); backdrop-filter: blur(8px); }
-  .btn-line:hover { border-color: var(--ink-3); transform: translateY(-2px); }
-  .btn .arr { transition: transform .25s var(--ease); }
-  .btn:hover .arr { transform: translateX(4px); }
-  @media (max-width: 880px) { .hero-sub { grid-template-columns: 1fr; } }
+  .glance .k { font-family: var(--mono); font-size: 12px; color: var(--faint); text-transform: lowercase; }
+  .glance .v { font-size: 15px; margin-top: 4px; font-weight: 600; }
+  .glance .v.y { color: var(--yellow); }
+  .glance .v.o { color: var(--orange); }
+  .glance .v.m { color: var(--magenta); }
+  .glance .v.c { color: var(--cyan); }
 
-  /* ───────── MARQUEE ───────── */
-  .marquee {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    overflow: clip; white-space: nowrap;
-    padding: 1rem 0;
-    position: relative; z-index: 2;
-    background: rgba(255,255,255,0.014);
-    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
-  }
-  .marquee .track { display: inline-flex; animation: mq 40s linear infinite; }
-  .marquee:hover .track { animation-play-state: paused; }
-  @keyframes mq { to { transform: translateX(-50%); } }
-  .marquee .it {
-    font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--ink-3);
-    padding: 0 1.1rem; display: inline-flex; align-items: center; gap: 2.2rem;
-  }
-  .marquee .it::after { content: "✦"; color: var(--accent); font-size: 10px; }
+  /* sections */
+  section { padding: 72px 0 8px; scroll-margin-top: 80px; }
+  .sec-title { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  .sec-title .prompt { font-family: var(--mono); color: var(--green); font-size: 18px; }
+  .sec-title h2 { font-size: 1.7rem; letter-spacing: -0.01em; }
+  .sec-intro { color: var(--muted); max-width: 64ch; margin-bottom: 28px; }
 
-  /* ───────── SECTIONS ───────── */
-  section { padding: clamp(5.5rem, 11vw, 9rem) var(--pad); position: relative; z-index: 2; }
-  .shell { max-width: var(--max); margin: 0 auto; width: 100%; }
-  .sec-head { margin-bottom: clamp(2.6rem, 5vw, 4.5rem); display: flex; flex-wrap: wrap; gap: 1.5rem 4rem; align-items: end; justify-content: space-between; }
-  .chip {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-family: var(--mono); font-size: 11px; font-weight: 500;
-    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2);
-    padding: 7px 14px;
-    border: 1px solid var(--border); border-radius: 999px;
-    background: var(--surface);
+  /* filters */
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .filters button {
+    font: inherit; font-size: 14px; color: var(--muted);
+    background: var(--card); border: 1px solid var(--line);
+    padding: 7px 14px; border-radius: 999px; cursor: pointer;
   }
-  .chip::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
-  .sec-head h2 {
-    margin-top: 1.1rem;
-    font-weight: 540;
-    font-size: clamp(2.4rem, 5.5vw, 4.5rem);
-    letter-spacing: -0.045em;
-    line-height: 1;
-  }
-  .sec-head h2 .dim { color: var(--ink-3); font-weight: 260; }
-  .sec-head .lead { max-width: 46ch; color: var(--ink-2); font-weight: 330; font-size: 1.02rem; }
+  .filters button:hover { color: var(--text); }
+  .filters button[aria-pressed="true"] { color: #0b0e14; background: var(--cyan); border-color: var(--cyan); font-weight: 600; }
 
-  /* spotlight card system */
-  .card {
-    position: relative;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    overflow: hidden;
-    transition: border-color .3s ease, transform .35s var(--ease);
-  }
-  .card::before {
-    content: "";
-    position: absolute; inset: 0;
-    background: radial-gradient(450px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 107, 74, 0.1), transparent 65%);
-    opacity: 0;
-    transition: opacity .35s ease;
-    pointer-events: none;
-  }
-  .card:hover::before { opacity: 1; }
-  .card:hover { border-color: var(--border-2); }
-
-  /* ───────── ABOUT BENTO ───────── */
-  .bento {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: minmax(120px, auto);
-    gap: 14px;
-  }
-  .b-photo { grid-column: span 4; grid-row: span 2; min-height: 380px; }
-  .b-photo img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; filter: saturate(0.95) contrast(1.02); transition: transform .8s var(--ease); }
-  .b-photo:hover img { transform: scale(1.04); }
-  .b-photo .tag {
-    position: absolute; bottom: 14px; left: 14px; z-index: 2;
-    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
-    padding: 7px 13px; border-radius: 999px;
-    background: rgba(10,10,10,0.6); border: 1px solid var(--border-2);
-    backdrop-filter: blur(12px); color: var(--ink);
-  }
-  .b-intro { grid-column: span 8; grid-row: span 2; padding: clamp(1.6rem, 3vw, 2.6rem); display: flex; flex-direction: column; justify-content: center; gap: 1.1rem; }
-  .b-intro p { font-size: clamp(1.08rem, 1.5vw, 1.3rem); font-weight: 320; line-height: 1.55; color: var(--ink-2); letter-spacing: -0.012em; }
-  .b-intro p b { color: var(--ink); font-weight: 470; }
-  .b-intro p .em { color: var(--accent-2); font-weight: 430; }
-  .b-stat { grid-column: span 3; padding: 1.5rem 1.6rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; min-height: 150px; }
-  .b-stat .num { font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 540; letter-spacing: -0.05em; line-height: 1; }
-  .b-stat .num sup { color: var(--accent); font-size: 0.5em; font-weight: 500; }
-  .b-stat .lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
-  .b-wide { grid-column: span 6; padding: 1.5rem 1.6rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; min-height: 150px; }
-  .b-wide .t { font-weight: 500; font-size: 1.05rem; letter-spacing: -0.02em; }
-  .b-wide .d { color: var(--ink-2); font-size: 13.5px; font-weight: 330; }
-  .b-wide .row { display: flex; flex-wrap: wrap; gap: 6px; }
-  .b-wide .row span {
-    font-family: var(--mono); font-size: 11px; color: var(--ink-2);
-    padding: 5px 11px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255,255,255,0.025);
-  }
-  @media (max-width: 980px) {
-    .b-photo { grid-column: span 12; min-height: 320px; grid-row: span 1; }
-    .b-intro { grid-column: span 12; }
-    .b-stat { grid-column: span 6; }
-    .b-wide { grid-column: span 12; }
-  }
-
-  /* ───────── STACK ───────── */
-  .stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-  .stack .card { padding: 1.7rem 1.7rem 1.9rem; }
-  .stack h3 { font-size: 1rem; font-weight: 520; letter-spacing: -0.02em; display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); }
-  .stack h3 .k { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.14em; }
-  .stack ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
-  .stack li { font-size: 13.5px; color: var(--ink-2); display: flex; align-items: center; gap: 10px; transition: color .2s ease, transform .2s var(--ease); }
-  .stack li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--ink-4); transition: background .2s ease; flex-shrink: 0; }
-  .stack li:hover { color: var(--ink); transform: translateX(3px); }
-  .stack li:hover::before { background: var(--accent); }
-  .stack li.hl { color: var(--accent-2); }
-  .stack li.hl::before { background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
-  @media (max-width: 1060px) { .stack { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 560px) { .stack { grid-template-columns: 1fr; } }
-
-  /* ───────── WORK ───────── */
-  .projects { display: flex; flex-direction: column; gap: 18px; }
+  /* project cards */
+  .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .project {
-    display: grid; grid-template-columns: 1.05fr 0.95fr;
-    gap: clamp(1.6rem, 3.5vw, 3.2rem); align-items: center;
-    padding: clamp(1.4rem, 2.5vw, 2.4rem);
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px; display: flex; flex-direction: column; gap: 12px;
+    transition: border-color .2s ease, transform .2s ease;
   }
-  .project.flip .p-media { order: 2; }
-  .p-media {
-    aspect-ratio: 4/3; border-radius: 16px; overflow: hidden;
-    position: relative; border: 1px solid var(--border);
-    background: var(--bg-2);
-    transition: transform .5s var(--ease);
+  .project:hover { border-color: var(--faint); transform: translateY(-2px); }
+  .project[hidden] { display: none; }
+  .tag-cat {
+    align-self: flex-start;
+    font-family: var(--mono); font-size: 12px; padding: 3px 10px; border-radius: 999px;
+    border: 1px solid currentColor;
   }
-  .project:hover .p-media { transform: translateY(-4px) scale(1.005); }
-  .p-media svg { width: 100%; height: 100%; }
-  .p-media .badge {
-    position: absolute; top: 14px; left: 14px; z-index: 3;
-    padding: 6px 12px; border-radius: 999px;
-    background: rgba(10,10,10,0.65); backdrop-filter: blur(12px);
-    border: 1px solid var(--border-2);
-    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--ink-2);
-    display: inline-flex; align-items: center; gap: 7px;
+  .cat-ai { color: var(--magenta); }
+  .cat-data { color: var(--cyan); }
+  .cat-tools { color: var(--yellow); }
+  .project h3 { font-size: 1.15rem; letter-spacing: -0.01em; }
+  .project h3 .yr { font-family: var(--mono); font-size: 12px; color: var(--faint); font-weight: 400; margin-left: 6px; }
+  .project p { color: var(--muted); font-size: 15px; }
+  .stack { display: flex; flex-wrap: wrap; gap: 6px; }
+  .stack span {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    background: var(--panel); border: 1px solid var(--line); padding: 3px 9px; border-radius: 6px;
   }
-  .p-media .badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-  .p-media .yr { position: absolute; top: 16px; right: 16px; z-index: 3; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
-  .p-info { display: flex; flex-direction: column; gap: 0.9rem; }
-  .p-info .idx { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
-  .p-info h3 { font-weight: 540; font-size: clamp(1.7rem, 3.2vw, 2.6rem); letter-spacing: -0.04em; line-height: 1.02; }
-  .p-info h3 .grad { background: linear-gradient(105deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-  .p-info .desc { font-size: 14.5px; font-weight: 330; color: var(--ink-2); line-height: 1.6; max-width: 52ch; }
-  .p-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .p-tags span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.03em; color: var(--ink-2); padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255,255,255,0.025); }
-  .p-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 0.5rem; }
-  .p-link {
-    display: inline-flex; align-items: center; gap: 9px;
-    padding: 10px 19px; border-radius: 999px;
-    background: var(--ink); color: #0a0a0a;
-    font-size: 13px; font-weight: 520;
-    transition: background .2s ease, transform .25s var(--ease), box-shadow .25s ease;
+  .project .actions { margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px; }
+  .action {
+    font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 8px;
+    border: 1px solid var(--line); color: var(--text); background: var(--panel);
   }
-  .p-link:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 12px 30px var(--accent-glow); }
-  .p-link.alt { background: transparent; color: var(--ink); border: 1px solid var(--border-2); }
-  .p-link.alt:hover { background: var(--surface-2); border-color: var(--ink-3); box-shadow: none; }
-  .p-link .arr { transition: transform .25s var(--ease); }
-  .p-link:hover .arr { transform: translateX(3px); }
-  @media (max-width: 920px) {
-    .project, .project.flip { grid-template-columns: 1fr; }
-    .project.flip .p-media { order: 0; }
-  }
+  .action:hover { text-decoration: none; border-color: var(--green); color: var(--green); }
+  .action.go { border-color: var(--green); color: var(--green); }
+  .action.go:hover { background: var(--green); color: #0b0e14; }
 
-  /* ───────── RESUME ───────── */
-  .res-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.6rem; }
-  .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .res-card { padding: 1.8rem 1.9rem; }
-  .res-card h3 { font-size: 1rem; font-weight: 520; letter-spacing: -0.02em; display: flex; justify-content: space-between; padding-bottom: 1.1rem; margin-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
-  .res-card h3 .k { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.14em; }
-  .entry { padding: 1rem 0; border-bottom: 1px solid var(--border); }
-  .entry:last-child { border-bottom: none; padding-bottom: 0.2rem; }
-  .entry .row { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
-  .entry .t { font-weight: 500; font-size: 0.98rem; letter-spacing: -0.015em; }
-  .entry .w { font-family: var(--mono); font-size: 11px; color: var(--ink-3); white-space: nowrap; letter-spacing: 0.05em; }
-  .entry .o { font-size: 13px; color: var(--ink-2); margin-top: 2px; font-weight: 330; }
-  .entry .n { font-size: 13px; color: var(--ink-3); margin-top: 7px; line-height: 1.55; font-weight: 330; }
-  .courses { display: grid; grid-template-columns: auto 1fr; gap: 5px 14px; margin-top: 0.6rem; }
-  .courses .code { font-family: var(--mono); font-size: 11px; color: var(--accent); }
-  .courses .name { font-size: 13px; color: var(--ink-2); font-weight: 330; }
+  /* experience and education */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .panel {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 26px;
+  }
+  .panel h3 { font-size: 1.05rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .panel h3::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--magenta); }
+  .item { padding: 14px 0; border-top: 1px solid var(--line); }
+  .item:first-of-type { border-top: none; padding-top: 0; }
+  .item .role { font-weight: 600; }
+  .item .where { color: var(--muted); font-size: 15px; }
+  .item .when { font-family: var(--mono); font-size: 12px; color: var(--yellow); margin-top: 2px; }
+  .item .note { color: var(--muted); font-size: 15px; margin-top: 8px; }
+  .courses { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .courses span { font-family: var(--mono); font-size: 12px; color: var(--orange); border: 1px solid var(--line); padding: 3px 8px; border-radius: 6px; }
+
+  /* skills */
+  .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .skill-group { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; }
+  .skill-group h3 { font-size: 15px; color: var(--green); font-family: var(--mono); font-weight: 500; margin-bottom: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips span { font-size: 14px; color: var(--text); background: var(--panel); border: 1px solid var(--line); padding: 5px 11px; border-radius: 999px; }
+
+  /* awards and certs */
   .awards { list-style: none; }
-  .awards li { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; padding: 0.7rem 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
-  .awards li:last-child { border-bottom: none; }
-  .awards .y { font-family: var(--mono); font-size: 11px; color: var(--ink-3); white-space: nowrap; }
-  @media (max-width: 860px) { .res-grid { grid-template-columns: 1fr; } }
+  .awards li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 15px; }
+  .awards li:first-child { border-top: none; padding-top: 0; }
+  .awards .y { font-family: var(--mono); font-size: 12px; color: var(--yellow); white-space: nowrap; padding-top: 3px; }
+  .certs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 16px; }
+  .certs a {
+    display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px;
+    color: var(--text); font-size: 15px;
+  }
+  .certs a:hover { border-color: var(--pink); text-decoration: none; }
+  .certs .sub { display: block; color: var(--muted); font-size: 13px; }
+  .certs .yr { font-family: var(--mono); font-size: 12px; color: var(--pink); white-space: nowrap; }
 
-  /* ───────── CERTS ───────── */
-  .certs.card { border-radius: 24px; }
-  .cert {
-    display: grid; grid-template-columns: 52px 1fr auto auto;
-    gap: 1.6rem; align-items: center;
-    padding: 1.2rem 1.8rem;
-    border-bottom: 1px solid var(--border);
-    position: relative;
-    transition: background .25s ease;
+  /* contact */
+  .contact {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 44px; text-align: left;
   }
-  .cert:last-child { border-bottom: none; }
-  .cert::after {
-    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
-    background: linear-gradient(var(--accent), var(--accent-2));
-    transform: scaleY(0); transform-origin: center;
-    transition: transform .3s var(--ease);
+  .contact h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); letter-spacing: -0.02em; }
+  .contact .email {
+    display: inline-block; margin-top: 14px;
+    font-family: var(--mono); font-size: clamp(1rem, 2.2vw, 1.3rem); color: var(--green);
   }
-  .cert:hover { background: rgba(255,255,255,0.03); }
-  .cert:hover::after { transform: scaleY(1); }
-  .cert:hover .cn { color: var(--accent-2); }
-  .cert:hover .go { color: var(--accent); transform: translateX(4px); }
-  .cert .ix { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.1em; }
-  .cert .cn { font-weight: 500; font-size: 1.02rem; letter-spacing: -0.015em; line-height: 1.3; transition: color .25s ease; }
-  .cert .is { font-size: 12px; color: var(--ink-3); margin-top: 2px; font-weight: 330; }
-  .cert .new {
-    display: inline-block; margin-left: 9px; vertical-align: 2px;
-    font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--accent); background: var(--accent-soft);
-    border: 1px solid rgba(255,107,74,0.35); border-radius: 999px; padding: 2px 8px;
-  }
-  .cert .yy { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
-  .cert .go { font-family: var(--mono); color: var(--ink-3); transition: color .25s ease, transform .25s var(--ease); }
-  @media (max-width: 700px) { .cert { grid-template-columns: 30px 1fr auto; gap: 0.9rem; padding: 1.05rem 1.2rem; } .cert .yy { display: none; } }
+  .contact p { color: var(--muted); max-width: 60ch; margin-top: 10px; }
+  .contact .ctas { margin-top: 24px; }
 
-  /* ───────── CONTACT ───────── */
-  .contact { padding-bottom: 3rem; overflow: clip; }
-  .contact .shell { position: relative; }
-  .contact-glow {
-    position: absolute; right: -10%; top: -20%;
-    width: 640px; height: 640px;
-    background: radial-gradient(circle, var(--accent-glow), transparent 65%);
-    filter: blur(75px); pointer-events: none;
+  footer {
+    margin-top: 56px; padding: 26px 0 40px; border-top: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+    font-size: 14px; color: var(--faint);
   }
-  .contact h2 {
-    font-weight: 540;
-    font-size: clamp(3rem, 10vw, 8.5rem);
-    line-height: 0.96; letter-spacing: -0.05em;
-    margin-top: 1.3rem;
-    position: relative;
-  }
-  .contact h2 .grad { background: linear-gradient(105deg, var(--accent), var(--accent-2), var(--accent-3)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-  .contact h2 .dim { color: var(--ink-3); font-weight: 260; }
-  .email-pill {
-    margin-top: 2.6rem;
-    display: inline-flex; align-items: center; gap: 14px;
-    padding: 16px 26px;
-    background: var(--surface); border: 1px solid var(--border-2);
-    border-radius: 999px; backdrop-filter: blur(12px);
-    font-family: var(--mono); font-size: clamp(0.95rem, 1.6vw, 1.15rem);
-    transition: border-color .25s ease, transform .3s var(--ease), box-shadow .3s ease;
-    position: relative;
-  }
-  .email-pill:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 18px 44px var(--accent-soft); }
-  .email-pill .arr { color: var(--accent); transition: transform .25s var(--ease); }
-  .email-pill:hover .arr { transform: translateX(5px); }
-  .socials { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2.4rem; position: relative; }
-  .socials a {
-    display: inline-flex; align-items: center; gap: 9px;
-    padding: 11px 19px;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
-    font-size: 13px; color: var(--ink-2);
-    transition: color .2s ease, border-color .2s ease, transform .25s var(--ease);
-  }
-  .socials a:hover { color: var(--ink); border-color: var(--border-2); transform: translateY(-2px); }
-  .socials a svg { width: 14px; height: 14px; }
-  .colophon {
-    margin-top: 4.5rem; padding-top: 1.8rem;
-    border-top: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: flex-end;
-    font-family: var(--mono); font-size: 11px; color: var(--ink-4); letter-spacing: 0.05em;
-    position: relative;
-  }
-  .colophon .right { text-align: right; }
-  @media (max-width: 700px) { .colophon { flex-direction: column; align-items: flex-start; gap: 0.9rem; } .colophon .right { text-align: left; } }
+  footer a { color: var(--muted); }
 
-  /* reveal */
-  .rv { opacity: 0; transform: translateY(22px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-  .rv.in { opacity: 1; transform: none; }
-
+  @media (max-width: 900px) {
+    .window-body { grid-template-columns: 1fr; padding: 30px 24px; }
+    .portrait { order: -1; }
+    .portrait img { width: 160px; height: 160px; }
+    .glance { grid-template-columns: repeat(2, 1fr); }
+    .projects, .two, .skills, .certs { grid-template-columns: 1fr; }
+    .contact { padding: 30px 24px; }
+  }
+  @media (max-width: 640px) {
+    .nav a:not(.hire) { display: none; }
+    .wrap { padding: 0 16px; }
+    .hero { padding-top: 28px; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-    .rv { opacity: 1; transform: none; }
-    .hero h1 .row > span { transform: none; }
-    body::after { display: none; }
+    .tagline .caret { animation: none; }
+    html { scroll-behavior: auto; }
+    .project { transition: none; }
   }
 </style>
 </head>
 <body>
 
-<div class="dots" aria-hidden="true"></div>
-<div class="progress" id="progress" aria-hidden="true"></div>
-
-<nav class="top" aria-label="Main">
-  <span class="brand">H</span>
-  <a class="link" href="#about">About</a>
-  <a class="link" href="#stack">Stack</a>
-  <a class="link" href="#work">Work</a>
-  <a class="link" href="#resume">Resume</a>
-  <a class="link" href="#certifications">Certs</a>
-  <a class="cta" href="#contact">Get in touch</a>
-</nav>
-
-<!-- ── HERO ── -->
-<header class="hero">
-  <div class="hero-aurora" aria-hidden="true"></div>
-  <div class="hero-inner">
-    <span class="hero-status"><span class="ring"></span>Open to opportunities · CS &amp; Finance @ UCalgary</span>
-    <h1>
-      <span class="row"><span>Hunter</span></span>
-      <span class="row"><span class="grad">Halvorson</span></span>
-    </h1>
-    <div class="hero-sub">
-      <p class="hero-desc">Building software at the intersection of <b>data, design, and decision-making</b> — from deep learning pipelines to RAG to polished web applications and analysis.</p>
-      <div class="hero-actions">
-        <a href="#work" class="btn btn-fill">View work <span class="arr">→</span></a>
-        <a href="#contact" class="btn btn-line">Get in touch</a>
-      </div>
-    </div>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">hunter<span>@calgary</span></div>
+    <nav class="nav" aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#contact" class="hire">Contact</a>
+    </nav>
   </div>
 </header>
 
-<!-- ── MARQUEE ── -->
-<div class="marquee" aria-hidden="true">
-  <div class="track">
-    <span class="it">Python</span><span class="it">PyTorch</span><span class="it">LangChain</span><span class="it">RAG Pipelines</span><span class="it">ChromaDB</span><span class="it">React</span><span class="it">Sentiment Analysis</span><span class="it">Hugging Face</span><span class="it">SEC EDGAR</span><span class="it">Vector Embeddings</span>
-    <span class="it">Python</span><span class="it">PyTorch</span><span class="it">LangChain</span><span class="it">RAG Pipelines</span><span class="it">ChromaDB</span><span class="it">React</span><span class="it">Sentiment Analysis</span><span class="it">Hugging Face</span><span class="it">SEC EDGAR</span><span class="it">Vector Embeddings</span>
-  </div>
-</div>
+<main class="wrap">
 
-<!-- ── ABOUT ── -->
-<section id="about">
-  <div class="shell">
-    <div class="sec-head rv">
-      <div>
-        <span class="chip">About</span>
-        <h2>A short <span class="dim">introduction.</span></h2>
+  <!-- HERO -->
+  <div class="hero" id="about">
+    <div class="window">
+      <div class="window-bar">
+        <span class="dot" style="background:#ff5f56"></span>
+        <span class="dot" style="background:#ffbd2e"></span>
+        <span class="dot" style="background:#27c93f"></span>
+        <span class="path">~/hunter-halvorson</span>
       </div>
-      <p class="lead">A computer scientist with a finance lens — drawn to problems that sit at the seam between engineering, data, and decision-making.</p>
-    </div>
-    <div class="bento">
-      <div class="card b-photo rv">
-        <img src="images/image.png" alt="Hunter Halvorson">
-        <span class="tag">Calgary, AB</span>
-      </div>
-      <div class="card b-intro rv">
-        <p>I'm <b>Hunter Halvorson</b>, a Computer Science &amp; Finance student at the <b>University of Calgary</b>, passionate about building innovative solutions through <span class="em">data science</span> and <span class="em">software development</span>.</p>
-        <p>My focus is clean, efficient, maintainable software that solves real problems — from <span class="em">machine learning</span> to finance. I build LLM-powered projects with <span class="em">LangChain</span>: RAG workflows, LCEL chaining, and semantic search backed by vector databases.</p>
-      </div>
-      <div class="card b-stat rv"><span class="num">2<sup>×</sup></span><span class="lbl">Majors</span></div>
-      <div class="card b-stat rv"><span class="num">9<sup>+</sup></span><span class="lbl">Certifications</span></div>
-      <div class="card b-wide rv">
+      <div class="window-body">
         <div>
-          <div class="t">Currently exploring</div>
-          <div class="d">Building at the intersection of AI and finance — sentiment analysis, quantitative analysis, and semantic search.</div>
+          <p class="eyebrow"><span class="m">$</span> whoami</p>
+          <h1>Hunter Halvorson</h1>
+          <p class="tagline" id="tagline" aria-live="off"><span class="caret">▍</span></p>
+          <p class="summary">
+            Computer science and finance student at the <strong>University of Calgary</strong>.
+            I build AI and data projects, from finding patterns in financial filings to recommending books
+            from a plain-English description. Based in Calgary, Alberta.
+          </p>
+          <div class="ctas">
+            <a class="btn primary" href="resume.pdf" download>Download resume</a>
+            <a class="btn" href="#projects">See projects</a>
+            <a class="btn" href="mailto:hhhalvorson@gmail.com">Email me</a>
+          </div>
         </div>
-        <div class="row"><span>RAG</span><span>Sentiment Analysis</span><span>SEC EDGAR</span><span>ChromaDB</span><span>yfinance</span></div>
-      </div>
-      <div class="card b-stat rv"><span class="num">26<sup>+</sup></span><span class="lbl">Languages &amp; tools</span></div>
-      <div class="card b-stat rv"><span class="num">8</span><span class="lbl">Featured projects</span></div>
-      <div class="card b-wide rv">
-        <div>
-          <div class="t">Recognition</div>
-          <div class="d">Dean's List in both faculties · Jason Lang Scholarship ×3.</div>
+        <div class="portrait">
+          <img src="images/image.png" alt="Portrait of Hunter Halvorson" onerror="this.style.display='none'">
+          <span class="status">open to opportunities</span>
         </div>
-        <div class="row"><span>Faculty of Science</span><span>Haskayne School of Business</span></div>
       </div>
+    </div>
+
+    <div class="glance">
+      <div><div class="k">degrees</div><div class="v c">2 (CS + Finance)</div></div>
+      <div><div class="k">dean's list</div><div class="v y">Both faculties</div></div>
+      <div><div class="k">scholarships</div><div class="v o">Jason Lang, 3 years</div></div>
+      <div><div class="k">certifications</div><div class="v m">9 completed</div></div>
     </div>
   </div>
-</section>
 
-<!-- ── STACK ── -->
-<section id="stack">
-  <div class="shell">
-    <div class="sec-head rv">
-      <div>
-        <span class="chip">Stack</span>
-        <h2>Tools of the <span class="dim">trade.</span></h2>
-      </div>
-      <p class="lead">A curated, opinionated kit. I reach first for what's sharp and reliable — and learn whatever the problem needs.</p>
-    </div>
-    <div class="stack">
-      <div class="card rv">
-        <h3>Languages <span class="k">A</span></h3>
-        <ul>
-          <li>Python</li><li>Java</li><li>C</li><li>C++</li><li>Assembly</li>
-          <li>JavaScript</li><li>HTML / CSS</li><li>SQL</li><li>Haskell</li><li>Prolog</li>
-        </ul>
-      </div>
-      <div class="card rv">
-        <h3>Data Science &amp; ML <span class="k">B</span></h3>
-        <ul>
-          <li>pandas</li><li>NumPy</li><li>Matplotlib</li><li>scikit-learn</li><li>PyTorch</li>
-          <li class="hl">yfinance</li>
-        </ul>
-      </div>
-      <div class="card rv">
-        <h3>NLP &amp; LLM <span class="k">C</span></h3>
-        <ul>
-          <li>Text Processing</li>
-          <li>POS Tagging &amp; NER</li>
-          <li>Sentiment Analysis</li>
-          <li>Text Vectorization</li>
-          <li>Topic Modelling</li>
-          <li class="hl">LangChain (LCEL)</li>
-          <li class="hl">RAG Pipelines</li>
-          <li class="hl">Semantic Search</li>
-        </ul>
-      </div>
-      <div class="card rv">
-        <h3>Tools &amp; Frameworks <span class="k">D</span></h3>
-        <ul>
-          <li>Git</li><li>GitHub</li><li>React</li><li>Gradio</li>
-          <li>Hugging Face</li><li>Socket Programming</li>
-          <li class="hl">ChromaDB</li>
-          <li class="hl">SEC EDGAR API</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec-title"><span class="prompt">$</span><h2>Projects</h2></div>
+    <p class="sec-intro">Eight projects, grouped by type. Each one has a short plain-English summary, the main tools used, and links where you can see it working.</p>
 
-<!-- ── WORK ── -->
-<section id="work">
-  <div class="shell">
-    <div class="sec-head rv">
-      <div>
-        <span class="chip">Selected work</span>
-        <h2>Featured <span class="dim">projects.</span></h2>
-      </div>
-      <p class="lead">Recent projects — turning state-of-the-art deep learning, data analysis, and quantitative research into something genuinely useful.</p>
+    <div class="filters" role="group" aria-label="Filter projects">
+      <button aria-pressed="true" data-filter="all">All</button>
+      <button aria-pressed="false" data-filter="ai">AI and machine learning</button>
+      <button aria-pressed="false" data-filter="data">Data analysis</button>
+      <button aria-pressed="false" data-filter="tools">Tools and automation</button>
     </div>
 
     <div class="projects">
 
-      <!-- 000 — NEW PROJECT -->
-      <article class="card project rv">
-        <div class="p-media" style="background: radial-gradient(circle at 70% 35%, rgba(255,107,74,0.18), transparent 60%), var(--bg-2);">
-          <span class="badge">Featured</span><span class="yr">2026</span>
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e6a61" letter-spacing="0.5">
-              <text x="30" y="50">SEC EDGAR</text>
-              <rect x="30" y="55" width="100" height="16" rx="3" fill="#ff6b4a" opacity="0.12" stroke="#ff6b4a" stroke-width="0.5"/>
-              <text x="80" y="66" text-anchor="middle" fill="#ff6b4a">10-K / 10-Q</text>
-              <line x1="130" y1="63" x2="152" y2="63" stroke="#ff6b4a" stroke-width="0.7" stroke-dasharray="2,2"/>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e6a61" letter-spacing="0.5">
-              <text x="160" y="50">Parse &amp; Chunk</text>
-              <rect x="160" y="55" width="120" height="16" rx="3" fill="#ff8a66" opacity="0.1" stroke="#ff8a66" stroke-width="0.5"/>
-              <text x="220" y="66" text-anchor="middle" fill="#ff8a66">RecursiveCharacterTextSplitter</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#a8a49b" text-anchor="middle">
-              <text x="50" y="95">Risk Factors</text>
-              <text x="50" y="107">MD&A</text>
-              <text x="110" y="101">→</text>
-              <text x="160" y="95">Chunk 1</text>
-              <text x="160" y="107">Chunk N</text>
-              <text x="210" y="101">→</text>
-            </g>
-            <g>
-              <circle cx="280" cy="100" r="28" fill="#0a0a0a" stroke="#ff6b4a" stroke-width="0.8" opacity="0.7"/>
-              <text x="280" y="103" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#ff6b4a" letter-spacing="0.3">HF</text>
-              <text x="280" y="113" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6" fill="#6e6a61">Embeddings</text>
-            </g>
-            <g>
-              <rect x="30" y="130" width="290" height="60" rx="4" fill="#101010" stroke="#f5f3ee" stroke-width="0.4" opacity="0.6"/>
-              <text x="40" y="145" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff6b4a" letter-spacing="0.5">CHROMADB</text>
-              <line x1="40" y1="150" x2="310" y2="150" stroke="#f5f3ee" stroke-width="0.2" opacity="0.3"/>
-              <g font-family="JetBrains Mono, monospace" font-size="7" fill="#a8a49b">
-                <text x="40" y="163">embedding_id</text><text x="200" y="163">vector</text><text x="310" y="163" text-anchor="end">sentiment</text>
-                <text x="40" y="176">chunk_001</text><text x="200" y="176">[0.12, -0.45, ...]</text><text x="310" y="176" text-anchor="end">-0.68</text>
-                <text x="40" y="185" fill="#6e6a61">chunk_002</text><text x="200" y="185" fill="#6e6a61">[0.34, 0.21, ...]</text><text x="310" y="185" text-anchor="end" fill="#6e6a61">0.15</text>
-              </g>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.5">
-              <text x="30" y="215" fill="#ff6b4a">LangChain RAG</text>
-              <line x1="95" y1="210" x2="120" y2="210" stroke="#ff6b4a" stroke-width="0.6" stroke-dasharray="2,2"/>
-              <text x="125" y="215" fill="#a8a49b">LLM context</text>
-              <line x1="210" y1="210" x2="235" y2="210" stroke="#ff6b4a" stroke-width="0.6" stroke-dasharray="2,2"/>
-            </g>
-            <g>
-              <circle cx="280" cy="215" r="8" fill="none" stroke="#ff6b4a" stroke-width="0.6" opacity="0.7"/>
-              <text x="280" y="218" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6" fill="#ff6b4a">Sentiment</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.4">
-              <text x="30" y="250">Loughran-McDonald + yfinance + SQLite</text>
-              <text x="345" y="250" text-anchor="end" fill="#ff6b4a">Stock movements</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-info">
-          <span class="idx">000 — Finance AI</span>
-          <h3>SEC <span class="grad">Sentiment</span> Analysis</h3>
-          <p class="desc">Parsed 10-K and 10-Q filings from SEC EDGAR to analyze the tone of Risk Factors and MD&A sections. Chunked filings with RecursiveCharacterTextSplitter, embedded chunks using Hugging Face, and stored them in ChromaDB for semantic search. Built a LangChain RAG pipeline for context-aware LLM analysis. Analyzed financial sentiment using the Loughran-McDonald dictionary, integrated stock price data via yfinance, and persisted results in SQLite — exploring the relationship between document sentiment and stock movements.</p>
-          <div class="p-tags"><span>Python</span><span>SEC EDGAR</span><span>LangChain</span><span>ChromaDB</span><span>RAG</span><span>Sentiment Analysis</span><span>yfinance</span><span>SQLite</span></div>
-          <div class="p-links">
-            <a href="https://lnkd.in/p/geN2d5nh" target="_blank" rel="noopener" class="p-link">LinkedIn post <span class="arr">→</span></a>
-          </div>
+      <article class="project" data-cat="ai">
+        <span class="tag-cat cat-ai">AI and machine learning</span>
+        <h3>Exercise recognition <span class="yr">2026</span></h3>
+        <p>An AI model that recognizes which exercise is in a photo: squats, deadlifts, pushups, pullups, or burpees. It scored 99% accuracy on test photos. You can try it in your browser.</p>
+        <div class="stack"><span>PyTorch</span><span>ResNet50</span><span>Gradio</span></div>
+        <div class="actions">
+          <a class="action go" href="https://huggingface.co/spaces/HunterHalvorson/exercise-classifier" target="_blank" rel="noopener">Try it</a>
+          <a class="action" href="https://github.com/HunterHalvorson/exercise-classifier" target="_blank" rel="noopener">View code</a>
         </div>
       </article>
 
-      <!-- 001 -->
-      <article class="card project flip rv">
-        <div class="p-media" style="background: radial-gradient(circle at 50% 50%, rgba(255,107,74,0.16), transparent 60%), var(--bg-2);">
-          <span class="badge">Featured</span><span class="yr">2025</span>
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-            <g stroke="#ff6b4a" stroke-width="0.6" fill="none" opacity="0.6">
-              <circle cx="200" cy="150" r="30"/><circle cx="200" cy="150" r="55"/>
-              <circle cx="200" cy="150" r="80"/><circle cx="200" cy="150" r="105"/><circle cx="200" cy="150" r="130"/>
-            </g>
-            <g stroke="#ff8a66" stroke-width="0.3" fill="none" opacity="0.3"><circle cx="200" cy="150" r="155"/></g>
-            <g stroke="#f5f3ee" stroke-width="0.3" opacity="0.15">
-              <line x1="40" y1="150" x2="360" y2="150"/><line x1="200" y1="20" x2="200" y2="280"/>
-            </g>
-            <g fill="#ff6b4a">
-              <circle cx="200" cy="150" r="3.5"/><circle cx="232" cy="128" r="2"/><circle cx="172" cy="172" r="2"/>
-            </g>
-            <g stroke="#ff6b4a" stroke-width="0.7" fill="none" stroke-dasharray="3,2.5">
-              <rect x="214" y="114" width="36" height="28" rx="2"/>
-            </g>
-          </svg>
-        </div>
-        <div class="p-info">
-          <span class="idx">001 — Medical AI</span>
-          <h3>ScreenVision <span class="grad">AI</span></h3>
-          <p class="desc">Advanced deep learning system for medical image analysis, leveraging state-of-the-art neural networks for accurate diagnostic support.</p>
-          <div class="p-tags"><span>Python</span><span>Deep Learning</span><span>Computer Vision</span><span>Medical AI</span></div>
-          <div class="p-links">
-            <a href="https://youtu.be/M1GjIFlY1cM" target="_blank" rel="noopener" class="p-link">Watch demo <span class="arr">→</span></a>
-          </div>
+      <article class="project" data-cat="ai">
+        <span class="tag-cat cat-ai">AI and machine learning</span>
+        <h3>Book recommender <span class="yr">2026</span></h3>
+        <p>Describe the kind of story you want in your own words, such as "a story about forgiveness," then filter by genre and mood. It searches over 7,000 books to find close matches.</p>
+        <div class="stack"><span>LangChain</span><span>RAG</span><span>OpenAI embeddings</span><span>Chroma</span></div>
+        <div class="actions">
+          <a class="action go" href="https://huggingface.co/spaces/HunterHalvorson/Book_Recommender" target="_blank" rel="noopener">Try it</a>
         </div>
       </article>
 
-      <!-- 002 -->
-      <article class="card project rv">
-        <div class="p-media" style="background: radial-gradient(circle at 25% 70%, rgba(255,107,74,0.14), transparent 55%), var(--bg-2);">
-          <span class="badge">Live demo</span><span class="yr">2026</span>
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-            <g stroke="#f5f3ee" stroke-width="0.3" opacity="0.06">
-              <line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="120" x2="400" y2="120"/>
-              <line x1="0" y1="180" x2="400" y2="180"/><line x1="0" y1="240" x2="400" y2="240"/>
-              <line x1="80" y1="0" x2="80" y2="300"/><line x1="160" y1="0" x2="160" y2="300"/>
-              <line x1="240" y1="0" x2="240" y2="300"/><line x1="320" y1="0" x2="320" y2="300"/>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e6a61">
-              <text x="60" y="80">squat</text><text x="60" y="115">deadlift</text>
-              <text x="60" y="150">pushup</text><text x="60" y="185">pullup</text><text x="60" y="220">burpee</text>
-            </g>
-            <g fill="#f5f3ee" opacity="0.05">
-              <rect x="110" y="70" width="240" height="10" rx="2"/><rect x="110" y="105" width="240" height="10" rx="2"/>
-              <rect x="110" y="140" width="240" height="10" rx="2"/><rect x="110" y="175" width="240" height="10" rx="2"/>
-              <rect x="110" y="210" width="240" height="10" rx="2"/>
-            </g>
-            <g>
-              <rect x="110" y="70" width="232" height="10" rx="2" fill="#ff6b4a"/>
-              <rect x="110" y="105" width="38" height="10" rx="2" fill="#ff8a66" opacity="0.6"/>
-              <rect x="110" y="140" width="22" height="10" rx="2" fill="#ff8a66" opacity="0.4"/>
-              <rect x="110" y="175" width="14" height="10" rx="2" fill="#ff8a66" opacity="0.3"/>
-              <rect x="110" y="210" width="8" height="10" rx="2" fill="#ff8a66" opacity="0.25"/>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#a8a49b" text-anchor="end">
-              <text x="358" y="78">96.7%</text><text x="358" y="113">1.6%</text>
-              <text x="358" y="148">0.9%</text><text x="358" y="183">0.5%</text><text x="358" y="218">0.3%</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
-              <text x="60" y="265">MODEL · RESNET50</text><text x="60" y="278">TEST ACC · 99.15%</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-info">
-          <span class="idx">002 — Computer vision</span>
-          <h3>Exercise <span class="grad">Classifier</span></h3>
-          <p class="desc">Fine-tuned ResNet50 on a custom exercise dataset using transfer learning. Achieves 99.15% test accuracy classifying photos of exercises like squats, deadlifts, pushups, pullups, and burpees. Deployed as an interactive web demo with live predictions.</p>
-          <div class="p-tags"><span>PyTorch</span><span>Transfer Learning</span><span>ResNet50</span><span>Gradio</span><span>Hugging Face</span></div>
-          <div class="p-links">
-            <a href="https://huggingface.co/spaces/HunterHalvorson/exercise-classifier" target="_blank" rel="noopener" class="p-link">Try live demo <span class="arr">→</span></a>
-            <a href="https://github.com/HunterHalvorson/exercise-classifier" target="_blank" rel="noopener" class="p-link alt">View code <span class="arr">→</span></a>
-          </div>
+      <article class="project" data-cat="ai">
+        <span class="tag-cat cat-ai">AI and machine learning</span>
+        <h3>ScreenVision AI <span class="yr">2025</span></h3>
+        <p>A deep learning system that analyzes medical images to help support diagnostic decisions.</p>
+        <div class="stack"><span>Python</span><span>Deep learning</span><span>Computer vision</span></div>
+        <div class="actions">
+          <a class="action go" href="https://youtu.be/M1GjIFlY1cM" target="_blank" rel="noopener">Watch demo</a>
         </div>
       </article>
 
-      <!-- 003 -->
-      <article class="card project flip rv">
-        <div class="p-media" style="background: radial-gradient(circle at 18% 50%, rgba(255,107,74,0.13), transparent 50%), radial-gradient(circle at 82% 50%, rgba(255,107,74,0.13), transparent 50%), var(--bg-2);">
-          <span class="badge">Open source</span><span class="yr">2026</span>
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-            <g>
-              <rect x="40" y="55" width="110" height="190" rx="3" fill="none" stroke="#f5f3ee" stroke-width="0.5" opacity="0.22"/>
-              <rect x="40" y="55" width="110" height="14" rx="3" fill="#f5f3ee" opacity="0.04"/>
-            </g>
-            <g>
-              <rect x="250" y="55" width="110" height="190" rx="3" fill="none" stroke="#f5f3ee" stroke-width="0.5" opacity="0.22"/>
-              <rect x="250" y="55" width="110" height="14" rx="3" fill="#f5f3ee" opacity="0.04"/>
-            </g>
-            <g stroke="#6e6a61" stroke-width="0.6" opacity="0.4" stroke-linecap="round">
-              <line x1="50" y1="85" x2="105" y2="85"/><line x1="50" y1="95" x2="130" y2="95"/>
-              <line x1="50" y1="125" x2="120" y2="125"/><line x1="50" y1="135" x2="138" y2="135"/>
-              <line x1="50" y1="155" x2="115" y2="155"/><line x1="50" y1="195" x2="130" y2="195"/>
-              <line x1="50" y1="205" x2="118" y2="205"/><line x1="50" y1="225" x2="135" y2="225"/>
-            </g>
-            <g stroke="#6e6a61" stroke-width="0.6" opacity="0.4" stroke-linecap="round">
-              <line x1="260" y1="85" x2="320" y2="85"/><line x1="260" y1="95" x2="345" y2="95"/>
-              <line x1="260" y1="125" x2="335" y2="125"/><line x1="260" y1="135" x2="348" y2="135"/>
-              <line x1="260" y1="155" x2="325" y2="155"/><line x1="260" y1="195" x2="345" y2="195"/>
-              <line x1="260" y1="205" x2="328" y2="205"/><line x1="260" y1="225" x2="340" y2="225"/>
-            </g>
-            <g fill="#ff6b4a">
-              <rect x="50" y="113" width="60" height="4" rx="1" opacity="0.9"/>
-              <rect x="260" y="113" width="60" height="4" rx="1" opacity="0.9"/>
-              <rect x="50" y="173" width="48" height="4" rx="1" opacity="0.55"/>
-              <rect x="260" y="173" width="56" height="4" rx="1" opacity="0.55"/>
-            </g>
-            <g stroke="#ff6b4a" stroke-width="0.7" fill="none" opacity="0.5" stroke-dasharray="2,2.5">
-              <path d="M 150 115 Q 200 95 250 115"/>
-              <path d="M 150 175 Q 200 195 250 175"/>
-            </g>
-            <g>
-              <circle cx="200" cy="150" r="32" fill="#101010" stroke="#f5f3ee" stroke-width="0.4" opacity="0.9"/>
-              <circle cx="200" cy="150" r="32" fill="none" stroke="#f5f3ee" stroke-width="2" opacity="0.08"/>
-              <circle cx="200" cy="150" r="32" fill="none" stroke="#ff6b4a" stroke-width="2" stroke-dasharray="175 200" transform="rotate(-90 200 150)" stroke-linecap="round"/>
-              <text x="200" y="152" text-anchor="middle" font-family="Geist, sans-serif" font-size="15" font-weight="600" fill="#f5f3ee">87<tspan font-size="10" fill="#ff6b4a">%</tspan></text>
-              <text x="200" y="165" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6" fill="#6e6a61" letter-spacing="1">MATCH</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#a8a49b" text-anchor="middle" letter-spacing="0.8" font-weight="500">
-              <text x="95" y="65">RESUME.PDF</text><text x="305" y="65">JOB_DESC.TXT</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-info">
-          <span class="idx">003 — NLP</span>
-          <h3>Resume ↔ JD <span class="grad">Matcher</span></h3>
-          <p class="desc">An NLP application that scores how well a resume matches a job description. Combines rule-based entity extraction (regex + spaCy over a curated 800+ skill vocabulary) with semantic similarity from sentence-transformer embeddings — producing an interpretable weighted match score and structured JSON for both documents.</p>
-          <div class="p-tags"><span>Python</span><span>NLP</span><span>spaCy</span><span>Sentence Transformers</span><span>Streamlit</span><span>pdfplumber</span></div>
-          <div class="p-links">
-            <a href="https://github.com/HunterHalvorson/Resume_Parser-Job-Matcher" target="_blank" rel="noopener" class="p-link">View code <span class="arr">→</span></a>
-          </div>
+      <article class="project" data-cat="ai">
+        <span class="tag-cat cat-ai">AI and machine learning</span>
+        <h3>Resume and job matcher</h3>
+        <p>Scores how well a resume fits a job posting and explains the result. It pulls out skills automatically and combines them with a meaning-based comparison of the text.</p>
+        <div class="stack"><span>spaCy</span><span>Sentence transformers</span><span>Streamlit</span></div>
+        <div class="actions">
+          <a class="action" href="https://github.com/HunterHalvorson/Resume_Parser-Job-Matcher" target="_blank" rel="noopener">View code</a>
         </div>
       </article>
 
-      <!-- 004 -->
-      <article class="card project rv">
-        <div class="p-media" style="background: radial-gradient(circle at 50% 30%, rgba(255,107,74,0.17), transparent 55%), var(--bg-2);">
-          <span class="badge">Data analysis</span><span class="yr">2026</span>
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-            <g>
-              <rect x="60" y="80" width="160" height="28" rx="3" fill="#ff6b4a" opacity="0.9"/>
-              <rect x="60" y="120" width="68" height="28" rx="3" fill="#ff8a66" opacity="0.6"/>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e6a61">
-              <text x="44" y="99" text-anchor="end">Movies</text>
-              <text x="44" y="139" text-anchor="end">TV Shows</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="8" fill="#f5f3ee">
-              <text x="228" y="99">6,131</text>
-              <text x="136" y="139">2,676</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
-              <text x="60" y="190">RANK</text>
-              <text x="100" y="190">COUNTRY</text>
-              <text x="280" y="190" text-anchor="end">COUNT</text>
-            </g>
-            <line x1="60" y1="195" x2="310" y2="195" stroke="#f5f3ee" stroke-width="0.3" opacity="0.15"/>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#a8a49b">
-              <text x="60" y="208" fill="#ff6b4a">01</text><text x="100" y="208">United States</text><text x="280" y="208" text-anchor="end">3,211</text>
-              <text x="60" y="220">02</text><text x="100" y="220">India</text><text x="280" y="220" text-anchor="end">1,046</text>
-              <text x="60" y="232">03</text><text x="100" y="232">United Kingdom</text><text x="280" y="232" text-anchor="end">806</text>
-              <text x="60" y="244">04</text><text x="100" y="244">Canada</text><text x="280" y="244" text-anchor="end">445</text>
-              <text x="60" y="256">05</text><text x="100" y="256">France</text><text x="280" y="256" text-anchor="end">393</text>
-            </g>
-            <g>
-              <rect x="295" y="80" width="68" height="22" rx="4" fill="#ff6b4a" opacity="0.12" stroke="#ff6b4a" stroke-width="0.5"/>
-              <text x="329" y="95" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff6b4a" letter-spacing="0.5">PostgreSQL</text>
-            </g>
-            <g>
-              <rect x="295" y="110" width="68" height="22" rx="4" fill="#ff8a66" opacity="0.08" stroke="#ff8a66" stroke-width="0.5"/>
-              <text x="329" y="125" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff8a66" letter-spacing="0.5">15 queries</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-info">
-          <span class="idx">004 — SQL</span>
-          <h3>Netflix <span class="grad">SQL Analysis</span></h3>
-          <p class="desc">Exploratory data analysis of Netflix's 8,000+ title catalog using PostgreSQL. Solves 9 real business problems — from content distribution and regional breakdowns to keyword-based categorization — using window functions, string manipulation, date arithmetic, and subqueries.</p>
-          <div class="p-tags"><span>PostgreSQL</span><span>SQL</span><span>Window Functions</span><span>EDA</span><span>Data Analysis</span></div>
-          <div class="p-links">
-            <a href="https://github.com/HunterHalvorson/Netflix-Business-Problems" target="_blank" rel="noopener" class="p-link">View code <span class="arr">→</span></a>
-          </div>
+      <article class="project" data-cat="data">
+        <span class="tag-cat cat-data">Data analysis</span>
+        <h3>SEC filing sentiment <span class="yr">2026</span></h3>
+        <p>Reads company annual and quarterly reports and measures how cautious or positive the language is. It then compares that with stock price movements, to see whether the tone of a filing tracks what the market does next.</p>
+        <div class="stack"><span>Python</span><span>LangChain</span><span>yfinance</span><span>SQLite</span></div>
+        <div class="actions">
+          <a class="action" href="https://lnkd.in/p/geN2d5nh" target="_blank" rel="noopener">Read the post</a>
         </div>
       </article>
 
-      <!-- 005 -->
-      <article class="card project flip rv">
-        <div class="p-media" style="background: radial-gradient(circle at 30% 40%, rgba(255,107,74,0.14), transparent 55%), var(--bg-2);">
-          <span class="badge">ETL + analysis</span><span class="yr">2026</span>
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-            <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.8">
-              <rect x="30" y="68" width="75" height="34" rx="4" fill="#ff6b4a" opacity="0.15" stroke="#ff6b4a" stroke-width="0.7"/>
-              <text x="67" y="82" text-anchor="middle" fill="#ff6b4a">EXTRACT</text>
-              <text x="67" y="94" text-anchor="middle" fill="#6e6a61">Walmart.csv</text>
-              <line x1="105" y1="85" x2="128" y2="85" stroke="#ff6b4a" stroke-width="0.7" stroke-dasharray="2,2"/>
-              <rect x="128" y="68" width="80" height="34" rx="4" fill="#ff8a66" opacity="0.12" stroke="#ff8a66" stroke-width="0.7"/>
-              <text x="168" y="82" text-anchor="middle" fill="#ff8a66">TRANSFORM</text>
-              <text x="168" y="94" text-anchor="middle" fill="#6e6a61">pandas</text>
-              <line x1="208" y1="85" x2="231" y2="85" stroke="#ff8a66" stroke-width="0.7" stroke-dasharray="2,2"/>
-              <rect x="231" y="68" width="65" height="34" rx="4" fill="#f5f3ee" opacity="0.04" stroke="#f5f3ee" stroke-width="0.4"/>
-              <text x="263" y="82" text-anchor="middle" fill="#a8a49b">LOAD</text>
-              <text x="263" y="94" text-anchor="middle" fill="#6e6a61">PostgreSQL</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
-              <text x="30" y="130">QUERY</text>
-              <text x="80" y="130">BUSINESS PROBLEM</text>
-              <text x="340" y="130" text-anchor="end">TYPE</text>
-            </g>
-            <line x1="30" y1="135" x2="355" y2="135" stroke="#f5f3ee" stroke-width="0.3" opacity="0.12"/>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#a8a49b">
-              <text x="30" y="148" fill="#ff6b4a">Q1</text><text x="80" y="148">Transactions by payment method</text><text x="340" y="148" text-anchor="end" fill="#6e6a61">GROUP BY</text>
-              <text x="30" y="161" fill="#ff6b4a">Q2</text><text x="80" y="161">Highest-rated category per branch</text><text x="340" y="161" text-anchor="end" fill="#6e6a61">RANK()</text>
-              <text x="30" y="174" fill="#ff6b4a">Q3</text><text x="80" y="174">Busiest day per branch</text><text x="340" y="174" text-anchor="end" fill="#6e6a61">RANK()</text>
-              <text x="30" y="187" fill="#ff6b4a">Q5</text><text x="80" y="187">Rating stats by city &amp; category</text><text x="340" y="187" text-anchor="end" fill="#6e6a61">AGG</text>
-              <text x="30" y="200" fill="#ff6b4a">Q6</text><text x="80" y="200">Total profit per category</text><text x="340" y="200" text-anchor="end" fill="#6e6a61">DERIVED</text>
-              <text x="30" y="213" fill="#ff6b4a">Q7</text><text x="80" y="213">Most common payment per branch</text><text x="340" y="213" text-anchor="end" fill="#6e6a61">CTE</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.5">
-              <rect x="310" y="66" width="55" height="18" rx="3" fill="#ff6b4a" opacity="0.12" stroke="#ff6b4a" stroke-width="0.5"/>
-              <text x="337" y="79" text-anchor="middle" fill="#ff6b4a">~10K rows</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
-              <text x="30" y="268">ETL · Python → PostgreSQL → SQL Analysis</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-info">
-          <span class="idx">005 — ETL</span>
-          <h3>Walmart <span class="grad">SQL Analysis</span></h3>
-          <p class="desc">End-to-end ETL + analysis pipeline on ~10,000 Walmart retail transactions. Raw CSV cleaned and transformed in Python (pandas), loaded into PostgreSQL via SQLAlchemy. Seven business problems answered with SQL — payment breakdowns, branch-level ratings, profit by category, busiest trading days — using window functions and CTEs.</p>
-          <div class="p-tags"><span>Python</span><span>pandas</span><span>PostgreSQL</span><span>SQLAlchemy</span><span>ETL</span><span>Window Functions</span></div>
-          <div class="p-links">
-            <a href="https://github.com/HunterHalvorson/Walmart-Data-Analysis" target="_blank" rel="noopener" class="p-link">View code <span class="arr">→</span></a>
-          </div>
+      <article class="project" data-cat="data">
+        <span class="tag-cat cat-data">Data analysis</span>
+        <h3>Netflix catalog analysis</h3>
+        <p>Answered business questions about more than 8,000 Netflix titles, such as the split between movies and TV shows and which countries produce the most content.</p>
+        <div class="stack"><span>PostgreSQL</span><span>SQL</span></div>
+        <div class="actions">
+          <a class="action" href="https://github.com/HunterHalvorson/Netflix-Business-Problems" target="_blank" rel="noopener">View code</a>
         </div>
       </article>
 
-      <!-- 006 -->
-      <article class="card project rv">
-        <div class="p-media" style="background: radial-gradient(circle at 40% 55%, rgba(255,107,74,0.16), transparent 55%), var(--bg-2);">
-          <span class="badge">Live demo</span><span class="yr">2026</span>
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-            <rect x="30" y="38" width="290" height="24" rx="12" fill="none" stroke="#ff6b4a" stroke-width="0.7" opacity="0.6"/>
-            <text x="44" y="54" font-family="JetBrains Mono, monospace" font-size="8" fill="#6e6a61">"a story about forgiveness and redemption..."</text>
-            <circle cx="308" cy="50" r="7" fill="none" stroke="#ff6b4a" stroke-width="0.8" opacity="0.8"/>
-            <line x1="313" y1="55" x2="317" y2="59" stroke="#ff6b4a" stroke-width="0.8" opacity="0.8"/>
-            <g font-family="JetBrains Mono, monospace" font-size="7">
-              <rect x="30" y="72" width="32" height="14" rx="7" fill="#ff6b4a" opacity="0.9"/>
-              <text x="46" y="82" text-anchor="middle" fill="#0a0a0a" font-weight="600">Joy</text>
-              <rect x="68" y="72" width="44" height="14" rx="7" fill="none" stroke="#6e6a61" stroke-width="0.5"/>
-              <text x="90" y="82" text-anchor="middle" fill="#6e6a61">Surprise</text>
-              <rect x="118" y="72" width="36" height="14" rx="7" fill="none" stroke="#6e6a61" stroke-width="0.5"/>
-              <text x="136" y="82" text-anchor="middle" fill="#6e6a61">Fear</text>
-              <rect x="160" y="72" width="32" height="14" rx="7" fill="none" stroke="#6e6a61" stroke-width="0.5"/>
-              <text x="176" y="82" text-anchor="middle" fill="#6e6a61">Sad</text>
-              <rect x="198" y="72" width="40" height="14" rx="7" fill="none" stroke="#6e6a61" stroke-width="0.5"/>
-              <text x="218" y="82" text-anchor="middle" fill="#6e6a61">Angry</text>
-            </g>
-            <g>
-              <rect x="30" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff6b4a" stroke-width="0.6" opacity="0.8"/>
-              <rect x="84" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="138" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="192" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="246" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="300" y="98" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="30" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="84" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="138" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="192" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="246" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-              <rect x="300" y="174" width="48" height="68" rx="3" fill="#161512" stroke="#ff8a66" stroke-width="0.4" opacity="0.5"/>
-            </g>
-            <rect x="26" y="94" width="56" height="14" rx="7" fill="#ff6b4a" opacity="0.95"/>
-            <text x="54" y="104" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#0a0a0a" font-weight="600">97% match</text>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
-              <text x="30" y="260">VECTOR DB · Chroma + OpenAI Embeddings · LangChain RAG</text>
-              <text x="370" y="260" text-anchor="end">7,000+ books</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-info">
-          <span class="idx">006 — LLM / RAG</span>
-          <h3>Book <span class="grad">Recommender</span></h3>
-          <p class="desc">Semantic book recommendation engine built on a 7,000+ title dataset. Describe the story you want in plain English, then filter by genre and emotional tone — powered by a LangChain RAG pipeline using OpenAI embeddings in a Chroma vector database, with LCEL chaining and output parsing throughout. Deployed as a Gradio app on Hugging Face Spaces.</p>
-          <div class="p-tags"><span>Python</span><span>LangChain</span><span>RAG</span><span>LCEL</span><span>OpenAI Embeddings</span><span>Chroma</span><span>Gradio</span></div>
-          <div class="p-links">
-            <a href="https://huggingface.co/spaces/HunterHalvorson/Book_Recommender" target="_blank" rel="noopener" class="p-link">Try live demo <span class="arr">→</span></a>
-          </div>
+      <article class="project" data-cat="data">
+        <span class="tag-cat cat-data">Data analysis</span>
+        <h3>Walmart sales pipeline</h3>
+        <p>Cleaned and organized about 10,000 retail transactions, then answered questions like which payment methods are most common and which days are busiest at each branch.</p>
+        <div class="stack"><span>Python</span><span>pandas</span><span>PostgreSQL</span></div>
+        <div class="actions">
+          <a class="action" href="https://github.com/HunterHalvorson/Walmart-Data-Analysis" target="_blank" rel="noopener">View code</a>
         </div>
       </article>
 
-      <!-- 007 -->
-      <article class="card project flip rv">
-        <div class="p-media" style="background: radial-gradient(circle at 60% 40%, rgba(255,107,74,0.14), transparent 55%), var(--bg-2);">
-          <span class="badge">Open source</span><span class="yr">2026</span>
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-            <g>
-              <rect x="30" y="40" width="160" height="100" rx="6" fill="none" stroke="#ff6b4a" stroke-width="0.7" opacity="0.5"/>
-              <rect x="30" y="40" width="160" height="18" rx="6" fill="#ff6b4a" opacity="0.12"/>
-              <text x="40" y="53" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff6b4a" letter-spacing="0.5">currency.py</text>
-              <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#6e6a61">
-                <text x="40" y="74">USD → CAD</text><text x="160" y="74" text-anchor="end" fill="#a8a49b">1.36</text>
-                <text x="40" y="88">USD → EUR</text><text x="160" y="88" text-anchor="end" fill="#a8a49b">0.92</text>
-                <text x="40" y="102">USD → AUD</text><text x="160" y="102" text-anchor="end" fill="#a8a49b">1.53</text>
-                <text x="40" y="116">USD → CNY</text><text x="160" y="116" text-anchor="end" fill="#a8a49b">7.24</text>
-              </g>
-              <rect x="38" y="123" width="46" height="11" rx="5.5" fill="#ff6b4a" opacity="0.18" stroke="#ff6b4a" stroke-width="0.5"/>
-              <text x="61" y="131" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#ff6b4a" letter-spacing="0.3">API</text>
-            </g>
-            <g>
-              <rect x="210" y="40" width="160" height="100" rx="6" fill="none" stroke="#ff8a66" stroke-width="0.7" opacity="0.5"/>
-              <rect x="210" y="40" width="160" height="18" rx="6" fill="#ff8a66" opacity="0.08"/>
-              <text x="220" y="53" font-family="JetBrains Mono, monospace" font-size="8" fill="#ff8a66" letter-spacing="0.5">backup.py</text>
-              <g font-family="JetBrains Mono, monospace" font-size="7.5" fill="#6e6a61">
-                <text x="220" y="74">Backups/</text>
-                <text x="228" y="88" fill="#a8a49b">2026-06-03/</text>
-                <text x="228" y="101" fill="#a8a49b">2026-06-04/</text>
-                <text x="228" y="114" fill="#ff6b4a">2026-06-05/ ✓</text>
-              </g>
-              <rect x="218" y="123" width="58" height="11" rx="5.5" fill="#ff8a66" opacity="0.12" stroke="#ff8a66" stroke-width="0.5"/>
-              <text x="247" y="131" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#ff8a66" letter-spacing="0.3">SCHEDULED</text>
-            </g>
-            <line x1="190" y1="90" x2="210" y2="90" stroke="#ff6b4a" stroke-width="0.7" stroke-dasharray="2,2" opacity="0.4"/>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.4">
-              <text x="30" y="168">python_automation/</text>
-              <text x="38" y="181" fill="#a8a49b">├── currency.py</text>
-              <text x="38" y="193" fill="#a8a49b">├── backup.py</text>
-              <text x="38" y="205" fill="#a8a49b">├── requirements.txt</text>
-              <text x="38" y="217" fill="#3d3b36">└── .env</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="0.4">
-              <rect x="240" y="160" width="60" height="13" rx="6.5" fill="#ff6b4a" opacity="0.12" stroke="#ff6b4a" stroke-width="0.5"/>
-              <text x="270" y="170" text-anchor="middle" fill="#ff6b4a">requests</text>
-              <rect x="308" y="160" width="60" height="13" rx="6.5" fill="#ff8a66" opacity="0.08" stroke="#ff8a66" stroke-width="0.5"/>
-              <text x="338" y="170" text-anchor="middle" fill="#ff8a66">schedule</text>
-              <rect x="240" y="180" width="54" height="13" rx="6.5" fill="#f5f3ee" opacity="0.04" stroke="#f5f3ee" stroke-width="0.4"/>
-              <text x="267" y="190" text-anchor="middle" fill="#a8a49b">shutil</text>
-              <rect x="302" y="180" width="66" height="13" rx="6.5" fill="#f5f3ee" opacity="0.04" stroke="#f5f3ee" stroke-width="0.4"/>
-              <text x="335" y="190" text-anchor="middle" fill="#a8a49b">python-dotenv</text>
-            </g>
-            <g font-family="JetBrains Mono, monospace" font-size="7" fill="#6e6a61" letter-spacing="0.5">
-              <text x="30" y="265">2 scripts · daily scheduler · exchange rates</text>
-            </g>
-          </svg>
-        </div>
-        <div class="p-info">
-          <span class="idx">007 — Automation</span>
-          <h3>Python <span class="grad">Automation</span></h3>
-          <p class="desc">A collection of practical Python automation scripts. Includes a currency converter that fetches exchange rates from an external API and loops interactively in the terminal, and an automated folder backup utility on a daily schedule — copying to a date-stamped destination and skipping runs when today's backup already exists.</p>
-          <div class="p-tags"><span>Python</span><span>requests</span><span>schedule</span><span>shutil</span><span>python-dotenv</span><span>Automation</span></div>
-          <div class="p-links">
-            <a href="https://github.com/HunterHalvorson/python_automation" target="_blank" rel="noopener" class="p-link">View code <span class="arr">→</span></a>
-          </div>
+      <article class="project" data-cat="tools">
+        <span class="tag-cat cat-tools">Tools and automation</span>
+        <h3>Python automation scripts</h3>
+        <p>Small tools that save time. One converts currencies using live exchange rates. The other backs up a folder every day and skips days that are already done.</p>
+        <div class="stack"><span>Python</span><span>requests</span><span>schedule</span></div>
+        <div class="actions">
+          <a class="action" href="https://github.com/HunterHalvorson/python_automation" target="_blank" rel="noopener">View code</a>
         </div>
       </article>
 
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ── RESUME ── -->
-<section id="resume">
-  <div class="shell">
-    <div class="sec-head rv">
-      <div>
-        <span class="chip">Resume</span>
-        <h2>Education &amp; <span class="dim">experience.</span></h2>
+  <!-- EXPERIENCE + EDUCATION -->
+  <section id="experience">
+    <div class="sec-title"><span class="prompt">$</span><h2>Experience and education</h2></div>
+    <p class="sec-intro">Work experience and studies, plus the coursework most relevant to software and data roles.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Experience</h3>
+        <div class="item">
+          <div class="role">Accounting Assistant</div>
+          <div class="where">Canadian Sports Institute, Calgary, AB</div>
+          <div class="when">Jun to Aug 2025</div>
+        </div>
+        <div class="item">
+          <div class="role">Financial Management Assistant</div>
+          <div class="where">GWL Realty Advisors, Calgary, AB</div>
+          <div class="when">May to Aug 2023</div>
+          <div class="note">Worked with a cross-Canada team of five interns on recommendations for amenities, in-suite features, and marketing for a residential development. Presented to a panel that included executive leadership.</div>
+        </div>
+        <div class="item">
+          <div class="role">Competitive Programming Club</div>
+          <div class="where">Member, Fall 2025</div>
+          <div class="note">Weekly workshops and competitions on programming problems.</div>
+        </div>
       </div>
-      <p class="lead">The full picture — coursework, employment, activities, and a few accolades along the way.</p>
-    </div>
-    <div class="res-actions rv">
-      <a href="resume.pdf" download class="btn btn-fill">Download resume <span class="arr">↓</span></a>
-      <a href="https://www.linkedin.com/in/hunter-halvorson-11116724b/" target="_blank" rel="noopener" class="btn btn-line">View on LinkedIn <span class="arr">→</span></a>
-    </div>
-    <div class="res-grid">
-      <div class="card res-card rv">
-        <h3>Education <span class="k">A</span></h3>
-        <div class="entry">
-          <div class="row"><span class="t">B.Sc. Computer Science</span><span class="w">2023 — Present</span></div>
-          <div class="o">University of Calgary</div>
-        </div>
-        <div class="entry">
-          <div class="row"><span class="t">B.Comm. Finance</span><span class="w">2021 — Present</span></div>
-          <div class="o">University of Calgary</div>
-        </div>
-        <div class="entry">
-          <div class="row"><span class="t">Highlighted coursework</span></div>
+
+      <div class="panel">
+        <h3>Education</h3>
+        <div class="item">
+          <div class="role">B.Sc. Computer Science</div>
+          <div class="where">University of Calgary</div>
+          <div class="when">2023 to present</div>
           <div class="courses">
-            <span class="code">CPSC 331</span><span class="name">Data Structures &amp; Algorithms</span>
-            <span class="code">CPSC 413</span><span class="name">Design &amp; Analysis of Algorithms</span>
-            <span class="code">CPSC 457</span><span class="name">Operating Systems</span>
-            <span class="code">CPSC 441</span><span class="name">Computer Networks</span>
+            <span>Data Structures</span><span>Algorithms</span><span>Operating Systems</span><span>Computer Networks</span>
           </div>
         </div>
-      </div>
-      <div class="card res-card rv">
-        <h3>Employment experience <span class="k">B</span></h3>
-        <div class="entry">
-          <div class="row"><span class="t">Accounting Assistant</span><span class="w">06/2025 — 08/2025</span></div>
-          <div class="o">Canadian Sports Institute · Calgary, AB</div>
+        <div class="item">
+          <div class="role">B.Comm. Finance</div>
+          <div class="where">University of Calgary, Haskayne School of Business</div>
+          <div class="when">2021 to present</div>
         </div>
-        <div class="entry">
-          <div class="row"><span class="t">Financial Management Assistant</span><span class="w">05/2023 — 08/2023</span></div>
-          <div class="o">GWL Realty Advisors · Calgary, AB</div>
-        </div>
-      </div>
-      <div class="card res-card rv">
-        <h3>Activities &amp; involvement <span class="k">C</span></h3>
-        <div class="entry">
-          <div class="row"><span class="t">Competitive Programming Club — Member</span><span class="w">Fall 2025</span></div>
-          <div class="n">Attended weekly workshops featuring competitions on various programming topics.</div>
-        </div>
-        <div class="entry">
-          <div class="row"><span class="t">GWLRA Development Summer Case Study</span><span class="w">05/2023 — 08/2023</span></div>
-          <div class="n">Worked with a cross-Canada team of 5 interns to develop recommendations for amenities, in-suite features, and marketing strategies for a residential development. Presented insights to a panel of judges, including executive leadership.</div>
-        </div>
-      </div>
-      <div class="card res-card rv">
-        <h3>Awards &amp; honours <span class="k">D</span></h3>
-        <ul class="awards">
-          <li><span>Jason Lang Scholarship</span><span class="y">2022 / 2023 / 2024</span></li>
-          <li><span>Marion Janet and Ian Stormont Forbes Bursary</span><span class="y">2022 / 2025</span></li>
-          <li><span>Michael and Illa Maher Bursary</span><span class="y">2023</span></li>
-          <li><span>Dean's List, Faculty of Science</span><span class="y">2023–24, 2024–25</span></li>
-          <li><span>Dean's List, Haskayne School of Business</span><span class="y">Fall 2023, 2024</span></li>
-        </ul>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ── CERTIFICATIONS ── -->
-<section id="certifications">
-  <div class="shell">
-    <div class="sec-head rv">
-      <div>
-        <span class="chip">Certifications</span>
-        <h2>Things I've <span class="dim">completed.</span></h2>
-      </div>
-      <p class="lead">A directory of recent coursework and credentials — verification links on each.</p>
+    <div class="panel" style="margin-top:16px">
+      <h3>Awards and honours</h3>
+      <ul class="awards">
+        <li><span>Jason Lang Scholarship</span><span class="y">2022, 2023, 2024</span></li>
+        <li><span>Marion Janet and Ian Stormont Forbes Bursary</span><span class="y">2022, 2025</span></li>
+        <li><span>Michael and Illa Maher Bursary</span><span class="y">2023</span></li>
+        <li><span>Dean's List, Faculty of Science</span><span class="y">2023–24, 2024–25</span></li>
+        <li><span>Dean's List, Haskayne School of Business</span><span class="y">Fall 2023, Fall 2024</span></li>
+      </ul>
     </div>
-    <div class="card certs rv">
-      <a href="https://ude.my/UC-1cf19807-7653-44e3-b6a9-354a38212946" target="_blank" rel="noopener" class="cert">
-        <span class="ix">01</span>
-        <div><div class="cn">The AI Engineer Course 2026: Complete AI Engineer Bootcamp<span class="new">New</span></div><div class="is">365 Careers · Udemy</div></div>
-        <span class="yy">2026</span><span class="go">→</span>
-      </a>
-      <a href="https://udemy-certificate.s3.amazonaws.com/pdf/UC-406a7a6f-a3fe-4b24-a5d3-0a9e699a9235.pdf" target="_blank" rel="noopener" class="cert">
-        <span class="ix">02</span>
-        <div><div class="cn">AI &amp; Machine Learning Bootcamp</div><div class="is">Udemy</div></div>
-        <span class="yy">2025</span><span class="go">→</span>
-      </a>
-      <a href="https://www.coursera.org/account/accomplishments/verify/3VNB2VBHYQUL" target="_blank" rel="noopener" class="cert">
-        <span class="ix">03</span>
-        <div><div class="cn">Meta Front-End Developer</div><div class="is">Meta · Coursera</div></div>
-        <span class="yy">2024</span><span class="go">→</span>
-      </a>
-      <a href="https://www.coursera.org/account/accomplishments/verify/5KJY7TM36ANW" target="_blank" rel="noopener" class="cert">
-        <span class="ix">04</span>
-        <div><div class="cn">Advanced React</div><div class="is">Meta · Coursera</div></div>
-        <span class="yy">2024</span><span class="go">→</span>
-      </a>
-      <a href="https://www.coursera.org/account/accomplishments/verify/YSP5PCVZZRKM" target="_blank" rel="noopener" class="cert">
-        <span class="ix">05</span>
-        <div><div class="cn">React Basics</div><div class="is">Meta · Coursera</div></div>
-        <span class="yy">2024</span><span class="go">→</span>
-      </a>
-      <a href="https://www.coursera.org/account/accomplishments/verify/9Z8LGYRWH9XQ" target="_blank" rel="noopener" class="cert">
-        <span class="ix">06</span>
-        <div><div class="cn">HTML &amp; CSS in Depth</div><div class="is">Meta · Coursera</div></div>
-        <span class="yy">2024</span><span class="go">→</span>
-      </a>
-      <a href="https://www.coursera.org/account/accomplishments/verify/T97LYDFHDJT8" target="_blank" rel="noopener" class="cert">
-        <span class="ix">07</span>
-        <div><div class="cn">Programming with JavaScript</div><div class="is">Meta · Coursera</div></div>
-        <span class="yy">2024</span><span class="go">→</span>
-      </a>
-      <a href="https://www.coursera.org/account/accomplishments/verify/DYB84WWUR7YB" target="_blank" rel="noopener" class="cert">
-        <span class="ix">08</span>
-        <div><div class="cn">Version Control</div><div class="is">Meta · Coursera</div></div>
-        <span class="yy">2024</span><span class="go">→</span>
-      </a>
-      <a href="https://udemy-certificate.s3.amazonaws.com/pdf/UC-a908a9c6-de1a-4774-b173-b1f8b143f610.pdf" target="_blank" rel="noopener" class="cert">
-        <span class="ix">09</span>
-        <div><div class="cn">The Complete JavaScript Course</div><div class="is">Udemy</div></div>
-        <span class="yy">2024</span><span class="go">→</span>
-      </a>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- ── CONTACT ── -->
-<section id="contact" class="contact">
-  <div class="shell">
-    <div class="contact-glow" aria-hidden="true"></div>
-    <span class="chip rv">Contact</span>
-    <h2 class="rv">Let's make<br><span class="grad">something</span> <span class="dim">together.</span></h2>
-    <a href="mailto:hhhalvorson@gmail.com" class="email-pill rv">hhhalvorson@gmail.com <span class="arr">→</span></a>
-    <div class="socials rv">
-      <a href="https://github.com/HunterHalvorson" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.9-.39.98 0 1.98.13 2.9.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-        GitHub
-      </a>
-      <a href="https://huggingface.co/HunterHalvorson" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
-        Hugging Face
-      </a>
-      <a href="https://www.linkedin.com/in/hunter-halvorson-11116724b/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-        LinkedIn
-      </a>
-      <a href="mailto:hhhalvorson@gmail.com">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
-        Email
-      </a>
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="sec-title"><span class="prompt">$</span><h2>Skills</h2></div>
+    <p class="sec-intro">The tools I use most often. Each one has shown up in a project or a course.</p>
+    <div class="skills">
+      <div class="skill-group">
+        <h3>programming</h3>
+        <div class="chips"><span>Python</span><span>Java</span><span>C</span><span>C++</span><span>JavaScript</span><span>SQL</span><span>HTML and CSS</span><span>Haskell</span><span>Prolog</span><span>Assembly</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>data and machine learning</h3>
+        <div class="chips"><span>pandas</span><span>NumPy</span><span>scikit-learn</span><span>PyTorch</span><span>Matplotlib</span><span>yfinance</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>AI and language models</h3>
+        <div class="chips"><span>LangChain</span><span>RAG pipelines</span><span>Semantic search</span><span>Sentiment analysis</span><span>NLP and text processing</span><span>Topic modelling</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>tools and platforms</h3>
+        <div class="chips"><span>Git and GitHub</span><span>React</span><span>Gradio</span><span>Hugging Face</span><span>ChromaDB</span><span>SEC EDGAR API</span></div>
+      </div>
     </div>
-    <div class="colophon">
-      <div>© 2026 Hunter Halvorson<br>Built with care in Calgary</div>
-      <div class="right"><span id="time">--:--:--</span> MST<br>Last updated · June 2026</div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="sec-title"><span class="prompt">$</span><h2>Certifications</h2></div>
+    <p class="sec-intro">Completed courses and credentials. Each one links to its verification page.</p>
+    <div class="certs">
+      <a href="https://ude.my/UC-1cf19807-7653-44e3-b6a9-354a38212946" target="_blank" rel="noopener"><span>The AI Engineer Course 2026<span class="sub">365 Careers, Udemy</span></span><span class="yr">2026</span></a>
+      <a href="https://udemy-certificate.s3.amazonaws.com/pdf/UC-406a7a6f-a3fe-4b24-a5d3-0a9e699a9235.pdf" target="_blank" rel="noopener"><span>AI and Machine Learning Bootcamp<span class="sub">Udemy</span></span><span class="yr">2025</span></a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/3VNB2VBHYQUL" target="_blank" rel="noopener"><span>Meta Front-End Developer<span class="sub">Meta, Coursera</span></span><span class="yr">2024</span></a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/5KJY7TM36ANW" target="_blank" rel="noopener"><span>Advanced React<span class="sub">Meta, Coursera</span></span><span class="yr">2024</span></a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/YSP5PCVZZRKM" target="_blank" rel="noopener"><span>React Basics<span class="sub">Meta, Coursera</span></span><span class="yr">2024</span></a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/9Z8LGYRWH9XQ" target="_blank" rel="noopener"><span>HTML and CSS in Depth<span class="sub">Meta, Coursera</span></span><span class="yr">2024</span></a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/T97LYDFHDJT8" target="_blank" rel="noopener"><span>Programming with JavaScript<span class="sub">Meta, Coursera</span></span><span class="yr">2024</span></a>
+      <a href="https://www.coursera.org/account/accomplishments/verify/DYB84WWUR7YB" target="_blank" rel="noopener"><span>Version Control<span class="sub">Meta, Coursera</span></span><span class="yr">2024</span></a>
+      <a href="https://udemy-certificate.s3.amazonaws.com/pdf/UC-a908a9c6-de1a-4774-b173-b1f8b143f610.pdf" target="_blank" rel="noopener"><span>The Complete JavaScript Course<span class="sub">Udemy</span></span><span class="yr">2024</span></a>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact">
+      <div class="sec-title"><span class="prompt">$</span><h2>Get in touch</h2></div>
+      <p>Interested in working together, or have a role that might suit me? Email is the fastest way to reach me. I'm happy to share more detail about any project.</p>
+      <a class="email" href="mailto:hhhalvorson@gmail.com">hhhalvorson@gmail.com</a>
+      <div class="ctas">
+        <a class="btn primary" href="mailto:hhhalvorson@gmail.com">Send an email</a>
+        <a class="btn" href="resume.pdf" download>Download resume</a>
+        <a class="btn" href="https://www.linkedin.com/in/hunter-halvorson-11116724b/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/HunterHalvorson" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://huggingface.co/HunterHalvorson" target="_blank" rel="noopener">Hugging Face</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Hunter Halvorson · Calgary, Alberta</span>
+  <span>Prefer a command-line feel? <a href="index-terminal-v2.html">Open the terminal version</a></span>
+</footer>
 
 <script>
-  // scroll progress
-  const bar = document.getElementById('progress');
-  addEventListener('scroll', () => {
-    const h = document.documentElement;
-    bar.style.transform = `scaleX(${h.scrollTop / (h.scrollHeight - h.clientHeight)})`;
-  }, { passive: true });
+(() => {
+  // typing tagline
+  const lines = [
+    'I turn messy data into clear answers.',
+    'I build AI tools people can actually use.',
+    'I care about clean code and clear results.'
+  ];
+  const el = document.getElementById('tagline');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-  // spotlight cards
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('pointermove', e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
-  });
-
-  // reveals
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
-  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-  document.querySelectorAll('.rv').forEach(el => io.observe(el));
-
-  // smooth anchors with offset
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', function (e) {
-      const href = this.getAttribute('href');
-      if (href.length <= 1) return;
-      const t = document.querySelector(href);
-      if (!t) return;
-      e.preventDefault();
-      window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 80, behavior: 'smooth' });
-    });
-  });
-
-  // clock
-  function tick() {
-    const o = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'America/Edmonton' };
-    document.getElementById('time').textContent = new Intl.DateTimeFormat('en-CA', o).format(new Date());
+  async function typeLoop() {
+    if (reduce) { el.textContent = lines[0]; return; }
+    let i = 0;
+    while (true) {
+      const text = lines[i % lines.length];
+      for (let n = 1; n <= text.length; n++) {
+        el.textContent = text.slice(0, n);
+        await sleep(40);
+      }
+      await sleep(2200);
+      for (let n = text.length; n >= 0; n--) {
+        el.textContent = text.slice(0, n);
+        await sleep(20);
+      }
+      await sleep(400);
+      i++;
+    }
   }
-  tick(); setInterval(tick, 1000);
+  typeLoop();
+
+  // project filters
+  const buttons = document.querySelectorAll('.filters button');
+  const cards = document.querySelectorAll('.project');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter;
+      buttons.forEach(b => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+      cards.forEach(c => { c.hidden = !(f === 'all' || c.dataset.cat === f); });
+    });
+  });
+})();
 </script>
 </body>
 </html>
